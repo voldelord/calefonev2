@@ -5,13 +5,13 @@ import CustomButton from '../components/CustomButton';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 interface Props extends NativeStackScreenProps<any, any> {}
-const NewHomeScreen = ({navigation}: Props) => {
+const NewScenaryScreen = ({navigation}: Props) => {
   const handleLoginPress = () => {
-    navigation.navigate('HomesScreen');
+    navigation.navigate('ScenariosScreen');
   };
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>New Home</Text>
+      <Text style={styles.text}>New Scenary</Text>
       <InputField
         label={'Name'}
         inputType="text"
@@ -56,7 +56,7 @@ const NewHomeScreen = ({navigation}: Props) => {
   );
 };
 
-export default NewHomeScreen;
+export default NewScenaryScreen;
 
 const styles = StyleSheet.create({
   container: {
