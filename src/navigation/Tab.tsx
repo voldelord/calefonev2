@@ -3,6 +3,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import HomeMenuScreen from '../screens/HomeMenuScreen';
 import Icons from 'react-native-vector-icons/MaterialIcons';
+import ModesScreen from '../screens/ModesScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -18,7 +19,7 @@ export const Tabs = () => {
 
           if (route.name === 'HomeMenuScreen') {
             iconName = focused ? 'home' : 'home-outline';
-          } else if (route.name === 'AddDevices') {
+          } else if (route.name === 'ModesScreen') {
             iconName = focused ? 'cog' : 'leaf-outline';
           } else if (route.name === 'Calefon') {
             iconName = focused ? 'leaf' : 'leaf-outline';
@@ -33,6 +34,7 @@ export const Tabs = () => {
         tabBarStyle: {display: 'flex'}, // Puedes ajustar otros estilos aquí
       })}>
       <Tab.Screen name="HomeMenuScreen" component={HomeMenuScreen} />
+      <Tab.Screen name="ModesScreen" component={ModesScreen} />
     </Tab.Navigator>
   );
 };

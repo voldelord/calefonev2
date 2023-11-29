@@ -14,11 +14,14 @@ import ScenariosScreen from '../screens/ScenariosScreen';
 import SearchDevicesScreen from '../screens/SearchDevicesScreen';
 import ModesConetionScreen from '../screens/ModesConetionScreen';
 import KeyConfigScreen from '../screens/KeyConfigScreen';
+import ComRequestScreen from '../screens/ComRequestScreen';
+import WirelessDeviceScreen from '../screens/WirelessDeviceScreen';
+import DevicesScreen from '../screens/DevicesScreen';
 const Stack = createNativeStackNavigator();
 
 export const StackNavigator = () => {
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{headerShown: true}}>
       <Stack.Screen name="HomeScreen" component={HomeScreen} />
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
@@ -31,6 +34,12 @@ export const StackNavigator = () => {
       <Stack.Screen name="NewScenaryScreen" component={NewScenaryScreen} />
       <Stack.Screen name="ScenariosScreen" component={ScenariosScreen} />
       <Stack.Screen name="KeyConfigScreen" component={KeyConfigScreen} />
+      <Stack.Screen name="ComRequestScreen" component={ComRequestScreen} />
+      <Stack.Screen name="DevicesScreen" component={DevicesScreen} />
+      <Stack.Screen
+        name="WirelessDeviceScreen"
+        component={WirelessDeviceScreen}
+      />
       <Stack.Screen
         name="ModesConetionScreen"
         component={ModesConetionScreen}

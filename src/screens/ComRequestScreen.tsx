@@ -1,32 +1,26 @@
-import {StyleSheet, Text, View, Dimensions} from 'react-native';
+import {StyleSheet, Text, View, Dimensions, Image} from 'react-native';
 import React from 'react';
-import InputField from '../components/InputField';
+import calefone from '../assets/6.png';
 import CustomButton from '../components/CustomButton';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 const {width, height} = Dimensions.get('window');
 
 interface Props extends NativeStackScreenProps<any, any> {}
-const KeyConfigScreen = ({navigation}: Props) => {
+const ComRequestScreen = ({navigation}: Props) => {
   const handleLoginPress = () => {
-    navigation.navigate('ComRequestScreen');
+    navigation.navigate('WirelessDeviceScreen');
   };
   return (
     <View style={[styles.container, {width, height}]}>
       <Text style={styles.title}>
-        Introducir el código de configuración del dispositivo matter
+        Por favor establezca la comunicación con el dispositivo
       </Text>
       <Text style={styles.parraph}>
-        Aplicable únicamente a un dispositivo matter. Buscar el código de
-        configuración en el dispositivo, embalaje o en el manual
+        Ejemplo: debe seguir los pasos a continuación
       </Text>
-      <View style={styles.inputcontainer}>
-        <InputField
-          label={'Introduzca el código del dispositivo'}
-          inputType="password"
-          fieldButtonLabel={'Forgot?'}
-          fieldButtonFunction={() => {}}
-        />
+      <View>
+        <Image style={styles.image} source={calefone} />
       </View>
       <View style={styles.buttoncontainer}>
         <CustomButton
@@ -34,7 +28,7 @@ const KeyConfigScreen = ({navigation}: Props) => {
           onPress={handleLoginPress}
           buttonColor="#DA215D"
           textColor="white"
-          width={250}
+          width={300}
           height={50}
         />
       </View>
@@ -42,7 +36,7 @@ const KeyConfigScreen = ({navigation}: Props) => {
   );
 };
 
-export default KeyConfigScreen;
+export default ComRequestScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -50,21 +44,26 @@ const styles = StyleSheet.create({
   },
   title: {
     marginHorizontal: 20,
-    marginTop: 80,
-    textAlign: 'justify',
+    marginTop: 40,
     fontWeight: 'bold',
     fontSize: 20,
+    color: 'black',
   },
   parraph: {
     marginHorizontal: 20,
-    marginTop: 80,
-    textAlign: 'justify',
+    marginTop: 20,
+    fontSize: 15,
+  },
+  image: {
+    resizeMode: 'contain',
+    width: 400,
+    height: 400,
+    justifyContent: 'center',
+    alignSelf: 'center',
+    marginTop: 40,
   },
   buttoncontainer: {
     alignItems: 'center',
-    marginTop: 200,
-  },
-  inputcontainer: {
-    marginTop: 80,
+    marginTop: 100,
   },
 });
