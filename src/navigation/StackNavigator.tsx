@@ -12,6 +12,8 @@ import AddScenaryScreen from '../screens/AddScenaryScreen';
 import NewScenaryScreen from '../screens/NewScenaryScreen';
 import ScenariosScreen from '../screens/ScenariosScreen';
 import SearchDevicesScreen from '../screens/SearchDevicesScreen';
+import ModesConetionScreen from '../screens/ModesConetionScreen';
+import KeyConfigScreen from '../screens/KeyConfigScreen';
 const Stack = createNativeStackNavigator();
 
 export const StackNavigator = () => {
@@ -28,6 +30,11 @@ export const StackNavigator = () => {
       <Stack.Screen name="AddScenaryScreen" component={AddScenaryScreen} />
       <Stack.Screen name="NewScenaryScreen" component={NewScenaryScreen} />
       <Stack.Screen name="ScenariosScreen" component={ScenariosScreen} />
+      <Stack.Screen name="KeyConfigScreen" component={KeyConfigScreen} />
+      <Stack.Screen
+        name="ModesConetionScreen"
+        component={ModesConetionScreen}
+      />
       <Stack.Screen
         name="SearchDevicesScreen"
         component={SearchDevicesScreen}
