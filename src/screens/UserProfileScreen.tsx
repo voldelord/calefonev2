@@ -1,31 +1,24 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
-import GaugeSVG from '@nassim99/react-native-gauge';
+import * as React from 'react';
+import {Text, View} from 'react-native';
+import {AnimatedCircularProgress} from 'react-native-circular-progress';
+import {Circle} from 'react-native-svg';
 
-const value = 40; // 40% of the gauge. min=0 max=100
-const UserProfileScreen = () => {
+export default function App() {
   return (
-    <GaugeSVG
-      size={150}
-      insideTextColor={'purple'}
-      gaugeColor={'black'}
-      gaugeValueColor={'blue'}
-      gaugeStroke={3}
-      gaugeValueStroke={3.5}
-      value={value}>
-      <View
-        style={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100%',
-          height: '100%',
-        }}>
-        <Text>{value}</Text>
-      </View>
-    </GaugeSVG>
+    <View>
+      <AnimatedCircularProgress
+        size={120}
+        width={15}
+        fill={100}
+        tintColor="#00e0ff"
+        backgroundColor="#3d5875"
+        padding={10}
+        arcSweepAngle={360}
+        // This is the property you are looking for:
+        renderCap={({center}) => (
+          <Circle cx={center.x} cy={center.y} r="10" fill="blue" />
+        )}
+      />
+    </View>
   );
-};
-
-export default UserProfileScreen;
-
-const styles = StyleSheet.create({});
+}

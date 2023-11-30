@@ -22,6 +22,7 @@
     "react-native-app-intro-slider": "^4.0.4",
     "react-native-bouncy-checkbox": "^3.0.7",
     "react-native-charts-wrapper": "^0.6.0",
+    "react-native-circular-progress": "^1.3.9",
     "react-native-cone-slider": "^0.2.0",
     "react-native-gauge": "^0.1.2",
     "react-native-gesture-handler": "^2.14.0",
