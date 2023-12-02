@@ -23,6 +23,7 @@ import EcoScreen from '../screens/EcoScreen';
 import ChartScreen from '../screens/ChartScreen';
 import SmartScreen from '../screens/SmartScreen';
 import AlarmScreen from '../screens/AlarmScreen';
+import AdvancedPlanScreen from '../screens/AdvancedPlanScreen';
 const Stack = createNativeStackNavigator();
 
 export const StackNavigator = () => {
@@ -61,6 +62,7 @@ export const StackNavigator = () => {
       <Stack.Screen name="ChartScreen" component={ChartScreen} />
       <Stack.Screen name="SmartScreen" component={SmartScreen} />
       <Stack.Screen name="AlarmScreen" component={AlarmScreen} />
+      <Stack.Screen name="AdvancedPlanScreen" component={AdvancedPlanScreen} />
     </Stack.Navigator>
   );
 };

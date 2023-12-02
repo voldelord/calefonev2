@@ -10,6 +10,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import perfil from '../assets/profile.png';
 import CustomButton from '../components/CustomButton';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 const opciones = [
   {id: 1, nombre: 'Editar perfil', icono: 'edit'},
@@ -18,9 +19,10 @@ const opciones = [
   {id: 4, nombre: 'Cerrar sesión', icono: 'sign-out'},
 ];
 
-const UserProfileScreen = () => {
+interface Props extends NativeStackScreenProps<any, any> {}
+const UserProfileScreen = ({navigation}: Props) => {
   const smartPress = () => {
-    console.log('SmartScreen');
+    navigation.navigate('AdvancedPlanScreen');
   };
   const renderOpcion = ({item}) => (
     <TouchableOpacity style={styles.opcionContainer}>
