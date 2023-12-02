@@ -14,8 +14,11 @@ const ModesScreen = ({navigation}: Props) => {
   const ecoPress = () => {
     navigation.navigate('EcoScreen');
   };
+  const energyPress = () => {
+    navigation.navigate('ChartScreen');
+  };
   const handleLoginPress = () => {
-    navigation.navigate('TemperatureScreen');
+    console.log('ChartScreen');
   };
   return (
     <View style={styles.container}>
@@ -48,7 +51,7 @@ const ModesScreen = ({navigation}: Props) => {
       />
       <CustomButton
         label="Ahorro de Energia"
-        onPress={handleLoginPress}
+        onPress={energyPress}
         buttonColor="#ECECEC"
         textColor="black"
         width={300}

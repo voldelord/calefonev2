@@ -20,6 +20,7 @@ import DevicesScreen from '../screens/DevicesScreen';
 import TemperatureScreen from '../screens/TemperatureScreen';
 import PowerScreen from '../screens/PowerScreen';
 import EcoScreen from '../screens/EcoScreen';
+import ChartScreen from '../screens/ChartScreen';
 const Stack = createNativeStackNavigator();
 
 export const StackNavigator = () => {
@@ -55,6 +56,7 @@ export const StackNavigator = () => {
       <Stack.Screen name="TemperatureScreen" component={TemperatureScreen} />
       <Stack.Screen name="PowerScreen" component={PowerScreen} />
       <Stack.Screen name="EcoScreen" component={EcoScreen} />
+      <Stack.Screen name="ChartScreen" component={ChartScreen} />
     </Stack.Navigator>
   );
 };
