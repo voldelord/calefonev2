@@ -5,14 +5,23 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 interface Props extends NativeStackScreenProps<any, any> {}
 const ModesScreen = ({navigation}: Props) => {
+  const temperaturePress = () => {
+    navigation.navigate('TemperatureScreen');
+  };
+  const powerPress = () => {
+    navigation.navigate('PowerScreen');
+  };
+  const ecoPress = () => {
+    navigation.navigate('EcoScreen');
+  };
   const handleLoginPress = () => {
-    navigation.navigate('RangeScreen');
+    navigation.navigate('TemperatureScreen');
   };
   return (
     <View style={styles.container}>
       <CustomButton
         label="Modo Temperatura"
-        onPress={handleLoginPress}
+        onPress={temperaturePress}
         buttonColor="#ECECEC"
         textColor="black"
         width={300}
@@ -21,7 +30,7 @@ const ModesScreen = ({navigation}: Props) => {
       />
       <CustomButton
         label="Modo Potencia"
-        onPress={handleLoginPress}
+        onPress={powerPress}
         buttonColor="#ECECEC"
         textColor="black"
         width={300}
@@ -30,7 +39,7 @@ const ModesScreen = ({navigation}: Props) => {
       />
       <CustomButton
         label="Modo Eco"
-        onPress={handleLoginPress}
+        onPress={ecoPress}
         buttonColor="#ECECEC"
         textColor="black"
         width={300}

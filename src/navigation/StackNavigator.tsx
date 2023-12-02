@@ -17,7 +17,9 @@ import KeyConfigScreen from '../screens/KeyConfigScreen';
 import ComRequestScreen from '../screens/ComRequestScreen';
 import WirelessDeviceScreen from '../screens/WirelessDeviceScreen';
 import DevicesScreen from '../screens/DevicesScreen';
-import RangeScreen from '../screens/RangeScreen';
+import TemperatureScreen from '../screens/TemperatureScreen';
+import PowerScreen from '../screens/PowerScreen';
+import EcoScreen from '../screens/EcoScreen';
 const Stack = createNativeStackNavigator();
 
 export const StackNavigator = () => {
@@ -50,7 +52,9 @@ export const StackNavigator = () => {
         name="SearchDevicesScreen"
         component={SearchDevicesScreen}
       />
-      <Stack.Screen name="RangeScreen" component={RangeScreen} />
+      <Stack.Screen name="TemperatureScreen" component={TemperatureScreen} />
+      <Stack.Screen name="PowerScreen" component={PowerScreen} />
+      <Stack.Screen name="EcoScreen" component={EcoScreen} />
     </Stack.Navigator>
   );
 };
