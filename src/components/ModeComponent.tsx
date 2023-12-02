@@ -1,11 +1,12 @@
 import {StyleSheet, Text, View, Image, Dimensions, Switch} from 'react-native';
+import Slider from '@react-native-community/slider';
 import React, {useState} from 'react';
 import range from '../assets/range.png';
 import CustomButton from './CustomButton';
 
 const {width, height} = Dimensions.get('window');
 
-const ModeComponent = ({value, title, parraph, toggle}) => {
+const ModeComponent = ({value, title, parraph, toggle, showSlider}) => {
   const [isSwitchOn1, setIsSwitchOn1] = useState(false);
   const toggleSwitch1 = () => {
     setIsSwitchOn1(!isSwitchOn1);
@@ -28,7 +29,7 @@ const ModeComponent = ({value, title, parraph, toggle}) => {
         ios_backgroundColor="#3e3e3e"
         onValueChange={toggleSwitch1}
         value={isSwitchOn1}
-        style={{transform: [{scaleX: 2}, {scaleY: 2}]}}
+        style={{transform: [{scaleX: 1.5}, {scaleY: 1.5}]}}
       />
       <View style={styles.buttoncontainer}>
         <CustomButton
@@ -50,6 +51,25 @@ const ModeComponent = ({value, title, parraph, toggle}) => {
           icon="thermometer-quarter"
         />
       </View>
+      {showSlider && (
+        <>
+          <Text style={styles.sliderText}>Limite de Consumo/Mes</Text>
+          <Slider
+            style={{width: 200, height: 40}}
+            minimumValue={0}
+            maximumValue={1}
+            minimumTrackTintColor="#FFFFFF"
+            maximumTrackTintColor="#000000"
+          />
+          <Slider
+            style={{width: 200, height: 40}}
+            minimumValue={0}
+            maximumValue={1}
+            minimumTrackTintColor="#FFFFFF"
+            maximumTrackTintColor="#000000"
+          />
+        </>
+      )}
     </View>
   );
 };
@@ -97,6 +117,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   buttoncontainer: {
-    marginTop: 50,
+    marginTop: 20,
+  },
+  sliderText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'black',
+    marginTop: 20,
   },
 });

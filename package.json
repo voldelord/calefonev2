@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@nassim99/react-native-gauge": "^0.0.8",
+    "@react-native-community/slider": "^4.4.3",
     "@react-native-community/viewpager": "^5.0.11",
     "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/native": "^6.1.9",

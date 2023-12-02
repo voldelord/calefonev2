@@ -17,6 +17,9 @@ const ModesScreen = ({navigation}: Props) => {
   const energyPress = () => {
     navigation.navigate('ChartScreen');
   };
+  const smartPress = () => {
+    navigation.navigate('SmartScreen');
+  };
   const handleLoginPress = () => {
     console.log('ChartScreen');
   };
@@ -69,7 +72,7 @@ const ModesScreen = ({navigation}: Props) => {
       />
       <CustomButton
         label="Plan Avanzado"
-        onPress={handleLoginPress}
+        onPress={smartPress}
         buttonColor="#ECECEC"
         textColor="black"
         width={300}
