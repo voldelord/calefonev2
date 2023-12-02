@@ -119,7 +119,7 @@ const AlarmasScreen = ({navigation}: Props) => {
       </TouchableOpacity>
       <View style={styles.buttoncontainer}>
         <CustomButton
-          label="Enviar Correo de Verificacion"
+          label="Guardar"
           onPress={handleLoginPress}
           buttonColor="#DA215D"
           textColor="white"

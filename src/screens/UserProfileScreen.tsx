@@ -1,14 +1,88 @@
-import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
+import {
+  View,
+  Text,
+  Image,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import perfil from '../assets/profile.png';
+import CustomButton from '../components/CustomButton';
+
+const opciones = [
+  {id: 1, nombre: 'Editar perfil', icono: 'edit'},
+  {id: 2, nombre: 'Notificaciones', icono: 'bell'},
+  {id: 3, nombre: 'Seguridad', icono: 'lock'},
+  {id: 4, nombre: 'Cerrar sesión', icono: 'sign-out'},
+];
 
 const UserProfileScreen = () => {
+  const smartPress = () => {
+    console.log('SmartScreen');
+  };
+  const renderOpcion = ({item}) => (
+    <TouchableOpacity style={styles.opcionContainer}>
+      <Icon name={item.icono} size={20} color="black" />
+      <Text style={styles.opcionTexto}>{item.nombre}</Text>
+    </TouchableOpacity>
+  );
+
   return (
-    <View>
-      <Text>UserProfileScreen</Text>
+    <View style={styles.container}>
+      <Image source={perfil} style={styles.imagenPerfil} />
+      <Text style={styles.nombreUsuario}>Franco Dueck</Text>
+      <CustomButton
+        label="Plan Avanzado"
+        onPress={smartPress}
+        buttonColor="#7417C6"
+        textColor="white"
+        width={300}
+        height={50}
+        icon="arrow-up"
+      />
+      <FlatList
+        data={opciones}
+        renderItem={renderOpcion}
+        keyExtractor={item => item.id.toString()}
+      />
     </View>
   );
 };
 
-export default UserProfileScreen;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+  },
+  imagenPerfil: {
+    width: 200,
+    height: 200,
+    borderRadius: 75,
+    marginBottom: 16,
+  },
+  nombreUsuario: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    marginBottom: 40,
+    color: 'black',
+  },
+  opcionContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 15,
+  },
+  opcionTexto: {
+    marginLeft: 8,
+    fontSize: 16,
+  },
+  buttoncontainer: {
+    alignItems: 'center',
+    marginTop: 10,
+  },
+});
 
-const styles = StyleSheet.create({});
+export default UserProfileScreen;
