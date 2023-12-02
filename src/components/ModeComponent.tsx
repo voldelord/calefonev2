@@ -3,16 +3,29 @@ import Slider from '@react-native-community/slider';
 import React, {useState} from 'react';
 import range from '../assets/range.png';
 import CustomButton from './CustomButton';
-
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 const {width, height} = Dimensions.get('window');
-
-const ModeComponent = ({value, title, parraph, toggle, showSlider}) => {
+interface Props extends NativeStackScreenProps<any, any> {
+  value: string; // Replace 'string' with the appropriate type for 'value'
+  title: string; // Replace 'string' with the appropriate type for 'title'
+  parraph: string; // Replace 'string' with the appropriate type for 'paragraph'
+  toggle: string; // Replace 'string' with the appropriate type for 'toggle'
+  showSlider: boolean; // Replace 'boolean' with the appropriate type for 'showSlider'
+}
+const ModeComponent = ({
+  value,
+  title,
+  parraph,
+  toggle,
+  showSlider,
+  navigation,
+}: Props) => {
   const [isSwitchOn1, setIsSwitchOn1] = useState(false);
   const toggleSwitch1 = () => {
     setIsSwitchOn1(!isSwitchOn1);
   };
   const handleLoginPress = () => {
-    console.log('RangeScreen');
+    navigation.navigate('AlarmScreen');
   };
   return (
     <View style={[styles.container, {width, height}]}>
