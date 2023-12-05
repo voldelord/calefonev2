@@ -34,7 +34,7 @@ const UserProfileScreen = ({navigation}: Props) => {
   return (
     <View style={styles.container}>
       <Image source={perfil} style={styles.imagenPerfil} />
-      <Text style={styles.nombreUsuario}>Franco Dueck</Text>
+      <Text style={styles.nombreUsuario}>Franco Duek</Text>
       <CustomButton
         label="Plan Avanzado"
         onPress={smartPress}

@@ -35,7 +35,9 @@ const alarmas = [
     activo: false,
   },
 ];
+
 interface Props extends NativeStackScreenProps<any, any> {}
+
 const AlarmasScreen = ({navigation}: Props) => {
   const [alarmasData, setAlarmasData] = useState(alarmas);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -88,8 +90,9 @@ const AlarmasScreen = ({navigation}: Props) => {
       // Hacer algo con la fecha seleccionada si es necesario
     }
   };
+
   const handleLoginPress = () => {
-    navigation.navigate('HomeMenuScreen');
+    navigation.navigate('AdvanceAlarmScreen');
   };
 
   return (
@@ -105,8 +108,8 @@ const AlarmasScreen = ({navigation}: Props) => {
           onDateChange={onDateChange}
           mode="time"
           style={styles.datePicker}
-          textColor="#000" // Color del texto
-          minuteInterval={15} // Intervalo de minutos
+          textColor="#000"
+          minuteInterval={15}
         />
       )}
       <TouchableOpacity onPress={agregarAlarma} style={styles.addButton}>
@@ -119,7 +122,7 @@ const AlarmasScreen = ({navigation}: Props) => {
       </TouchableOpacity>
       <View style={styles.buttoncontainer}>
         <CustomButton
-          label="Guardar"
+          label="Opciones Avanzadas"
           onPress={handleLoginPress}
           buttonColor="#DA215D"
           textColor="white"
