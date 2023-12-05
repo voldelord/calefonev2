@@ -84,14 +84,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: '#DADADA',
     marginBottom: 10,
-    marginTop: 40,
+    marginTop: 20,
   },
   alert: {
     alignSelf: 'center',
-    marginTop: 40,
+    marginTop: 20,
   },
   buttoncontainer: {
     alignItems: 'center',
-    marginTop: 40,
   },
 });

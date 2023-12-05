@@ -56,8 +56,8 @@ const styles = StyleSheet.create({
   },
   image: {
     resizeMode: 'contain',
-    width: 400,
-    height: 400,
+    width: 300,
+    height: 300,
     justifyContent: 'center',
     alignSelf: 'center',
     marginTop: 40,
