@@ -26,6 +26,8 @@ import AlarmScreen from '../screens/AlarmScreen';
 import AdvancedPlanScreen from '../screens/AdvancedPlanScreen';
 import AdvancedModesScreen from '../screens/AdvancedModesScreen';
 import AdvanceAlarmScreen from '../screens/AdvanceAlarmScreen';
+import EditProfileScreen from '../screens/EditProfileScreen';
+import NotificationsScreen from '../screens/NotificationsScreen';
 const Stack = createNativeStackNavigator();
 
 export const StackNavigator = () => {
@@ -70,6 +72,11 @@ export const StackNavigator = () => {
         component={AdvancedModesScreen}
       />
       <Stack.Screen name="AdvanceAlarmScreen" component={AdvanceAlarmScreen} />
+      <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
+      <Stack.Screen
+        name="NotificationsScreen"
+        component={NotificationsScreen}
+      />
     </Stack.Navigator>
   );
 };

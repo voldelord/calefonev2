@@ -5,6 +5,7 @@ import {
   Image,
   FlatList,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   StyleSheet,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -13,10 +14,15 @@ import CustomButton from '../components/CustomButton';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 const opciones = [
-  {id: 1, nombre: 'Editar perfil', icono: 'edit'},
-  {id: 2, nombre: 'Notificaciones', icono: 'bell'},
-  {id: 3, nombre: 'Seguridad', icono: 'lock'},
-  {id: 4, nombre: 'Cerrar sesión', icono: 'sign-out'},
+  {id: 1, nombre: 'Editar perfil', icono: 'edit', destino: 'EditProfileScreen'},
+  {
+    id: 2,
+    nombre: 'Notificaciones',
+    icono: 'bell',
+    destino: 'NotificationsScreen',
+  },
+  {id: 3, nombre: 'Seguridad', icono: 'lock', destino: 'SecurityScreen'},
+  {id: 4, nombre: 'Cerrar sesión', icono: 'sign-out', destino: 'LogoutScreen'},
 ];
 
 interface Props extends NativeStackScreenProps<any, any> {}
@@ -24,11 +30,18 @@ const UserProfileScreen = ({navigation}: Props) => {
   const smartPress = () => {
     navigation.navigate('AdvancedPlanScreen');
   };
+
+  const navigateToScreen = (destino: string) => {
+    navigation.navigate(destino);
+  };
+
   const renderOpcion = ({item}) => (
-    <TouchableOpacity style={styles.opcionContainer}>
-      <Icon name={item.icono} size={20} color="black" />
-      <Text style={styles.opcionTexto}>{item.nombre}</Text>
-    </TouchableOpacity>
+    <TouchableWithoutFeedback onPress={() => navigateToScreen(item.destino)}>
+      <View style={styles.opcionContainer}>
+        <Icon name={item.icono} size={20} color="black" />
+        <Text style={styles.opcionTexto}>{item.nombre}</Text>
+      </View>
+    </TouchableWithoutFeedback>
   );
 
   return (
@@ -80,10 +93,6 @@ const styles = StyleSheet.create({
   opcionTexto: {
     marginLeft: 8,
     fontSize: 16,
-  },
-  buttoncontainer: {
-    alignItems: 'center',
-    marginTop: 10,
   },
 });
 
