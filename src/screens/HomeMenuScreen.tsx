@@ -9,9 +9,15 @@ const HomeMenuScreen = ({navigation}: Props) => {
   const handleButtonPress = (screenName: string) => {
     navigation.navigate(screenName);
   };
+  const onPress = () => {
+    navigation.navigate('AllNotificationsScreens');
+  };
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={onPress} style={styles.iconnotifications}>
+        <Icon name="bell" size={30} color="black" />
+      </TouchableOpacity>
       <TouchableOpacity
         style={styles.buttonContainer}
         onPress={() => navigation.navigate('NewHomeScreen')}>
@@ -50,5 +56,10 @@ const styles = StyleSheet.create({
   },
   parraph: {
     fontWeight: 'bold',
+  },
+  iconnotifications: {
+    alignSelf: 'flex-end',
+    marginRight: 15,
+    marginBottom: 10,
   },
 });

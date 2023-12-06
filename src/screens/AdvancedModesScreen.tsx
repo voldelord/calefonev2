@@ -11,7 +11,6 @@ const AdvancedModesScreen = () => {
         la fijación de un consumo en Kw/h
         o colocando el monto en ARS"
         iconName="history"
-        icom
       />
       <Card
         title="Pantalla Smart"

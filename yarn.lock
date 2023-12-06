@@ -7590,6 +7590,13 @@ react-native-svg@^12.1.1:
     css-select "^5.1.0"
     css-tree "^1.1.3"
 
+react-native-switch-selector@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.npmjs.org/react-native-switch-selector/-/react-native-switch-selector-2.3.0.tgz"
+  integrity sha512-BnhbC7vRu5HIanANszNS5rbrXqYwDggJGg/Xik2NXDA1FSzId/WrxU5hicmmZzTrQSh9N5TS76YsnG1swNzBpA==
+  dependencies:
+    prop-types "^15.7.2"
+
 react-native-vector-icons@^10.0.2:
   version "10.0.2"
   resolved "https://registry.npmjs.org/react-native-vector-icons/-/react-native-vector-icons-10.0.2.tgz"

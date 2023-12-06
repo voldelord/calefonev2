@@ -1,7 +1,8 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import CustomButton from '../components/CustomButton';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 interface Props extends NativeStackScreenProps<any, any> {}
 const ModesScreen = ({navigation}: Props) => {
@@ -23,8 +24,14 @@ const ModesScreen = ({navigation}: Props) => {
   const handleLoginPress = () => {
     console.log('ChartScreen');
   };
+  const onPress = () => {
+    navigation.navigate('AllNotificationsScreens');
+  };
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={onPress} style={styles.iconnotifications}>
+        <Icon name="bell" size={30} color="black" />
+      </TouchableOpacity>
       <CustomButton
         label="Modo Temperatura"
         onPress={temperaturePress}
@@ -87,9 +94,13 @@ export default ModesScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  iconnotifications: {
+    alignSelf: 'flex-end',
+    marginRight: 15,
+    marginBottom: 10,
   },
 });

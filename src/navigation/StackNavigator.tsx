@@ -28,11 +28,13 @@ import AdvancedModesScreen from '../screens/AdvancedModesScreen';
 import AdvanceAlarmScreen from '../screens/AdvanceAlarmScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import NotificationsScreen from '../screens/NotificationsScreen';
+import SecurityScreen from '../screens/SecurityScreen';
+import AllNotificationsScreens from '../screens/AllNotificationsScreens';
 const Stack = createNativeStackNavigator();
 
 export const StackNavigator = () => {
   return (
-    <Stack.Navigator screenOptions={{headerShown: true}}>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="HomeScreen" component={HomeScreen} />
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
@@ -76,6 +78,11 @@ export const StackNavigator = () => {
       <Stack.Screen
         name="NotificationsScreen"
         component={NotificationsScreen}
+      />
+      <Stack.Screen name="SecurityScreen" component={SecurityScreen} />
+      <Stack.Screen
+        name="AllNotificationsScreens"
+        component={AllNotificationsScreens}
       />
     </Stack.Navigator>
   );

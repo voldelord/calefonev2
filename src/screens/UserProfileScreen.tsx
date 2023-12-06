@@ -8,7 +8,8 @@ import {
   TouchableWithoutFeedback,
   StyleSheet,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+
 import perfil from '../assets/profile.png';
 import CustomButton from '../components/CustomButton';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -22,7 +23,7 @@ const opciones = [
     destino: 'NotificationsScreen',
   },
   {id: 3, nombre: 'Seguridad', icono: 'lock', destino: 'SecurityScreen'},
-  {id: 4, nombre: 'Cerrar sesión', icono: 'sign-out', destino: 'LogoutScreen'},
+  {id: 4, nombre: 'Cerrar sesión', icono: 'sign-out', destino: 'HomeScreen'},
 ];
 
 interface Props extends NativeStackScreenProps<any, any> {}
@@ -30,9 +31,15 @@ const UserProfileScreen = ({navigation}: Props) => {
   const smartPress = () => {
     navigation.navigate('AdvancedPlanScreen');
   };
+  const notificationsPress = () => {
+    navigation.navigate('AdvancedPlanScreen');
+  };
 
   const navigateToScreen = (destino: string) => {
     navigation.navigate(destino);
+  };
+  const onPress = () => {
+    navigation.navigate('AllNotificationsScreens');
   };
 
   const renderOpcion = ({item}) => (
@@ -46,6 +53,9 @@ const UserProfileScreen = ({navigation}: Props) => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={onPress} style={styles.iconnotifications}>
+        <Icon name="bell" size={30} color="black" />
+      </TouchableOpacity>
       <Image source={perfil} style={styles.imagenPerfil} />
       <Text style={styles.nombreUsuario}>Franco Duek</Text>
       <CustomButton
@@ -93,6 +103,11 @@ const styles = StyleSheet.create({
   opcionTexto: {
     marginLeft: 8,
     fontSize: 16,
+  },
+  iconnotifications: {
+    alignSelf: 'flex-end',
+    marginRight: 15,
+    marginBottom: 10,
   },
 });
 

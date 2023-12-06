@@ -48,7 +48,7 @@ const ModesConetionScreen = ({navigation}: Props) => {
           />
           <CustomButton
             label="Conexión Manual"
-            onPress={() => navigation.navigate('ManualConfigScreen')}
+            onPress={() => navigation.navigate('KeyConfigScreen')}
             buttonColor="#DA215D"
             textColor="white"
             width={300}
