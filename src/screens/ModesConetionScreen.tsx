@@ -1,42 +1,69 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {StyleSheet, Text, View, Alert} from 'react-native';
+import React, {useState} from 'react';
 import CustomButton from '../components/CustomButton';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import QRCodeScanner from 'react-native-qrcode-scanner';
+import WifiManager from 'react-native-wifi-reborn';
 
 interface Props extends NativeStackScreenProps<any, any> {}
+
 const ModesConetionScreen = ({navigation}: Props) => {
-  const handleLoginPress = () => {
-    navigation.navigate('KeyConfigScreen');
+  const [showScanner, setShowScanner] = useState(false);
+
+  const handleWifiPress = () => {
+    WifiManager.forceWifiUsage(true);
+    WifiManager.setEnabled(true);
   };
+
+  const handleQRCodePress = () => {
+    setShowScanner(true);
+  };
+
+  const handleQRCodeScanned = (e: any) => {
+    setShowScanner(false);
+    Alert.alert('QR Code Scanned', e.data);
+  };
+
   return (
     <View style={styles.container}>
-      <CustomButton
-        label="Wi-Fi"
-        onPress={handleLoginPress}
-        buttonColor="#DA215D"
-        textColor="white"
-        width={300}
-        height={50}
-        icon="plus-circle"
-      />
-      <CustomButton
-        label="Codigo QR"
-        onPress={handleLoginPress}
-        buttonColor="#DA215D"
-        textColor="white"
-        width={300}
-        height={50}
-        icon="plus-circle"
-      />
-      <CustomButton
-        label="Conexion Manual"
-        onPress={handleLoginPress}
-        buttonColor="#DA215D"
-        textColor="white"
-        width={300}
-        height={50}
-        icon="plus-circle"
-      />
+      {!showScanner ? (
+        <>
+          <CustomButton
+            label="Wi-Fi"
+            onPress={handleWifiPress}
+            buttonColor="#DA215D"
+            textColor="white"
+            width={300}
+            height={50}
+            icon="plus-circle"
+          />
+          <CustomButton
+            label="Código QR"
+            onPress={handleQRCodePress}
+            buttonColor="#DA215D"
+            textColor="white"
+            width={300}
+            height={50}
+            icon="plus-circle"
+          />
+          <CustomButton
+            label="Conexión Manual"
+            onPress={() => navigation.navigate('ManualConfigScreen')}
+            buttonColor="#DA215D"
+            textColor="white"
+            width={300}
+            height={50}
+            icon="plus-circle"
+          />
+        </>
+      ) : (
+        <QRCodeScanner
+          onRead={handleQRCodeScanned}
+          showMarker={true}
+          markerStyle={styles.markerStyle}
+          cameraStyle={styles.cameraStyle}
+        />
+      )}
     </View>
   );
 };
@@ -49,5 +76,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  markerStyle: {
+    borderColor: '#DA215D',
+    borderRadius: 10,
+    borderWidth: 2,
+  },
+  cameraStyle: {
+    height: 400,
+    width: 300,
   },
 });

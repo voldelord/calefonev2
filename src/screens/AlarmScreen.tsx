@@ -115,11 +115,7 @@ const AlarmasScreen = ({navigation}: Props) => {
       <TouchableOpacity onPress={agregarAlarma} style={styles.addButton}>
         <Icon name="plus" size={20} color="black" />
       </TouchableOpacity>
-      <TouchableOpacity
-        onPress={showDatePickerHandler}
-        style={styles.datePickerButton}>
-        <Text>Mostrar Selector de Fecha</Text>
-      </TouchableOpacity>
+
       <View style={styles.buttoncontainer}>
         <CustomButton
           label="Opciones Avanzadas"

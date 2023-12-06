@@ -6,7 +6,7 @@ const Card = ({title, paragraph, iconName}) => {
   return (
     <View style={styles.cardContainer}>
       <View style={styles.iconContainer}>
-        <Icon name={iconName} size={24} color="white" />
+        <Icon name={iconName} size={30} color="white" />
       </View>
       <View style={styles.textContainer}>
         <Text style={styles.title}>{title}</Text>
