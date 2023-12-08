@@ -6,6 +6,7 @@ import AppIntroSlider from 'react-native-app-intro-slider';
 import {SIZES} from '../constants/theme';
 import CustomButton from '../components/CustomButton';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import logo from '../assets/recurso1.png';
 
 interface Props extends NativeStackScreenProps<any, any> {}
 const HomeScreen = ({navigation}: Props) => {
@@ -36,6 +37,14 @@ const HomeScreen = ({navigation}: Props) => {
         renderItem={({item}) => {
           return (
             <View style={styles.container}>
+              <Image
+                source={logo}
+                style={{
+                  width: 150,
+                  height: 150,
+                }}
+                resizeMode="center"
+              />
               <Image
                 source={item.image}
                 style={{
@@ -79,7 +88,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     padding: 15,
-    paddingTop: 100,
+    paddingTop: 50,
     backgroundColor: '#6C6CDD',
   },
   title: {
