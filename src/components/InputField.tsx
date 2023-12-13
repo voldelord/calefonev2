@@ -1,65 +1,68 @@
-import React, {ReactElement, ReactNode} from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  TextStyle,
-  ViewStyle,
-} from 'react-native';
+import {ErrorMessage} from 'formik';
+import React, {ReactElement} from 'react';
+import {View, TextInput, StyleSheet} from 'react-native';
+import FormError from './forms/FormError';
 
 interface InputFieldProps {
   label: string;
   icon: ReactElement;
-  inputType: 'password' | 'text'; // Asumo que solo hay dos tipos posibles
-  fieldButtonLabel: string;
-  fieldButtonFunction: () => void;
+  inputType?: 'password' | 'text'; // Asumo que solo hay dos tipos posibles,
+  name: string;
+  value?: string;
+  onChange?: (e: {target: {value: string; name: string}}) => void;
+  showFormikError?: boolean;
 }
 
 const InputField = ({
   label,
   icon,
-  inputType,
-  fieldButtonLabel,
-  fieldButtonFunction,
+  inputType = 'text',
+  value,
+  onChange,
+  name,
+  showFormikError = false,
 }: InputFieldProps): ReactElement => {
+  const handleChange = (value: string) => {
+    onChange?.({target: {value, name}});
+  };
+
   return (
-    <View style={styles.inputContainer}>
-      {icon}
-      {inputType === 'password' ? (
+    <View style={styles.container}>
+      <View style={styles.inputContainer}>
+        {icon}
         <TextInput
           placeholder={label}
           style={styles.input}
-          secureTextEntry={true}
+          secureTextEntry={inputType === 'password'}
+          value={value}
+          onChangeText={handleChange}
         />
-      ) : (
-        <TextInput placeholder={label} style={styles.input} />
-      )}
+      </View>
+      {showFormikError && <ErrorMessage name={name} component={FormError} />}
     </View>
   );
 };
 
-const styles = {
+const styles = StyleSheet.create({
+  container: {marginBottom: 25, paddingHorizontal: 30},
   inputContainer: {
     flexDirection: 'row',
     borderBottomColor: '#ccc',
     borderBottomWidth: 1,
-    paddingBottom: 8,
-    marginBottom: 25,
-    marginRight: 40,
-    marginLeft: 40,
+    paddingVertical: 8,
+    paddingHorizontal: 5,
     alignItems: 'center',
-  } as ViewStyle,
+  },
   input: {
     flex: 1,
     paddingVertical: 0,
     marginHorizontal: 50,
     marginLeft: 8,
-  } as TextStyle,
+  },
   buttonText: {
     color: '#AD40AF',
     fontWeight: '700',
-  } as TextStyle,
-};
+  },
+});
 
 export default InputField;

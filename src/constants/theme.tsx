@@ -10,6 +10,7 @@ export const COLORS = {
   grey: '#C1C0C9',
   blue: '#087BB6',
   yellow: '#F4D03F',
+  error: '#f22424',
 };
 
 export const SIZES = {

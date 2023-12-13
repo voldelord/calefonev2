@@ -13,6 +13,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import perfil from '../assets/profile.png';
 import CustomButton from '../components/CustomButton';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useAuth} from '../context/AuthContext';
 
 const opciones = [
   {id: 1, nombre: 'Editar perfil', icono: 'edit', destino: 'EditProfileScreen'},
@@ -23,11 +24,13 @@ const opciones = [
     destino: 'NotificationsScreen',
   },
   {id: 3, nombre: 'Seguridad', icono: 'lock', destino: 'SecurityScreen'},
-  {id: 4, nombre: 'Cerrar sesión', icono: 'sign-out', destino: 'HomeScreen'},
+  // {id: 4, nombre: 'Cerrar sesión', icono: 'sign-out', destino: 'HomeScreen'},
 ];
 
 interface Props extends NativeStackScreenProps<any, any> {}
 const UserProfileScreen = ({navigation}: Props) => {
+  const {logout} = useAuth()!;
+
   const smartPress = () => {
     navigation.navigate('AdvancedPlanScreen');
   };
@@ -41,15 +44,6 @@ const UserProfileScreen = ({navigation}: Props) => {
   const onPress = () => {
     navigation.navigate('AllNotificationsScreens');
   };
-
-  const renderOpcion = ({item}) => (
-    <TouchableWithoutFeedback onPress={() => navigateToScreen(item.destino)}>
-      <View style={styles.opcionContainer}>
-        <Icon name={item.icono} size={20} color="black" />
-        <Text style={styles.opcionTexto}>{item.nombre}</Text>
-      </View>
-    </TouchableWithoutFeedback>
-  );
 
   return (
     <View style={styles.container}>
@@ -67,11 +61,24 @@ const UserProfileScreen = ({navigation}: Props) => {
         height={50}
         icon="arrow-up"
       />
-      <FlatList
-        data={opciones}
-        renderItem={renderOpcion}
-        keyExtractor={item => item.id.toString()}
-      />
+      <View style={styles.buttonList}>
+        {opciones.map(option => (
+          <TouchableWithoutFeedback
+            onPress={() => navigateToScreen(option.destino)}
+            key={option.id}>
+            <View style={styles.opcionContainer}>
+              <Icon name={option.icono} size={20} color="black" />
+              <Text style={styles.opcionTexto}>{option.nombre}</Text>
+            </View>
+          </TouchableWithoutFeedback>
+        ))}
+        <TouchableWithoutFeedback onPress={logout}>
+          <View style={styles.opcionContainer}>
+            <Icon name={'sign-out'} size={20} color="black" />
+            <Text style={styles.opcionTexto}>Cerrar sesión</Text>
+          </View>
+        </TouchableWithoutFeedback>
+      </View>
     </View>
   );
 };
@@ -82,6 +89,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
+  },
+  buttonList: {
+    width: '100%',
+    paddingHorizontal: 45,
   },
   imagenPerfil: {
     width: 200,

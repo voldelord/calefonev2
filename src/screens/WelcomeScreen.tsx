@@ -9,7 +9,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import logo from '../assets/recurso1.png';
 
 interface Props extends NativeStackScreenProps<any, any> {}
-const HomeScreen = ({navigation}: Props) => {
+const WelcomeScreen = ({navigation}: Props) => {
   const handleLoginPress = () => {
     navigation.navigate('LoginScreen');
   };
@@ -25,7 +25,8 @@ const HomeScreen = ({navigation}: Props) => {
     },
     {
       id: 2,
-      description: 'Crea un clima más sano y confortable en tu hogar.',
+      description:
+        'Ahorra energía caldeando y climatizando tu casa de manera inteligente.',
       image: login2,
     },
   ];
@@ -64,7 +65,7 @@ const HomeScreen = ({navigation}: Props) => {
                   height={50}
                 />
               </View>
-              <Text style={styles.parraph}>No eres usuario Registrate</Text>
+              <Text style={styles.parraph}>¿No eres usuario?</Text>
               <View style={styles.containertabbutton}>
                 <CustomButton
                   label="Registrarse"
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
     fontFamily: 'ShareTechMono',
   },
   containerbutton: {
-    marginTop: 40,
+    marginTop: 30,
   },
   containertabbutton: {
     marginTop: 20,
@@ -104,6 +105,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     color: 'white',
     fontFamily: 'ShareTechMono',
+    textAlign: 'center',
   },
 });
-export default HomeScreen;
+export default WelcomeScreen;

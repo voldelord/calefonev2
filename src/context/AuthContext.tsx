@@ -1,0 +1,75 @@
+import {createContext, useContext, useEffect, useState} from 'react';
+import {clearAuth, getAuth, storeAuth} from '../helpers/auth';
+
+const AuthContext = createContext<{
+  user: Record<string, any> | null;
+  token: string | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  login: (data: {token: string; user: Record<string, any>}) => Promise<void>;
+  logout: () => Promise<void>;
+} | null>(null);
+
+export const AuthProvider = ({children}: React.PropsWithChildren) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [authToken, setAuthToken] = useState<string | null>(null);
+  const [user, setUser] = useState<Record<string, any> | null>(null);
+
+  const login = async ({
+    token,
+    user,
+  }: {
+    token: string;
+    user: Record<string, any>;
+  }) => {
+    await storeAuth({token, user});
+
+    setAuthToken(token);
+
+    setUser(user);
+  };
+
+  const logout = async () => {
+    await clearAuth();
+
+    setAuthToken(null);
+
+    setUser(null);
+  };
+
+  useEffect(() => {
+    const loadAuthInfo = async () => {
+      const authInfo = await getAuth();
+
+      setIsLoading(false);
+
+      if (authInfo === null) {
+        return;
+      }
+
+      const {user, token} = authInfo;
+
+      setUser(user);
+
+      setAuthToken(token);
+    };
+
+    loadAuthInfo();
+  }, [isLoading]);
+
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        token: authToken,
+        isAuthenticated: !!authToken,
+        isLoading,
+        login,
+        logout,
+      }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = () => useContext(AuthContext);

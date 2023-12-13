@@ -1,11 +1,12 @@
-import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
-import {StackNavigator} from './src/navigation/StackNavigator';
+import {AuthProvider} from './src/context/AuthContext';
+import AppStackList from './src/navigation/AppStackList';
+
 const App = () => {
   return (
-    <NavigationContainer>
-      <StackNavigator />
-    </NavigationContainer>
+    <AuthProvider>
+      <AppStackList />
+    </AuthProvider>
   );
 };
 
