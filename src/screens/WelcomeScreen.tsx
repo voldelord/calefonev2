@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import login from '../assets/home1.png';
 import login2 from '../assets/home2.png';
@@ -30,58 +30,60 @@ const WelcomeScreen = ({navigation}: Props) => {
       image: login2,
     },
   ];
-  const [showHomePage, setShowHomePage] = useState(false);
-  if (!showHomePage) {
-    return (
-      <AppIntroSlider
-        data={slides}
-        renderItem={({item}) => {
-          return (
-            <View style={styles.container}>
-              <Image
-                source={logo}
-                style={{
-                  width: 150,
-                  height: 150,
-                }}
-                resizeMode="center"
+
+  return (
+    <AppIntroSlider
+      data={slides}
+      showNextButton={false}
+      showDoneButton={false}
+      renderItem={({item}) => {
+        return (
+          <View style={styles.container}>
+            <Image
+              source={logo}
+              style={{
+                width: 250,
+                height: 150,
+              }}
+              resizeMode="center"
+            />
+            <Image
+              source={item.image}
+              style={{
+                width: SIZES.width - 80,
+                height: 250,
+              }}
+              resizeMode="contain"
+            />
+            <Text style={[styles.parraph, styles.caption]}>
+              {item.description}
+            </Text>
+            <View style={styles.containerbutton}>
+              <CustomButton
+                label="Iniciar Sesión"
+                onPress={handleLoginPress}
+                buttonColor="white"
+                textColor="#DA215D"
+                width={280}
+                height={50}
               />
-              <Image
-                source={item.image}
-                style={{
-                  width: SIZES.width - 80,
-                  height: 250,
-                }}
-                resizeMode="contain"
-              />
-              <Text style={styles.parraph}>{item.description}</Text>
-              <View style={styles.containerbutton}>
-                <CustomButton
-                  label="Iniciar Sesión"
-                  onPress={handleLoginPress}
-                  buttonColor="white"
-                  textColor="#DA215D"
-                  width={280}
-                  height={50}
-                />
-              </View>
-              <Text style={styles.parraph}>¿No eres usuario?</Text>
-              <View style={styles.containertabbutton}>
-                <CustomButton
-                  label="Registrarse"
-                  onPress={handleRegisterPress}
-                  buttonColor="#8C8CEA"
-                  textColor="white"
-                  width={200}
-                  height={50}
-                />
-              </View>
             </View>
-          );
-        }}
-      />
-    );
-  }
+            <Text style={styles.parraph}>¿No eres usuario?</Text>
+            <View style={styles.containertabbutton}>
+              <CustomButton
+                label="Registrarse"
+                onPress={handleRegisterPress}
+                buttonColor="#8C8CEA"
+                textColor="white"
+                width={200}
+                height={50}
+              />
+            </View>
+          </View>
+        );
+      }}
+    />
+  );
 };
 
 const styles = StyleSheet.create({
@@ -106,6 +108,9 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'ShareTechMono',
     textAlign: 'center',
+  },
+  caption: {
+    paddingHorizontal: 45,
   },
 });
 export default WelcomeScreen;
