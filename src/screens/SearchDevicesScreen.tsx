@@ -3,6 +3,7 @@ import React from 'react';
 import logo from '../assets/15.png';
 import CustomButton from '../components/CustomButton';
 import CustomModal from '../components/CustomModal';
+
 const SearchDevicesScreen = () => {
   const handleLoginPress = () => {
     console.log('ConfirmScreen');

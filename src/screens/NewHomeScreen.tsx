@@ -12,36 +12,11 @@ const NewHomeScreen = ({navigation}: Props) => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>New Home</Text>
-      <InputField
-        label={'Name'}
-        inputType="text"
-        fieldButtonLabel={'Forgot?'}
-        fieldButtonFunction={() => {}}
-      />
-      <InputField
-        label={'Direccion'}
-        inputType="password"
-        fieldButtonLabel={'Forgot?'}
-        fieldButtonFunction={() => {}}
-      />
-      <InputField
-        label={'Localidad'}
-        inputType="text"
-        fieldButtonLabel={'Forgot?'}
-        fieldButtonFunction={() => {}}
-      />
-      <InputField
-        label={'M3'}
-        inputType="number"
-        fieldButtonLabel={'Forgot?'}
-        fieldButtonFunction={() => {}}
-      />
-      <InputField
-        label={'input'}
-        inputType="password"
-        fieldButtonLabel={'Forgot?'}
-        fieldButtonFunction={() => {}}
-      />
+      <InputField label={'Name'} inputType="text" />
+      <InputField label={'Direccion'} inputType="password" />
+      <InputField label={'Localidad'} inputType="text" />
+      <InputField label={'M3'} inputType="number" />
+      <InputField label={'input'} inputType="password" />
       <View style={styles.buttoncontainer}>
         <CustomButton
           label="Confirmar"
