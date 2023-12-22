@@ -8,6 +8,7 @@ import {Image, Text, View} from 'react-native';
 import leafPink from '../assets/leaf_pink.png';
 import accountBlack from '../assets/account_black.png';
 import accountPink from '../assets/account_pink.png';
+import DeviceControlStack from './DeviceControlStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -22,7 +23,7 @@ const AppBottomTabs = () => {
 
           if (route.name === 'HomeStack') {
             icon = focused ? homePink : homeBlack;
-          } else if (route.name === 'DontKnowStack') {
+          } else if (route.name === 'DeviceControlStack') {
             icon = focused ? leafPink : leafBlack;
           } else if (route.name === 'AccountStack') {
             icon = focused ? accountPink : accountBlack;
@@ -32,7 +33,7 @@ const AppBottomTabs = () => {
         },
       })}>
       <Tab.Screen name="HomeStack" component={HomeStack} />
-      <Tab.Screen name="DontKnowStack" component={HomeStack} />
+      <Tab.Screen name="DeviceControlStack" component={DeviceControlStack} />
       <Tab.Screen name="AccountStack" component={HomeStack} />
     </Tab.Navigator>
   );
