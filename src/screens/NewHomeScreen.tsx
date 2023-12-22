@@ -11,12 +11,12 @@ const NewHomeScreen = ({navigation}: Props) => {
   };
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>New Home</Text>
-      <InputField label={'Name'} inputType="text" />
-      <InputField label={'Direccion'} inputType="password" />
-      <InputField label={'Localidad'} inputType="text" />
-      <InputField label={'M3'} inputType="number" />
-      <InputField label={'input'} inputType="password" />
+      <Text style={styles.text}>Nuevo Hogar</Text>
+      <InputField label={'Nomber'} name="name" />
+      <InputField label={'Direccion'} name="address" />
+      <InputField label={'Localidad'} name="location" />
+      <InputField label={'M3'} name="m3" />
+      <InputField label={'Input'} name="input" />
       <View style={styles.buttoncontainer}>
         <CustomButton
           label="Confirmar"
@@ -37,8 +37,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   buttoncontainer: {
     alignItems: 'center',

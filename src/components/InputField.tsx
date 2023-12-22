@@ -5,7 +5,7 @@ import FormError from './forms/FormError';
 
 interface InputFieldProps {
   label: string;
-  icon: ReactElement;
+  icon?: ReactElement;
   inputType?: 'password' | 'text'; // Asumo que solo hay dos tipos posibles,
   name: string;
   value?: string;
