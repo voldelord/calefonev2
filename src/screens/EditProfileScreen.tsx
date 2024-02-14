@@ -14,39 +14,33 @@ const EditProfileScreen = ({navigation}: Props) => {
       <Text style={styles.text}>Editar Perfil</Text>
       <InputField
         label={'Nombre Completo'}
+        name='name'
         inputType="text"
-        fieldButtonLabel={'Forgot?'}
-        fieldButtonFunction={() => {}}
       />
       <InputField
         label={'NickName'}
+        name='nickname'
         inputType="password"
-        fieldButtonLabel={'Forgot?'}
-        fieldButtonFunction={() => {}}
       />
       <InputField
         label={'Fecha de Nacimiento'}
+        name='birthdate'
         inputType="text"
-        fieldButtonLabel={'Forgot?'}
-        fieldButtonFunction={() => {}}
       />
       <InputField
         label={'Email'}
+        name='email'
         inputType="text"
-        fieldButtonLabel={'Forgot?'}
-        fieldButtonFunction={() => {}}
       />
       <InputField
         label={'Numero de Telefono'}
+        name='phone'
         inputType="text"
-        fieldButtonLabel={'Forgot?'}
-        fieldButtonFunction={() => {}}
       />
       <InputField
         label={'Sexo'}
+        name='sex'
         inputType="text"
-        fieldButtonLabel={'Forgot?'}
-        fieldButtonFunction={() => {}}
       />
       <View style={styles.buttoncontainer}>
         <CustomButton
@@ -68,8 +62,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   buttoncontainer: {
     alignItems: 'center',

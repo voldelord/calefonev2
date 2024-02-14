@@ -74,7 +74,7 @@ const UserProfileScreen = ({navigation}: Props) => {
         ))}
         <TouchableWithoutFeedback onPress={logout}>
           <View style={styles.opcionContainer}>
-            <Icon name={'sign-out'} size={20} color="black" />
+            <Icon name={'sign-out-alt'} size={20} color="black" />
             <Text style={styles.opcionTexto}>Cerrar sesión</Text>
           </View>
         </TouchableWithoutFeedback>

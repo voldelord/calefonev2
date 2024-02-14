@@ -1,7 +1,14 @@
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  SafeAreaView,
+} from 'react-native';
 import React from 'react';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import Header from '../components/layout/Header';
 
 interface Props extends NativeStackScreenProps<any, any> {}
 
@@ -11,7 +18,8 @@ const HomesScreen = ({navigation}: Props) => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <Header />
       <TouchableOpacity
         style={styles.myhouse}
         onPress={() => navigation.navigate('AddScenaryScreen')}>
@@ -24,9 +32,9 @@ const HomesScreen = ({navigation}: Props) => {
           <Icon name="plus" size={20} color="#DA215D" />
         </View>
         <Text>No tenés ninguna casa registrada</Text>
-        <Text style={styles.parraph}>Agrega una Casa</Text>
+        <Text style={styles.parraph}>Agrega una Casaasdfasdf</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 

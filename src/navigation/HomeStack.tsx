@@ -12,12 +12,13 @@ import KeyConfigScreen from '../screens/KeyConfigScreen';
 import ComRequestScreen from '../screens/ComRequestScreen';
 import WirelessDeviceScreen from '../screens/WirelessDeviceScreen';
 import DevicesScreen from '../screens/DevicesScreen';
+import SearchBLEDevicesScreen from '../screens/SearchBLEDevicesScreen';
 
 const Stack = createStackNavigator();
 
 const HomeStack = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="HomeMenuScreen" component={HomeMenuScreen} />
       <Stack.Screen name="NewHomeScreen" component={NewHomeScreen} />
       <Stack.Screen name="HomesScreen" component={HomesScreen} />
@@ -43,6 +44,7 @@ const HomeStack = () => {
         component={WirelessDeviceScreen}
       />
       <Stack.Screen name="DevicesScreen" component={DevicesScreen} />
+      <Stack.Screen name="SearchBLEDevicesScreen" component={SearchBLEDevicesScreen} />
     </Stack.Navigator>
   );
 };

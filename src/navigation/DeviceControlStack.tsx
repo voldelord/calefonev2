@@ -11,7 +11,7 @@ const Stack = createStackNavigator();
 
 const DeviceControlStack = () => {
     return (
-        <Stack.Navigator>
+        <Stack.Navigator screenOptions={{headerShown: false}}>
             <Stack.Screen name='ModesScreen' component={ModesScreen} />
             <Stack.Screen name='TemperatureScreen' component={TemperatureScreen} />
             <Stack.Screen name='PowerScreen' component={PowerScreen} />

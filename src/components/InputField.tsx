@@ -44,7 +44,7 @@ const InputField = ({
 };
 
 const styles = StyleSheet.create({
-  container: {marginBottom: 25, paddingHorizontal: 30},
+  container: {marginBottom: 25},
   inputContainer: {
     flexDirection: 'row',
     borderBottomColor: '#ccc',

@@ -9,6 +9,7 @@ import leafPink from '../assets/leaf_pink.png';
 import accountBlack from '../assets/account_black.png';
 import accountPink from '../assets/account_pink.png';
 import DeviceControlStack from './DeviceControlStack';
+import AccountStack from './AccountStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -34,7 +35,7 @@ const AppBottomTabs = () => {
       })}>
       <Tab.Screen name="HomeStack" component={HomeStack} />
       <Tab.Screen name="DeviceControlStack" component={DeviceControlStack} />
-      <Tab.Screen name="AccountStack" component={HomeStack} />
+      <Tab.Screen name="AccountStack" component={AccountStack} />
     </Tab.Navigator>
   );
 };
