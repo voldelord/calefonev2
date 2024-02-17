@@ -1,13 +1,14 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import bell from '../../assets/bell.png';
+import { COLORS } from '../../constants/theme';
 
 const Header = ({onBackPress, hideNotificationIcon = false, title}) => {
   return (
     <View style={styles.container}>
       {onBackPress && (
         <TouchableOpacity onPress={onBackPress}>
-          <Entypo name="chevron-thin-left" size={30} />
+          <Entypo name="chevron-thin-left" size={30} color={COLORS.black} />
         </TouchableOpacity>
       )}
 

@@ -1,5 +1,5 @@
 import {Alert, SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Header from '../components/layout/Header';
 import tempIcon from '../assets/temp-mode-icon.png';
 import powerIcon from '../assets/mode-power-icon.png';
@@ -11,8 +11,7 @@ import Dropdown from '../components/forms/Dropdown';
 import useHomes from '../hooks/useHomes';
 import useHomeEnvironments from '../hooks/useHomeEnvironments';
 import useControllers from '../hooks/useControllers';
-
-const countries = ['Egypt', 'Canada', 'Australia', 'Ireland'];
+import { useFocusEffect } from '@react-navigation/native';
 
 const ModesScreen = ({navigation}) => {
   const [data, setData] = useState({
@@ -35,9 +34,9 @@ const ModesScreen = ({navigation}) => {
     filters: [{field: 'environmentId', operator: '=', value: data.environmentId}]
   }});
 
-  useEffect(() => {
+  useFocusEffect(useCallback(() => {
     getHomes();
-  }, []);
+  }, []));
 
   useEffect(() => {
     getEnvironments();
@@ -52,9 +51,11 @@ const ModesScreen = ({navigation}) => {
       return Alert.alert("Seleccione un dispositivo");
     }
 
+    const device = controllers.find(c => c.deviceId === data.deviceId);
+
     navigation.navigate(screenName, {
       deviceId: data.deviceId,
-      deviceName: `Dispositivo ${controllers.findIndex(c => c.id === data.deviceId) + 1}`
+      deviceName: device.description || `Dispositivo ${controllers.indexOf(device) + 1}`
     });
   };
 
@@ -77,7 +78,7 @@ const ModesScreen = ({navigation}) => {
   const handleDropdownChange = e => {
     setData(data => ({
       ...data,
-      [e.target.name]: e.target.value.id,
+      [e.target.name]: e.target.name === "deviceId" ? e.target.value.deviceId : e.target.value.id,
     }));
   };
 
@@ -132,7 +133,7 @@ const ModesScreen = ({navigation}) => {
           style={{marginBottom: 20}}
           onPress={() => navigateToScreenWithDevice("TemperatureScreen")}
         />
-        <ModeButton
+        {/* <ModeButton
           title={'Modo potencia'}
           icon={powerIcon}
           style={{marginBottom: 20}}
@@ -156,7 +157,7 @@ const ModesScreen = ({navigation}) => {
           style={{marginBottom: 20}}
           onPress={handleLoginPress}
         />
-        <ModeButton title={'Modo Temperatura'} icon={tempIcon} />
+        <ModeButton title={'Modo Temperatura'} icon={tempIcon} /> */}
       </ScrollView>
     </SafeAreaView>
   );

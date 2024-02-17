@@ -1,13 +1,87 @@
 import {SafeAreaView, StyleSheet, Switch, Text, View} from 'react-native';
-import React from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import init from 'react_native_mqtt';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import CustomSwitch from 'react-native-custom-switch-new';
 import Header from '../components/layout/Header';
-import Slider from '@react-native-community/slider';
 import SectionTitle from '../components/typography/SectionTitle';
 import {COLORS} from '../constants/theme';
+import {useFocusEffect} from '@react-navigation/native';
+import {hostIp} from '../helpers/createAxios';
+import {useAuth} from '../context/AuthContext';
+import RangeSlider from '../components/forms/RangeSlider';
+
+init({
+  size: 10000,
+  storageBackend: AsyncStorage,
+  defaultExpires: 1000 * 3600 * 24,
+  enableCache: true,
+  sync: {},
+});
+
+const options = {
+  host: hostIp,
+  port: 8883,
+  path: '/ws',
+};
 
 const TemperatureScreen = ({navigation, route}) => {
   const deviceId = route.params.deviceId;
   const deviceName = route.params.deviceName;
+  const {token} = useAuth();
+  const client = useRef(null);
+  const [temperature, setTemperature] = useState(0);
+  const [targetTemperature, setTargetTemperature] = useState(0);
+  const [isConnected, setIsConnected] = useState(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      client.current = new Paho.MQTT.Client(
+        options.host,
+        options.port,
+        options.path,
+        token,
+      );
+
+      client.current.onConnectionLost = function (responseObject) {
+        console.log('onConnectionLost');
+        console.log(responseObject.errorMessage);
+        setIsConnected(false);
+      };
+      client.current.onMessageArrived = function (message) {
+        console.log('onMessageArrived');
+        const parsedMessage = JSON.parse(message.payloadString);
+        console.log(parsedMessage);
+        setTemperature(parsedMessage.value);
+      };
+
+      client.current.connect({
+        onSuccess: function (...args) {
+          console.log('onSuccess');
+          console.log(...args);
+          client.current.subscribe(`${deviceId}/temperature`, {qos: 0});
+          setIsConnected(true);
+        },
+        userName: deviceId,
+        useSSL: false,
+        timeout: 3,
+        onFailure: function (...args) {
+          console.log('onFailure');
+          console.log(...args);
+        },
+      });
+
+      () => {
+        client.current?.disconnect();
+      };
+    }, [deviceId, token]),
+  );
+
+  // useEffect(() => {
+  //   if (isConnected) {
+  //     client.current?.send(`${deviceId}/target_temperature`, JSON.stringify({value: targetTemperature}));
+  //   }
+  // }, [targetTemperature, client.current, isConnected]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -15,35 +89,25 @@ const TemperatureScreen = ({navigation, route}) => {
       <View style={styles.content}>
         <SectionTitle text={deviceName} style={{marginBottom: 10}} />
 
-        <View style={styles.rangePickerContainer}>
-          <View style={styles.rangePickerValueContainer}>
-            <Text style={styles.rangePickerTitle}>MODO TEMPERATURA</Text>
-            <Text style={styles.rangePickerValue}>20,00 C°</Text>
-          </View>
-          <Slider
-            style={{width: '100%', height: 40}}
-            minimumValue={0}
-            maximumValue={1}
-            minimumTrackTintColor="#87F0AB"
-            maximumTrackTintColor="#FEA2AD"
-          />
-        </View>
-
-        <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 30}}>
-          <Text style={{fontSize: 18, color: COLORS.black}}>Temperatura actual: </Text>
-          <Text style={{fontSize: 18, color: COLORS.primary}}>20,00 C°</Text>
-        </View>
+        <RangeSlider
+          value={targetTemperature}
+          subTitleValue={temperature}
+          onChange={e => setTargetTemperature(e.target.value)}
+        />
 
         <View style={{alignItems: 'center', marginTop: 40}}>
-          <Text style={{fontSize: 18, color: COLORS.black, marginBottom: 10}}>Calefón apagado</Text>
-          <Switch
+          <Text style={{fontSize: 18, color: COLORS.black, marginBottom: 10}}>
+            Calefón apagado
+          </Text>
+          {/* <Switch
             trackColor={{false: '#767577', true: '#DA215D'}}
             // thumbColor={isSwitchOn1 ? '#FFFFFF' : '#f4f3f4'}
             ios_backgroundColor="#3e3e3e"
             // onValueChange={toggleSwitch1}
             // value={isSwitchOn1}
             style={{transform: [{scaleX: 1.5}, {scaleY: 1.5}]}}
-          />
+          /> */}
+          <CustomSwitch />
         </View>
       </View>
       {/* <ModeComponent
@@ -62,35 +126,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   content: {
-    paddingHorizontal: 15,
-  },
-  rangePickerContainer: {
-    backgroundColor: '#fff',
-    borderRadius: 15,
-    padding: 10,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-
-    elevation: 5,
-  },
-  rangePickerValueContainer: {
-    paddingTop: 15,
-    paddingBottom: 15,
-    alignItems: 'center',
-  },
-  rangePickerValue: {
-    fontSize: 48,
-    color: COLORS.black,
-  },
-  rangePickerTitle: {
-    color: COLORS.black,
-    fontSize: 18,
-    marginBottom: 15,
+    paddingHorizontal: 20,
   },
 });
 

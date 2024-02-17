@@ -6,12 +6,12 @@ import {
   SafeAreaView,
   ScrollView,
 } from 'react-native';
-import React, {useCallback} from 'react';
+import React, { useCallback } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Header from '../components/layout/Header';
 import SectionTitle from '../components/typography/SectionTitle';
 import useHomes from '../hooks/useHomes';
-import {useFocusEffect} from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 
 const HomeMenuScreen = ({navigation}) => {
   const {homes, getHomes} = useHomes();

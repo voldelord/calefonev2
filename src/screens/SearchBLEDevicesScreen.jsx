@@ -5,6 +5,7 @@ import {
 } from '@orbital-systems/react-native-esp-idf-provisioning';
 import {useCallback, useEffect, useState} from 'react';
 import {
+  Alert,
   RefreshControl,
   SafeAreaView,
   ScrollView,
@@ -14,15 +15,16 @@ import {
   View,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Entypo from 'react-native-vector-icons/Entypo';
 import {PERMISSIONS, RESULTS, requestMultiple} from 'react-native-permissions';
-import Header from '../components/layout/Header';
 import SectionTitle from '../components/typography/SectionTitle';
+import {v4 as uuid} from 'uuid';
+import Header from '../components/layout/Header';
 import ReactNativeModal from 'react-native-modal';
 import {COLORS} from '../constants/theme';
 import InputField from '../components/InputField';
 import CustomButton from '../components/CustomButton';
 import useAxios from '../hooks/useAxios';
+import { hostIp } from '../helpers/createAxios';
 
 const requestPermissions = async () => {
   try {
@@ -53,6 +55,7 @@ const SearchBLEDevicesScreen = ({navigation, route}) => {
   const [loadingWifiList, setLoadingWifiList] = useState(true);
   const [selectedWifi, setSelectedWifi] = useState(null);
   const [wifiPassword, setWifiPassword] = useState('');
+  const [showWifiModal, setShowWifiModal] = useState(false);
 
   const [{loading: loadingCreateController}, createController] = useAxios(
     {
@@ -81,7 +84,7 @@ const SearchBLEDevicesScreen = ({navigation, route}) => {
       } finally {
         setLoadingDevices(false);
       }
-    }
+    };
 
     doSearch();
   }, []);
@@ -90,20 +93,60 @@ const SearchBLEDevicesScreen = ({navigation, route}) => {
     searchDevices();
   }, []);
 
-  const handleDevicePressed = async device => {
-    await device.connect('abcd1234');
+  const handleDevicePressed = device => {
+    setSelectedDevice(selectedDevice === device ? null : device);
+  };
+
+  const handleRegisterEspPress = async () => {
+    if (!selectedDevice) {
+      return;
+    }
+
+    await selectedDevice.connect('abcd1234', null, 'wifiprov');
+
+    try {
+      const deviceId = await selectedDevice.sendData(
+        'custom-data',
+        JSON.stringify({mqttServer: `${hostIp}:1883`}),
+      );
+      console.log({deviceId});
+
+      await createController({
+        data: {
+          id: uuid(),
+          description: selectedDevice.name,
+          deviceId: deviceId.replaceAll('\0', ''),
+          environmentId,
+        },
+      });
+
+      Alert.alert("Calefon agregado");
+    } catch (e) {
+      console.error(e);
+      console.error(e.response?.data);
+    } finally {
+      selectedDevice.disconnect();
+    }
+  };
+
+  const handleScanWifiPressed = async () => {
+    if (!selectedDevice) {
+      return;
+    }
+
+    await selectedDevice.connect('abcd1234', null, 'wifiprov');
 
     try {
       setLoadingWifiList(true);
-      setSelectedDevice(device);
+      setShowWifiModal(true);
 
-      const wifiList = await device.scanWifiList();
+      const wifiList = await selectedDevice.scanWifiList();
 
       setWifiList(wifiList);
       setLoadingWifiList(false);
     } catch (e) {
       console.error(e);
-      device.disconnect();
+      // selectedDevice.disconnect();
     }
   };
 
@@ -114,24 +157,16 @@ const SearchBLEDevicesScreen = ({navigation, route}) => {
     }
 
     try {
-      await selectedDevice.provision(selectedWifi.ssid, "2023apamateS");
-      // await selectedDevice.provision(selectedWifi.ssid, wifiPassword);
-
-      const espResponse = JSON.parse(
-        await selectedDevice.sendData(
-          'custom-data',
-          JSON.stringify({mqttServer: 'test.com'}),
-        ),
-      );
-
-      console.log(espResponse);
+      // await selectedDevice.provision(selectedWifi.ssid, '2023apamateS');
+      await selectedDevice.provision(selectedWifi.ssid, wifiPassword);
+      Alert.alert("Credenciales enviadas");
     } catch (e) {
       console.error(e);
     } finally {
       selectedDevice.disconnect();
       setSelectedWifi(null);
-      setSelectedDevice(null);
-      setWifiPassword("");
+      setShowWifiModal(false);
+      setWifiPassword('');
     }
   };
 
@@ -158,27 +193,57 @@ const SearchBLEDevicesScreen = ({navigation, route}) => {
           <View>
             <SectionTitle text={'Dispositivos'} style={{marginBottom: 10}} />
 
-            {devices.map(device => (
-              <TouchableOpacity
+            {devices.map((device, i) => (
+              <View
                 key={device.name}
-                onPress={() => handleDevicePressed(device)}
-                style={styles.device}>
-                <Ionicons
-                  name="hardware-chip-outline"
-                  style={styles.deviceIcon}
-                />
-                <Text style={styles.deviceText}>{device.name}</Text>
-                <Entypo name="chevron-small-right" style={styles.deviceIcon} />
-              </TouchableOpacity>
+                style={[
+                  styles.device,
+                  {borderBottomWidth: i === devices.length - 1 ? 0 : 1},
+                ]}>
+                {selectedDevice === device ? (
+                  <>
+                    <TouchableOpacity
+                      style={[styles.deviceOptionBtn, {marginRight: 5}]}
+                      onPress={handleScanWifiPressed}>
+                      <Text>Escanear WIFI</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.deviceOptionBtn}
+                      onPress={handleRegisterEspPress}>
+                      <Text>Registrar calefon</Text>
+                    </TouchableOpacity>
+                  </>
+                ) : (
+                  <>
+                    <Ionicons
+                      name="hardware-chip-outline"
+                      style={styles.deviceIcon}
+                    />
+                    <Text style={styles.deviceText}>{device.name}</Text>
+                  </>
+                )}
+                <TouchableOpacity
+                  onPress={() => handleDevicePressed(device)}
+                  style={{marginLeft: 'auto'}}>
+                  <Ionicons
+                    name={
+                      selectedDevice === device
+                        ? 'radio-button-on'
+                        : 'radio-button-off'
+                    }
+                    style={[styles.deviceIcon, {marginRight: 0}]}
+                  />
+                </TouchableOpacity>
+              </View>
             ))}
           </View>
         )}
       </ScrollView>
 
-      <ReactNativeModal isVisible={!!selectedDevice} style={{margin: 0}}>
+      <ReactNativeModal isVisible={showWifiModal} style={{margin: 0}}>
         <View style={{backgroundColor: COLORS.white, flex: 1}}>
           <Header
-            onBackPress={() => setSelectedDevice(null)}
+            onBackPress={() => setShowWifiModal(false)}
             hideNotificationIcon
             title="Redes WIFI"
           />
@@ -318,7 +383,8 @@ const styles = StyleSheet.create({
   device: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 5,
+    paddingVertical: 15,
+    borderColor: '#ddd',
   },
   deviceIcon: {
     fontSize: 40,
@@ -327,5 +393,15 @@ const styles = StyleSheet.create({
   deviceText: {
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  deviceOptionBtn: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
   },
 });

@@ -47,12 +47,12 @@ const UserProfileScreen = ({navigation}: Props) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={onPress} style={styles.iconnotifications}>
+      {/* <TouchableOpacity onPress={onPress} style={styles.iconnotifications}>
         <Icon name="bell" size={30} color="black" />
-      </TouchableOpacity>
-      <Image source={perfil} style={styles.imagenPerfil} />
-      <Text style={styles.nombreUsuario}>Franco Duek</Text>
-      <CustomButton
+      </TouchableOpacity> */}
+      {/* <Image source={perfil} style={styles.imagenPerfil} /> */}
+      {/* <Text style={styles.nombreUsuario}>Franco Duek</Text> */}
+      {/* <CustomButton
         label="Plan Avanzado"
         onPress={smartPress}
         buttonColor="#7417C6"
@@ -60,9 +60,9 @@ const UserProfileScreen = ({navigation}: Props) => {
         width={300}
         height={50}
         icon="arrow-up"
-      />
+      /> */}
       <View style={styles.buttonList}>
-        {opciones.map(option => (
+        {/* {opciones.map(option => (
           <TouchableWithoutFeedback
             onPress={() => navigateToScreen(option.destino)}
             key={option.id}>
@@ -71,7 +71,7 @@ const UserProfileScreen = ({navigation}: Props) => {
               <Text style={styles.opcionTexto}>{option.nombre}</Text>
             </View>
           </TouchableWithoutFeedback>
-        ))}
+        ))} */}
         <TouchableWithoutFeedback onPress={logout}>
           <View style={styles.opcionContainer}>
             <Icon name={'sign-out-alt'} size={20} color="black" />

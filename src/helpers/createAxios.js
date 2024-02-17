@@ -2,7 +2,9 @@ import * as axios from 'axios';
 import qs from 'qs';
 import {getAuth} from './auth';
 
-const host = 'http://192.168.1.114:3000/api';
+export const hostIp = '192.168.1.114';
+// export const hostIp = '54.207.97.89';
+const host = `http://${hostIp}:3000/api`;
 
 export const createAxios = () => {
   const headers = {
@@ -23,8 +25,7 @@ export const createAxios = () => {
       if (authInfo !== null) {
         request.headers = {
           ...headers,
-          // Authorization: `Bearer ${authInfo.token}`,
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiZmNiNTVkLTAzN2YtNDMxMi1hODYyLTdhMWQyOTA2NzQ1MCIsImVtYWlsIjoiYWxleEBnbWFpbC5jb20iLCJpYXQiOjE3MDU5MTkyMTR9.wROeeaMXtl6sor3IOFUSmAXYgIUYiB8kaziEqjgb92s`,
+          Authorization: `Bearer ${authInfo.token}`,
         };
       }
 

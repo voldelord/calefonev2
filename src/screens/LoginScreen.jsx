@@ -16,6 +16,7 @@ import InputField from '../components/InputField';
 import Ionicons from 'react-native-vector-icons/Ionicons'; // importa Ionicons
 import google from '../assets/google.png';
 import {useAuth} from '../context/AuthContext';
+import useAxios from '../hooks/useAxios';
 
 const initialValues = () => ({email: '', password: ''});
 
@@ -28,8 +29,19 @@ const loginSchema = Yup.object().shape({
 
 const LoginScreen = ({navigation}) => {
   const {login} = useAuth();
+  const [{loading: loadingLoginToApi}, loginToApi] = useAxios(
+    {
+      method: 'post',
+      url: '/v1/auth/login',
+    },
+    {manual: true},
+  );
 
   const handleSubmit = async (values, helpers) => {
+    if (loadingLoginToApi) {
+      return;
+    }
+
     if (
       values.email !== 'customer@temptech.com' ||
       values.password !== 'password'
@@ -38,8 +50,15 @@ const LoginScreen = ({navigation}) => {
       return;
     }
 
+    const {data} = await loginToApi({
+      data: {
+        id: 'cbfcb55d-037f-4312-a862-7a1d29067450',
+        email: 'alex@gmail.com',
+      },
+    });
+
     await login({
-      token: 'the_token',
+      token: data.token,
       user: {email: values.email, name: 'Pedro Perez'},
     });
   };

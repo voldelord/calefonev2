@@ -41,7 +41,7 @@ const DevicesScreen = ({navigation, route}) => {
             key={controller.id}
             style={styles.myhouse}
             onPress={() => navigation.navigate('AddScenaryScreen')}>
-            <Text style={styles.myparraph}>Dispositivo {i + 1}</Text>
+            <Text style={styles.myparraph}>{controller.description || `Dispositivo ${i + 1}`}</Text>
           </TouchableOpacity>
         ))}
 
