@@ -6,20 +6,26 @@ import {
   SafeAreaView,
   ScrollView,
 } from 'react-native';
-import React, { useCallback } from 'react';
+import React, {useCallback} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Header from '../components/layout/Header';
 import SectionTitle from '../components/typography/SectionTitle';
 import useControllers from '../hooks/useControllers';
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
+import {useDeviceStore} from '../stores/device-store';
 
 const DevicesScreen = ({navigation, route}) => {
+  const homeId = route.params.homeId;
   const environmentId = route.params.environmentId;
   const environmentName = route.params.environmentName;
 
-  const {controllers, getControllers} = useControllers({params: {
-    filters: [{field: 'environmentId', operator: '=', value: environmentId}]
-  }});
+  const setData = useDeviceStore(state => state.setData);
+
+  const {controllers, getControllers} = useControllers({
+    params: {
+      filters: [{field: 'environmentId', operator: '=', value: environmentId}],
+    },
+  });
 
   const noControllers = controllers.length === 0;
 
@@ -40,8 +46,16 @@ const DevicesScreen = ({navigation, route}) => {
           <TouchableOpacity
             key={controller.id}
             style={styles.myhouse}
-            onPress={() => navigation.navigate('AddScenaryScreen')}>
-            <Text style={styles.myparraph}>{controller.description || `Dispositivo ${i + 1}`}</Text>
+            onPress={() => {
+              setData({homeId, environmentId, deviceId: controller.deviceId});
+
+              navigation.navigate('DeviceControlStack', {
+                screen: 'ModesScreen',
+              });
+            }}>
+            <Text style={styles.myparraph}>
+              {controller.description || `Dispositivo ${i + 1}`}
+            </Text>
           </TouchableOpacity>
         ))}
 

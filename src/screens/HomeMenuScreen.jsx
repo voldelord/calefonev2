@@ -35,7 +35,7 @@ const HomeMenuScreen = ({navigation}) => {
             key={home.id}
             style={styles.home}
             onPress={() =>
-              navigation.navigate('ScenariosScreen', {homeId: home.id})
+              navigation.navigate('ScenariosScreen', {homeId: home.id, homeName: home.name})
             }>
             <Text style={styles.homeTitle}>{home.name}</Text>
             <Text style={styles.homeAddress}>{home.address}</Text>

@@ -15,6 +15,7 @@ import SectionTitle from '../components/typography/SectionTitle';
 
 const ScenariosScreen = ({navigation, route}) => {
   const homeId = route.params.homeId;
+  const homeName = route.params.homeName;
 
   const {environments, getEnvironments} = useHomeEnvironments({homeId});
 
@@ -30,7 +31,7 @@ const ScenariosScreen = ({navigation, route}) => {
     <SafeAreaView style={styles.container}>
       <Header onBackPress={() => navigation.goBack()} />
       <ScrollView style={styles.content}>
-        <SectionTitle text={'Ambientes'} />
+        <SectionTitle text={homeName} />
 
         {environments.map(environment => (
           <TouchableOpacity
@@ -38,6 +39,7 @@ const ScenariosScreen = ({navigation, route}) => {
             style={styles.myhouse}
             onPress={() =>
               navigation.navigate('DevicesScreen', {
+                homeId,
                 environmentId: environment.id,
                 environmentName: environment.name,
               })

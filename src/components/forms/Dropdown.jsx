@@ -4,6 +4,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 
 const Dropdown = ({
   items,
+  defaultValue,
   defaultButtonText,
   disabled,
   buttonTextAfterSelection,
@@ -21,6 +22,7 @@ const Dropdown = ({
   return (
     <SelectDropdown
       data={items}
+      defaultValue={defaultValue}
       disabled={disabled}
       onSelect={handleSelect}
       defaultButtonText={defaultButtonText}
