@@ -13,11 +13,7 @@ export const useDeviceStore = create((set, get) => ({
       });
     }
 
-    set({
-      homeId: arg.homeId,
-      environmentId: arg.environmentId,
-      deviceId: arg.deviceId,
-    });
+    set(arg);
   },
   selectHomeId: homeId => set({homeId}),
   selectEnvironmentId: environmentId => set({environmentId}),
