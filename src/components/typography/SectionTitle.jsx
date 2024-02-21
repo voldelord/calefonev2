@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   text: {
-    fontSize: 25,
+    fontSize: 24,
     color: COLORS.black,
   },
 });

@@ -2,9 +2,18 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {RadialSlider} from 'react-native-radial-slider';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { COLORS } from '../../constants/theme';
+import {COLORS} from '../../constants/theme';
 
-const RangeSlider = ({value, name, onChange, step = 1, subTitleValue}) => {
+const RangeSlider = ({
+  value,
+  name,
+  onChange,
+  step = 1,
+  title,
+  subTitle,
+  subTitleValue,
+  unit,
+}) => {
   const handleChange = value => {
     onChange?.({target: {name, value}});
   };
@@ -30,7 +39,7 @@ const RangeSlider = ({value, name, onChange, step = 1, subTitleValue}) => {
         unit="C°"
         thumbColor="#ffffff"
         thumbBorderWidth={1}
-        thumbRadius={25}
+        thumbRadius={22}
         thumbBorderColor="#ddd"
         sliderWidth={22}
         linearGradient={[
@@ -50,13 +59,6 @@ const RangeSlider = ({value, name, onChange, step = 1, subTitleValue}) => {
         isHideButtons={true}
         isHideTailText={true}
         isHideTitle={true}
-        // buttonContainerStyle={{
-        //   backgroundColor: 'tomato',
-        //   width: '100%',
-        //   justifyContent: 'space-between',
-        //   margin: 0,
-        // }}
-        // subTitleStyle={{backgroundColor: 'blue', width: '100%', margin: 0}}
         onChange={handleChange}
       />
 
@@ -65,20 +67,22 @@ const RangeSlider = ({value, name, onChange, step = 1, subTitleValue}) => {
           <TouchableOpacity
             style={styles.rangePickerButton}
             onPress={onMinusPress}>
-            <FontAwesome5 name="minus" size={24} />
+            <FontAwesome5 name="minus" style={styles.rangePickerButtonIcon} />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.rangePickerButton}
             onPress={onPlusPress}>
-            <FontAwesome5 name="plus" size={24} />
+            <FontAwesome5 name="plus" style={styles.rangePickerButtonIcon} />
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.title}>MODO POTENCIA</Text>
+        <Text style={styles.title}>{title}</Text>
 
         <View style={styles.subTitleContainer}>
-          <Text style={styles.subTitle}>Temperatura actual:</Text>
-          <Text style={styles.subTitleValue}>{subTitleValue} C°</Text>
+          <Text style={styles.subTitle}>{subTitle}</Text>
+          <Text style={styles.subTitleValue}>
+            {subTitleValue} {unit}
+          </Text>
         </View>
       </View>
     </View>
@@ -92,17 +96,18 @@ const styles = StyleSheet.create({
   rangePickerBottomSection: {
     width: '100%',
     position: 'absolute',
-    top: 190,
+    top: 200,
+    alignItems: 'center',
   },
   rangePickerButtonContainer: {
     flexDirection: 'row',
-    padding: 11,
     justifyContent: 'space-between',
+    width: 322,
   },
   rangePickerButton: {
-    height: 50,
-    width: 50,
-    borderRadius: 25,
+    height: 40,
+    width: 40,
+    borderRadius: 20,
     borderWidth: 1,
     borderColor: '#ddd',
     justifyContent: 'center',
@@ -118,6 +123,10 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
 
     elevation: 5,
+  },
+  rangePickerButtonIcon: {
+    fontSize: 18,
+    color: COLORS.primary,
   },
   title: {
     textAlign: 'center',

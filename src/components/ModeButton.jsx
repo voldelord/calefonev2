@@ -1,17 +1,62 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {COLORS} from '../constants/theme';
+import LinearGradient from 'react-native-linear-gradient';
 
-const ModeButton = ({icon, title, onPress, style}) => {
+const ModeButton = ({
+  icon,
+  title,
+  onPress,
+  style,
+  small = false,
+  withGradient = false,
+}) => {
+  const buttonHeight = small ? 50 : 68;
+  const buttonPadding = small ? 6 : 10;
+  const iconContainerHeight = small ? 40 : 50;
+  const iconHeight = small ? 20 : 40;
+  const titleFontSize = small ? 16 : 18;
+
+  const colors = withGradient
+    ? ['#6B6BDB', '#8858BC', '#964FAB', COLORS.primary]
+    : ['#eee', '#eee'];
+
   return (
-    <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
-      <Text style={styles.buttonTitle}>{title}</Text>
-      <View style={styles.iconContainer}>
-        <Image
-          source={icon}
-          style={styles.icon}
-          resizeMode="center"
-        />
-      </View>
+    <TouchableOpacity onPress={onPress}>
+      <LinearGradient
+        style={[
+          styles.button,
+          {height: buttonHeight, padding: buttonPadding},
+          style,
+        ]}
+        start={{x: 0, y: 0}}
+        end={{x: 1, y: 0}}
+        colors={colors}>
+        <Text
+          style={[
+            styles.buttonTitle,
+            {
+              fontSize: titleFontSize,
+              color: withGradient ? COLORS.white : COLORS.black,
+            },
+          ]}>
+          {title}
+        </Text>
+        <View
+          style={[
+            styles.iconContainer,
+            {
+              height: iconContainerHeight,
+              width: iconContainerHeight,
+              borderRadius: iconContainerHeight / 2,
+            },
+          ]}>
+          <Image
+            source={icon}
+            style={[styles.icon, {height: iconHeight, width: iconHeight}]}
+            resizeMode="center"
+          />
+        </View>
+      </LinearGradient>
     </TouchableOpacity>
   );
 };
@@ -23,21 +68,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: '#ECECEC',
     borderRadius: 35,
-    height: 70,
-    padding: 10,
     paddingLeft: 20,
   },
-  buttonTitle: {fontWeight: 'bold', fontSize: 18, color: COLORS.black},
+  buttonTitle: {fontWeight: 'bold', color: COLORS.black},
   iconContainer: {
-    height: 50,
-    width: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 25,
     overflow: 'hidden',
     backgroundColor: COLORS.white,
   },
-  icon: {height: 40, width: 40}
+  icon: {height: 40, width: 40},
 });
 
 export default ModeButton;

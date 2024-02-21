@@ -3,6 +3,8 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import init from 'react_native_mqtt';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomSwitch from 'react-native-custom-switch-new';
+import changeModeIcon from '../assets/change-mode-icon.png';
+import crownIcon from '../assets/crown-icon.png';
 import Header from '../components/layout/Header';
 import SectionTitle from '../components/typography/SectionTitle';
 import {COLORS} from '../constants/theme';
@@ -10,6 +12,7 @@ import {useFocusEffect} from '@react-navigation/native';
 import {hostIp} from '../helpers/createAxios';
 import {useAuth} from '../context/AuthContext';
 import RangeSlider from '../components/forms/RangeSlider';
+import ModeButton from '../components/ModeButton';
 
 init({
   size: 10000,
@@ -91,31 +94,42 @@ const TemperatureScreen = ({navigation, route}) => {
 
         <RangeSlider
           value={targetTemperature}
+          title="MODO TEMPERATURA"
           subTitleValue={temperature}
+          subTitle={'Temperatura actual:'}
+          unit="C°"
           onChange={e => setTargetTemperature(e.target.value)}
         />
 
-        <View style={{alignItems: 'center', marginTop: 40}}>
+        <View style={{alignItems: 'center'}}>
           <Text style={{fontSize: 18, color: COLORS.black, marginBottom: 10}}>
             Calefón apagado
           </Text>
-          {/* <Switch
-            trackColor={{false: '#767577', true: '#DA215D'}}
-            // thumbColor={isSwitchOn1 ? '#FFFFFF' : '#f4f3f4'}
-            ios_backgroundColor="#3e3e3e"
-            // onValueChange={toggleSwitch1}
-            // value={isSwitchOn1}
-            style={{transform: [{scaleX: 1.5}, {scaleY: 1.5}]}}
-          /> */}
-          <CustomSwitch />
+          <CustomSwitch
+            buttonPadding={7}
+            buttonWidth={28}
+            switchWidth={80}
+            switchBackgroundColor={'#DDD'}
+            onSwitchBackgroundColor={COLORS.primary}
+          />
+        </View>
+
+        <View style={{marginTop: 'auto', marginBottom: 30}}>
+          <ModeButton
+            small
+            icon={changeModeIcon}
+            title={'Cambiar de modo'}
+            style={{marginBottom: 15}}
+            onPress={() => navigation.navigate('ModesScreen')}
+          />
+          <ModeButton
+            small
+            icon={crownIcon}
+            title={'Desbloquear programar horario'}
+            withGradient
+          />
         </View>
       </View>
-      {/* <ModeComponent
-        value="20,00 Cº"
-        title="MODO TEMPERATURA"
-        parraph="Temperatura actual: 20.00 c°"
-        toggle="Calefon"
-      /> */}
     </SafeAreaView>
   );
 };
@@ -127,6 +141,7 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingHorizontal: 20,
+    flex: 1,
   },
 });
 
