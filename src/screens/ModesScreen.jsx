@@ -6,6 +6,7 @@ import powerIcon from '../assets/mode-power-icon.png';
 import ecoIcon from '../assets/mode-eco-icon.png';
 import saveEnergyIcon from '../assets/save-energy-icon.png';
 import envIndicatorsIcon from '../assets/environmental-indicators-icon.png';
+import crownIcon from '../assets/crown-icon.png';
 import ModeButton from '../components/ModeButton';
 import Dropdown from '../components/forms/Dropdown';
 import useHomes from '../hooks/useHomes';
@@ -173,7 +174,7 @@ const ModesScreen = ({navigation}) => {
           style={{marginBottom: 20}}
           onPress={handleLoginPress}
         />
-        <ModeButton title={'Modo Temperatura'} icon={tempIcon} />
+        <ModeButton title={'Plan Avanzado'} icon={crownIcon} withGradient />
       </ScrollView>
     </SafeAreaView>
   );
