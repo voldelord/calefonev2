@@ -1,11 +1,24 @@
 import {create} from 'zustand';
 
-export const useDeviceStore = create(set => ({
+export const useDeviceStore = create((set, get) => ({
   homeId: null,
   environmentId: null,
   deviceId: null,
-  setData: ({homeId, environmentId, deviceId}) =>
-    set({homeId, environmentId, deviceId}),
+  setData: arg => {
+    if (typeof arg === 'function') {
+      arg({
+        homeId: get().homeId,
+        environmentId: get().environmentId,
+        deviceId: get().deviceId,
+      });
+    }
+
+    set({
+      homeId: arg.homeId,
+      environmentId: arg.environmentId,
+      deviceId: arg.deviceId,
+    });
+  },
   selectHomeId: homeId => set({homeId}),
   selectEnvironmentId: environmentId => set({environmentId}),
   selectDeviceId: deviceId => set({deviceId}),

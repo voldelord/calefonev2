@@ -1,18 +1,7 @@
-import {
-  Alert,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
+import {Alert, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
+import React, {useCallback, useEffect} from 'react';
 import Header from '../components/layout/Header';
 import tempIcon from '../assets/temp-mode-icon.png';
-import powerIcon from '../assets/mode-power-icon.png';
-import ecoIcon from '../assets/mode-eco-icon.png';
-import saveEnergyIcon from '../assets/save-energy-icon.png';
-import envIndicatorsIcon from '../assets/environmental-indicators-icon.png';
 import ModeButton from '../components/ModeButton';
 import Dropdown from '../components/forms/Dropdown';
 import useHomes from '../hooks/useHomes';
@@ -21,32 +10,26 @@ import useControllers from '../hooks/useControllers';
 import {useFocusEffect} from '@react-navigation/native';
 import {useDeviceStore} from '../stores/device-store';
 
-const ModesScreen = ({navigation, route}) => {
+const ModesScreen = ({navigation}) => {
   const homeId = useDeviceStore(state => state.homeId);
   const environmentId = useDeviceStore(state => state.environmentId);
   const deviceId = useDeviceStore(state => state.deviceId);
-
-  const [data, setData] = useState({
-    homeId,
-    environmentId,
-    deviceId,
-  });
+  const setData = useDeviceStore(state => state.setData);
 
   const {homes, loading: homesLoading, getHomes} = useHomes();
+
   const {
     environments,
     loading: environmentsLoading,
     getEnvironments,
-  } = useHomeEnvironments({homeId: data.homeId});
+  } = useHomeEnvironments({homeId: homeId});
   const {
     controllers,
     loading: controllersLoading,
     getControllers,
   } = useControllers({
     params: {
-      filters: [
-        {field: 'environmentId', operator: '=', value: data.environmentId},
-      ],
+      filters: [{field: 'environmentId', operator: '=', value: environmentId}],
     },
   });
 
@@ -58,21 +41,21 @@ const ModesScreen = ({navigation, route}) => {
 
   useEffect(() => {
     getEnvironments();
-  }, [data.homeId]);
+  }, [homeId]);
 
   useEffect(() => {
     getControllers();
-  }, [data.environmentId]);
+  }, [environmentId]);
 
   const navigateToScreenWithDevice = screenName => {
-    if (!data.deviceId) {
+    if (!deviceId) {
       return Alert.alert('Seleccione un dispositivo');
     }
 
-    const device = controllers.find(c => c.deviceId === data.deviceId);
+    const device = controllers.find(c => c.deviceId === deviceId);
 
     navigation.navigate(screenName, {
-      deviceId: data.deviceId,
+      deviceId: deviceId,
       deviceName:
         device.description || `Dispositivo ${controllers.indexOf(device) + 1}`,
     });
@@ -112,7 +95,7 @@ const ModesScreen = ({navigation, route}) => {
         <View style={{width: '33.33%'}}>
           <Dropdown
             items={homes}
-            defaultValue={homes.find(home => home.id === data.homeId)}
+            defaultValue={homes.find(home => home.id === homeId)}
             defaultButtonText="Hogar"
             disabled={homesLoading}
             buttonTextAfterSelection={home => home.name}
@@ -125,7 +108,7 @@ const ModesScreen = ({navigation, route}) => {
           <Dropdown
             items={environments}
             defaultValue={environments.find(
-              environment => environment.id === data.environmentId,
+              environment => environment.id === environmentId,
             )}
             defaultButtonText="Ambiente"
             disabled={environmentsLoading}
@@ -139,7 +122,7 @@ const ModesScreen = ({navigation, route}) => {
           <Dropdown
             items={controllers}
             defaultValue={controllers.find(
-              controller => controller.deviceId === data.deviceId,
+              controller => controller.deviceId === deviceId,
             )}
             defaultButtonText="Dispositivo"
             disabled={controllersLoading}
