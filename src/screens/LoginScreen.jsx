@@ -17,8 +17,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons'; // importa Ionicons
 import google from '../assets/google.png';
 import {useAuth} from '../context/AuthContext';
 import useAxios from '../hooks/useAxios';
+import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
+import extractErrorMessage from '../helpers/extractErrorMessage';
 
-const initialValues = () => ({email: '', password: ''});
+const initialValues = ({email = '', password = ''}) => ({email, password});
 
 const loginSchema = Yup.object().shape({
   email: Yup.string()
@@ -27,7 +29,11 @@ const loginSchema = Yup.object().shape({
   password: Yup.string().required('La contraseña es requerida'),
 });
 
-const LoginScreen = ({navigation}) => {
+const LoginScreen = ({navigation, route}) => {
+  const email = route.params?.email || '';
+  const password = route.params?.password || '';
+  const doLogin = route.params?.doLogin || false;
+
   const {login} = useAuth();
   const [{loading: loadingLoginToApi}, loginToApi] = useAxios(
     {
@@ -42,25 +48,23 @@ const LoginScreen = ({navigation}) => {
       return;
     }
 
-    if (
-      values.email !== 'customer@temptech.com' ||
-      values.password !== 'password'
-    ) {
-      helpers.setErrors({email: 'Credenciales Incorrectas.'});
-      return;
+    try {
+      const {data} = await loginToApi({
+        data: values,
+      });
+
+      await login({
+        token: data.token,
+        // TODO: Get user profile
+        user: {email: values.email, name: 'Pedro Perez'},
+      });
+    } catch (e) {
+      Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: 'Error',
+        textBody: extractErrorMessage(e),
+      });
     }
-
-    const {data} = await loginToApi({
-      data: {
-        id: 'cbfcb55d-037f-4312-a862-7a1d29067450',
-        email: 'alex@gmail.com',
-      },
-    });
-
-    await login({
-      token: data.token,
-      user: {email: values.email, name: 'Pedro Perez'},
-    });
   };
 
   return (
@@ -70,7 +74,7 @@ const LoginScreen = ({navigation}) => {
       </View>
       <View style={{paddingHorizontal: 20}}>
         <Formik
-          initialValues={{email: '', password: ''}}
+          initialValues={initialValues({email, password})}
           onSubmit={handleSubmit}
           validationSchema={loginSchema}>
           {({handleSubmit}) => (

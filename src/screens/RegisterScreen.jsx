@@ -8,27 +8,76 @@ import {
   Pressable,
 } from 'react-native';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
+import {v4 as uuid} from 'uuid';
 import CustomButton from '../components/CustomButton';
 import logo from '../assets/logo.jpg';
 import InputField from '../components/InputField';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import google from '../assets/google.png';
 import * as Yup from 'yup';
-import {Field, Formik} from 'formik';
+import {ErrorMessage, Field, Formik} from 'formik';
+import FormError from '../components/forms/FormError';
+import useAxios from '../hooks/useAxios';
+import extractErrorMessage from '../helpers/extractErrorMessage';
+import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 
-const initialValues = () => ({name: '', password: ''});
+const initialValues = () => ({
+  email: '',
+  password: '',
+  passwordConfirmation: '',
+  acceptTermsOfService: false,
+});
 
 const registerSchema = Yup.object().shape({
-  email: Yup.string().email().required('El correo es requerido'),
+  email: Yup.string()
+    .email('Debe ingresar un email válido')
+    .required('El email es requerido'),
   password: Yup.string().required('La contraseña es requerida'),
+  passwordConfirmation: Yup.string()
+    .oneOf([Yup.ref('password'), null], 'Las contraseñas deben coincidir')
+    .required('Debes confirmar la contraseña'),
+  acceptTermsOfService: Yup.boolean().isTrue(
+    'Debes aceptar la política de privacidad',
+  ),
 });
 
 const RegisterScreen = ({navigation}) => {
-  const handleLoginPress = () => {
-    navigation.navigate('ConfirmScreen');
-  };
+  const [{loading: registerLoading}, register] = useAxios(
+    {
+      method: 'POST',
+      url: '/v1/auth/register',
+    },
+    {manual: true},
+  );
 
-  const handleSubmit = () => {};
+  const handleSubmit = async data => {
+    if (registerLoading) {
+      return;
+    }
+
+    try {
+      await register({
+        data: {
+          ...data,
+          id: uuid(),
+        },
+      });
+
+      navigation.navigate('LoginScreen', {
+        email: data.email,
+        password: data.password,
+        doLogin: true,
+      });
+    } catch (e) {
+      const errorMessage = extractErrorMessage(e);
+
+      Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: 'Error',
+        textBody: errorMessage,
+      });
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -43,7 +92,7 @@ const RegisterScreen = ({navigation}) => {
           initialValues={initialValues()}
           onSubmit={handleSubmit}
           validationSchema={registerSchema}>
-          {({handleSubmit}) => (
+          {({handleSubmit, values, setFieldValue}) => (
             <>
               <Field
                 label={'Email'}
@@ -71,13 +120,14 @@ const RegisterScreen = ({navigation}) => {
                     style={{marginRight: 5}}
                   />
                 }
+                showFormikError
                 inputType="password"
                 as={InputField}
               />
 
               <Field
                 label={'Confirmar Contraseña'}
-                name="password"
+                name="passwordConfirmation"
                 icon={
                   <Ionicons
                     name="lock-closed-outline"
@@ -86,12 +136,13 @@ const RegisterScreen = ({navigation}) => {
                     style={{marginRight: 5}}
                   />
                 }
+                showFormikError
                 inputType="password"
                 as={InputField}
               />
 
               <BouncyCheckbox
-                style={styles.checkbox}
+                isChecked={values.acceptTermsOfService}
                 size={20}
                 fillColor="green"
                 unfillColor="#FFFFFF"
@@ -99,13 +150,18 @@ const RegisterScreen = ({navigation}) => {
                 iconStyle={{borderColor: 'red'}}
                 innerIconStyle={{borderWidth: 2}}
                 textStyle={{
-                  fontFamily: 'JosefinSans-Regular',
                   fontSize: 10,
                   textAlign: 'justify',
-                  marginRight: 10,
-                  marginBottom: 10,
+                  textDecorationLine: 'none',
                 }}
-                onPress={isChecked => {}}
+                onPress={isChecked =>
+                  setFieldValue('acceptTermsOfService', isChecked)
+                }
+              />
+
+              <ErrorMessage
+                name={'acceptTermsOfService'}
+                component={FormError}
               />
 
               <View style={styles.buttoncontainer}>
@@ -116,6 +172,7 @@ const RegisterScreen = ({navigation}) => {
                   textColor="white"
                   width={'100%'}
                   height={50}
+                  disabled={registerLoading}
                 />
               </View>
             </>
@@ -172,9 +229,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: 'white',
     marginBottom: 10,
-  },
-  checkbox: {
-    marginHorizontal: 20,
   },
   imagecentercontainer: {
     justifyContent: 'center',
