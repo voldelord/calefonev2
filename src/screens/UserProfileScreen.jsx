@@ -98,6 +98,7 @@ const UserProfileScreen = ({navigation}) => {
               key={option.id}
               title={option.nombre}
               icon={option.icono}
+              onPress={() => navigation.navigate(option.destino)}
             />
           ))}
           <MenuItem
@@ -173,7 +174,6 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   menuItemIcon: {
-    color: '#aaa',
     height: 20,
     width: 20,
     marginRight: 15,
