@@ -17,6 +17,7 @@ import useAxios from '../hooks/useAxios';
 import {showConfirmationAlert} from '../helpers/alerts';
 import {useLoadingOverlayStore} from '../stores/loadingOverlayStore';
 import TitleOptions from '../components/TitleOptions';
+import TitleSection from '../components/TitleSection';
 
 const ScenariosScreen = ({navigation, route}) => {
   const homeId = route.params.homeId;
@@ -63,14 +64,11 @@ const ScenariosScreen = ({navigation, route}) => {
     <SafeAreaView style={styles.container}>
       <Header onBackPress={() => navigation.goBack()} />
       <ScrollView style={styles.content}>
-        <View style={styles.titleSection}>
-          <SectionTitle text={homeName} />
-
-          <TitleOptions
-            onDeletePress={handleDeletePressed}
-            deleteDisabled={deleteHomeLoading}
-          />
-        </View>
+        <TitleSection
+          title={homeName}
+          onDeletePress={handleDeletePressed}
+          deleteDisabled={deleteHomeLoading}
+        />
 
         {environments.map(environment => (
           <TouchableOpacity
@@ -117,9 +115,6 @@ const styles = StyleSheet.create({
   content: {
     paddingHorizontal: 20,
   },
-  titleSection: {flexDirection: 'row', alignItems: 'center'},
-  titleOption: {paddingHorizontal: 5, alignItems: 'center'},
-  titleOptionIcon: {fontSize: 22, color: COLORS.black},
   buttonContainer: {
     backgroundColor: '#ededed',
     borderRadius: 20,
