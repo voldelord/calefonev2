@@ -6,22 +6,29 @@ import {
   SafeAreaView,
   ScrollView,
 } from 'react-native';
-import React, { useCallback } from 'react';
+import React, {useCallback} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Header from '../components/layout/Header';
 import SectionTitle from '../components/typography/SectionTitle';
 import useHomes from '../hooks/useHomes';
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
+import {useAuth} from '../context/AuthContext';
 
 const HomeMenuScreen = ({navigation}) => {
-  const {homes, getHomes} = useHomes();
+  const {user} = useAuth();
+
+  const {homes, getHomes} = useHomes({
+    params: {
+      filters: [{field: 'customerId', operator: '=', value: user?.id}],
+    },
+  });
 
   const noHomes = homes.length === 0;
 
   useFocusEffect(
     useCallback(() => {
       getHomes();
-    }, []),
+    }, [user?.id]),
   );
 
   return (
@@ -35,7 +42,10 @@ const HomeMenuScreen = ({navigation}) => {
             key={home.id}
             style={styles.home}
             onPress={() =>
-              navigation.navigate('ScenariosScreen', {homeId: home.id, homeName: home.name})
+              navigation.navigate('ScenariosScreen', {
+                homeId: home.id,
+                homeName: home.name,
+              })
             }>
             <Text style={styles.homeTitle}>{home.name}</Text>
             <Text style={styles.homeAddress}>{home.address}</Text>

@@ -1,10 +1,16 @@
 import {useEffect, useState} from 'react';
 import useAxios from './useAxios';
 
-const useHomes = () => {
+const useHomes = ({params} = {}) => {
   const [homes, setHomes] = useState([]);
 
-  const [{data, loading}, getHomes] = useAxios('/v1/homes', {manual: true});
+  const [{data, loading}, getHomes] = useAxios(
+    {
+      url: '/v1/homes',
+      params,
+    },
+    {manual: true},
+  );
 
   useEffect(() => {
     if (data) {

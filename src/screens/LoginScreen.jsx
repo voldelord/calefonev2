@@ -54,8 +54,7 @@ const LoginScreen = ({navigation, route}) => {
 
       await login({
         token: data.token,
-        // TODO: Get user profile
-        user: {email: values.email, name: 'Pedro Perez'},
+        user: {...data.user, name: 'Pedro Perez'},
       });
     } catch (e) {
       Toast.show({
