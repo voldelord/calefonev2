@@ -7,7 +7,6 @@ import {
   Image,
   Pressable,
 } from 'react-native';
-import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import CustomButton from '../components/CustomButton';
 import {Field, Formik} from 'formik';
 import * as Yup from 'yup';
@@ -105,25 +104,9 @@ const LoginScreen = ({navigation, route}) => {
                     style={{marginRight: 5}}
                   />
                 }
+                showFormikError
                 inputType="password"
                 as={InputField}
-              />
-              <BouncyCheckbox
-                style={styles.checkbox}
-                size={20}
-                fillColor="green"
-                unfillColor="#FFFFFF"
-                text="Estoy deacuerdo con la Politica de Privacidad, Acuerdo del Usuario y Politica de Privacidad Infantil"
-                iconStyle={{borderColor: 'red'}}
-                innerIconStyle={{borderWidth: 2}}
-                textStyle={{
-                  fontFamily: 'JosefinSans-Regular',
-                  fontSize: 10,
-                  textAlign: 'justify',
-                  marginRight: 10,
-                  marginBottom: 10,
-                }}
-                onPress={isChecked => {}}
               />
 
               <View style={styles.buttoncontainer}>
