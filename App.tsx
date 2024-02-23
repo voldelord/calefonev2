@@ -3,6 +3,7 @@ import {AuthProvider} from './src/context/AuthContext';
 import AppStackList from './src/navigation/AppStackList';
 import {Appearance} from 'react-native';
 import {AlertNotificationRoot} from 'react-native-alert-notification';
+import LoadingOverlay from './src/components/ui/LoadingOverlay';
 
 const App = () => {
   useEffect(() => {
@@ -13,6 +14,7 @@ const App = () => {
     <AuthProvider>
       <AlertNotificationRoot theme="light">
         <AppStackList />
+        <LoadingOverlay />
       </AlertNotificationRoot>
     </AuthProvider>
   );

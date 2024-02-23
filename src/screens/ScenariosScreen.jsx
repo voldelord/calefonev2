@@ -6,18 +6,34 @@ import {
   SafeAreaView,
   ScrollView,
 } from 'react-native';
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Header from '../components/layout/Header';
 import useHomeEnvironments from '../hooks/useHomeEnvironments';
 import {useFocusEffect} from '@react-navigation/native';
 import SectionTitle from '../components/typography/SectionTitle';
+import {COLORS} from '../constants/theme';
+import useAxios from '../hooks/useAxios';
+import {showConfirmationAlert} from '../helpers/alerts';
+import {useLoadingOverlayStore} from '../stores/loadingOverlayStore';
+import TitleOptions from '../components/TitleOptions';
 
 const ScenariosScreen = ({navigation, route}) => {
   const homeId = route.params.homeId;
   const homeName = route.params.homeName;
 
+  const setIsLoadingOverlay = useLoadingOverlayStore(
+    state => state.setIsLoading,
+  );
   const {environments, getEnvironments} = useHomeEnvironments({homeId});
+
+  const [{loading: deleteHomeLoading}, deleteHome] = useAxios(
+    {
+      method: 'delete',
+      url: `/v1/homes/${homeId}`,
+    },
+    {manual: true},
+  );
 
   const noEnvironments = environments.length === 0;
 
@@ -27,11 +43,34 @@ const ScenariosScreen = ({navigation, route}) => {
     }, []),
   );
 
+  useEffect(() => {
+    setIsLoadingOverlay(deleteHomeLoading);
+  }, [deleteHomeLoading]);
+
+  const handleDeletePressed = () => {
+    showConfirmationAlert({
+      title: 'Eliminar hogar',
+      message: `¿Estas seguro de eliminar "${homeName}" y todo su contenido?`,
+      okButtonPress: async () => {
+        await deleteHome();
+
+        navigation.goBack();
+      },
+    });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Header onBackPress={() => navigation.goBack()} />
       <ScrollView style={styles.content}>
-        <SectionTitle text={homeName} />
+        <View style={styles.titleSection}>
+          <SectionTitle text={homeName} />
+
+          <TitleOptions
+            onDeletePress={handleDeletePressed}
+            deleteDisabled={deleteHomeLoading}
+          />
+        </View>
 
         {environments.map(environment => (
           <TouchableOpacity
@@ -78,6 +117,9 @@ const styles = StyleSheet.create({
   content: {
     paddingHorizontal: 20,
   },
+  titleSection: {flexDirection: 'row', alignItems: 'center'},
+  titleOption: {paddingHorizontal: 5, alignItems: 'center'},
+  titleOptionIcon: {fontSize: 22, color: COLORS.black},
   buttonContainer: {
     backgroundColor: '#ededed',
     borderRadius: 20,
