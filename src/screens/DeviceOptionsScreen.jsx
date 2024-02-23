@@ -37,7 +37,7 @@ const DeviceOptionsScreen = ({navigation, route}) => {
 
   const handleDeletePressed = () => {
     showConfirmationAlert({
-      title: 'Eliminar ambiente',
+      title: 'Eliminar dispositivo',
       message: `¿Estas seguro de eliminar "${deviceName}"?`,
       okButtonPress: async () => {
         await deleteController();
