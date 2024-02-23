@@ -5,7 +5,6 @@ import {
 } from '@orbital-systems/react-native-esp-idf-provisioning';
 import {useCallback, useEffect, useState} from 'react';
 import {
-  Alert,
   RefreshControl,
   SafeAreaView,
   ScrollView,
@@ -24,7 +23,7 @@ import {COLORS} from '../constants/theme';
 import InputField from '../components/InputField';
 import CustomButton from '../components/CustomButton';
 import useAxios from '../hooks/useAxios';
-import { hostIp } from '../helpers/createAxios';
+import {hostIp} from '../helpers/createAxios';
 
 const requestPermissions = async () => {
   try {
@@ -93,60 +92,21 @@ const SearchBLEDevicesScreen = ({navigation, route}) => {
     searchDevices();
   }, []);
 
-  const handleDevicePressed = device => {
-    setSelectedDevice(selectedDevice === device ? null : device);
-  };
-
-  const handleRegisterEspPress = async () => {
-    if (!selectedDevice) {
-      return;
-    }
-
-    await selectedDevice.connect('abcd1234', null, 'wifiprov');
-
-    try {
-      const deviceId = await selectedDevice.sendData(
-        'custom-data',
-        JSON.stringify({mqttServer: `${hostIp}:1883`}),
-      );
-      console.log({deviceId});
-
-      await createController({
-        data: {
-          id: uuid(),
-          description: selectedDevice.name,
-          deviceId: deviceId.replaceAll('\0', ''),
-          environmentId,
-        },
-      });
-
-      Alert.alert("Calefon agregado");
-    } catch (e) {
-      console.error(e);
-      console.error(e.response?.data);
-    } finally {
-      selectedDevice.disconnect();
-    }
-  };
-
-  const handleScanWifiPressed = async () => {
-    if (!selectedDevice) {
-      return;
-    }
-
-    await selectedDevice.connect('abcd1234', null, 'wifiprov');
+  const handleDevicePressed = async device => {
+    setSelectedDevice(device);
+    await device.connect('abcd1234', null, 'wifiprov');
 
     try {
       setLoadingWifiList(true);
       setShowWifiModal(true);
 
-      const wifiList = await selectedDevice.scanWifiList();
+      const wifiList = await device.scanWifiList();
 
       setWifiList(wifiList);
       setLoadingWifiList(false);
     } catch (e) {
       console.error(e);
-      // selectedDevice.disconnect();
+      device.disconnect();
     }
   };
 
@@ -157,10 +117,25 @@ const SearchBLEDevicesScreen = ({navigation, route}) => {
     }
 
     try {
-      // await selectedDevice.provision(selectedWifi.ssid, '2023apamateS');
+      const deviceId = await selectedDevice.sendData(
+        'custom-data',
+        JSON.stringify({mqttServer: `${hostIp}:1883`}),
+      );
+
+      await createController({
+        data: {
+          id: uuid(),
+          description: selectedDevice.name,
+          deviceId: deviceId.replaceAll('\0', ''),
+          environmentId,
+        },
+      });
+
       await selectedDevice.provision(selectedWifi.ssid, wifiPassword);
-      Alert.alert("Credenciales enviadas");
     } catch (e) {
+      if (e.message === 'Provisioning Failed') {
+        //
+      }
       console.error(e);
     } finally {
       selectedDevice.disconnect();
@@ -194,47 +169,19 @@ const SearchBLEDevicesScreen = ({navigation, route}) => {
             <SectionTitle text={'Dispositivos'} style={{marginBottom: 10}} />
 
             {devices.map((device, i) => (
-              <View
+              <TouchableOpacity
                 key={device.name}
                 style={[
                   styles.device,
                   {borderBottomWidth: i === devices.length - 1 ? 0 : 1},
-                ]}>
-                {selectedDevice === device ? (
-                  <>
-                    <TouchableOpacity
-                      style={[styles.deviceOptionBtn, {marginRight: 5}]}
-                      onPress={handleScanWifiPressed}>
-                      <Text>Escanear WIFI</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.deviceOptionBtn}
-                      onPress={handleRegisterEspPress}>
-                      <Text>Registrar calefon</Text>
-                    </TouchableOpacity>
-                  </>
-                ) : (
-                  <>
-                    <Ionicons
-                      name="hardware-chip-outline"
-                      style={styles.deviceIcon}
-                    />
-                    <Text style={styles.deviceText}>{device.name}</Text>
-                  </>
-                )}
-                <TouchableOpacity
-                  onPress={() => handleDevicePressed(device)}
-                  style={{marginLeft: 'auto'}}>
-                  <Ionicons
-                    name={
-                      selectedDevice === device
-                        ? 'radio-button-on'
-                        : 'radio-button-off'
-                    }
-                    style={[styles.deviceIcon, {marginRight: 0}]}
-                  />
-                </TouchableOpacity>
-              </View>
+                ]}
+                onPress={() => handleDevicePressed(device)}>
+                <Ionicons
+                  name="hardware-chip-outline"
+                  style={styles.deviceIcon}
+                />
+                <Text style={styles.deviceText}>{device.name}</Text>
+              </TouchableOpacity>
             ))}
           </View>
         )}
