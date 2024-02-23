@@ -11,12 +11,9 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import Header from '../components/layout/Header';
 import useHomeEnvironments from '../hooks/useHomeEnvironments';
 import {useFocusEffect} from '@react-navigation/native';
-import SectionTitle from '../components/typography/SectionTitle';
-import {COLORS} from '../constants/theme';
 import useAxios from '../hooks/useAxios';
 import {showConfirmationAlert} from '../helpers/alerts';
 import {useLoadingOverlayStore} from '../stores/loadingOverlayStore';
-import TitleOptions from '../components/TitleOptions';
 import TitleSection from '../components/TitleSection';
 
 const ScenariosScreen = ({navigation, route}) => {
