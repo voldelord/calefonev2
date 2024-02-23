@@ -13,6 +13,7 @@ import ComRequestScreen from '../screens/ComRequestScreen';
 import WirelessDeviceScreen from '../screens/WirelessDeviceScreen';
 import DevicesScreen from '../screens/DevicesScreen';
 import SearchBLEDevicesScreen from '../screens/SearchBLEDevicesScreen';
+import DeviceOptionsScreen from '../screens/DeviceOptionsScreen';
 
 const Stack = createStackNavigator();
 
@@ -44,7 +45,14 @@ const HomeStack = () => {
         component={WirelessDeviceScreen}
       />
       <Stack.Screen name="DevicesScreen" component={DevicesScreen} />
-      <Stack.Screen name="SearchBLEDevicesScreen" component={SearchBLEDevicesScreen} />
+      <Stack.Screen
+        name="DeviceOptionsScreen"
+        component={DeviceOptionsScreen}
+      />
+      <Stack.Screen
+        name="SearchBLEDevicesScreen"
+        component={SearchBLEDevicesScreen}
+      />
     </Stack.Navigator>
   );
 };

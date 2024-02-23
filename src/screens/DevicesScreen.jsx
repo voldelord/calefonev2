@@ -11,7 +11,6 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import Header from '../components/layout/Header';
 import useControllers from '../hooks/useControllers';
 import {useFocusEffect} from '@react-navigation/native';
-import {useDeviceStore} from '../stores/device-store';
 import TitleSection from '../components/TitleSection';
 import {showConfirmationAlert} from '../helpers/alerts';
 import useAxios from '../hooks/useAxios';
@@ -21,8 +20,6 @@ const DevicesScreen = ({navigation, route}) => {
   const homeId = route.params.homeId;
   const environmentId = route.params.environmentId;
   const environmentName = route.params.environmentName;
-
-  const setData = useDeviceStore(state => state.setData);
 
   const setIsLoadingOverlay = useLoadingOverlayStore(
     state => state.setIsLoading,
@@ -76,22 +73,26 @@ const DevicesScreen = ({navigation, route}) => {
           deleteDisabled={deleteEnvironmentLoading}
         />
 
-        {controllers.map((controller, i) => (
-          <TouchableOpacity
-            key={controller.id}
-            style={styles.myhouse}
-            onPress={() => {
-              setData({homeId, environmentId, deviceId: controller.deviceId});
+        {controllers.map((controller, i) => {
+          const name = controller.description || `Dispositivo ${i + 1}`;
 
-              navigation.navigate('DeviceControlStack', {
-                screen: 'ModesScreen',
-              });
-            }}>
-            <Text style={styles.myparraph}>
-              {controller.description || `Dispositivo ${i + 1}`}
-            </Text>
-          </TouchableOpacity>
-        ))}
+          return (
+            <TouchableOpacity
+              key={controller.id}
+              style={styles.myhouse}
+              onPress={() => {
+                navigation.navigate('DeviceOptionsScreen', {
+                  homeId,
+                  environmentId,
+                  deviceId: controller.deviceId,
+                  deviceName: name,
+                  controllerId: controller.id,
+                });
+              }}>
+              <Text style={styles.myparraph}>{name}</Text>
+            </TouchableOpacity>
+          );
+        })}
 
         <TouchableOpacity
           style={styles.buttonContainer}

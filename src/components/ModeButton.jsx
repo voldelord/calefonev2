@@ -4,6 +4,7 @@ import LinearGradient from 'react-native-linear-gradient';
 
 const ModeButton = ({
   icon,
+  renderIcon,
   title,
   onPress,
   style,
@@ -50,11 +51,15 @@ const ModeButton = ({
               borderRadius: iconContainerHeight / 2,
             },
           ]}>
-          <Image
-            source={icon}
-            style={[styles.icon, {height: iconHeight, width: iconHeight}]}
-            resizeMode="center"
-          />
+          {renderIcon ? (
+            renderIcon({height: iconHeight, width: iconHeight})
+          ) : (
+            <Image
+              source={icon}
+              style={[styles.icon, {height: iconHeight, width: iconHeight}]}
+              resizeMode="center"
+            />
+          )}
         </View>
       </LinearGradient>
     </TouchableOpacity>
