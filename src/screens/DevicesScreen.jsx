@@ -6,13 +6,16 @@ import {
   SafeAreaView,
   ScrollView,
 } from 'react-native';
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Header from '../components/layout/Header';
-import SectionTitle from '../components/typography/SectionTitle';
 import useControllers from '../hooks/useControllers';
 import {useFocusEffect} from '@react-navigation/native';
 import {useDeviceStore} from '../stores/device-store';
+import TitleSection from '../components/TitleSection';
+import {showConfirmationAlert} from '../helpers/alerts';
+import useAxios from '../hooks/useAxios';
+import {useLoadingOverlayStore} from '../stores/loadingOverlayStore';
 
 const DevicesScreen = ({navigation, route}) => {
   const homeId = route.params.homeId;
@@ -21,11 +24,23 @@ const DevicesScreen = ({navigation, route}) => {
 
   const setData = useDeviceStore(state => state.setData);
 
+  const setIsLoadingOverlay = useLoadingOverlayStore(
+    state => state.setIsLoading,
+  );
+
   const {controllers, getControllers} = useControllers({
     params: {
       filters: [{field: 'environmentId', operator: '=', value: environmentId}],
     },
   });
+
+  const [{loading: deleteEnvironmentLoading}, deleteEnvironment] = useAxios(
+    {
+      method: 'delete',
+      url: `/v1/homes/${homeId}/environments/${environmentId}`,
+    },
+    {manual: true},
+  );
 
   const noControllers = controllers.length === 0;
 
@@ -35,12 +50,31 @@ const DevicesScreen = ({navigation, route}) => {
     }, []),
   );
 
+  useEffect(() => {
+    setIsLoadingOverlay(deleteEnvironmentLoading);
+  }, [deleteEnvironmentLoading]);
+
+  const handleDeletePressed = () => {
+    showConfirmationAlert({
+      title: 'Eliminar ambiente',
+      message: `¿Estas seguro de eliminar "${environmentName}" y todo su contenido?`,
+      okButtonPress: async () => {
+        await deleteEnvironment();
+        navigation.goBack();
+      },
+    });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Header onBackPress={() => navigation.goBack()} />
 
       <ScrollView style={styles.content}>
-        <SectionTitle text={environmentName} />
+        <TitleSection
+          title={environmentName}
+          onDeletePress={handleDeletePressed}
+          deleteDisabled={deleteEnvironmentLoading}
+        />
 
         {controllers.map((controller, i) => (
           <TouchableOpacity
