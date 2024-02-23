@@ -28,7 +28,7 @@ const options = {
   path: '/ws',
 };
 
-const TemperatureScreen = ({navigation, route}) => {
+const EcoScreen = ({navigation, route}) => {
   const deviceId = route.params.deviceId;
   const deviceName = route.params.deviceName;
   const {token} = useAuth();
@@ -83,7 +83,7 @@ const TemperatureScreen = ({navigation, route}) => {
   useEffect(() => {
     if (isConnected) {
       client.current?.send(
-        `${deviceId}/target_temperature`,
+        `${deviceId}/target_eco`,
         JSON.stringify({value: targetTemperature}),
       );
     }
@@ -97,7 +97,7 @@ const TemperatureScreen = ({navigation, route}) => {
 
         <RangeSlider
           value={targetTemperature}
-          title="MODO TEMPERATURA"
+          title="MODO ECO"
           subTitleValue={temperature}
           subTitle={'Temperatura actual:'}
           unit="C°"
@@ -148,4 +148,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TemperatureScreen;
+export default EcoScreen;

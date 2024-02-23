@@ -28,13 +28,13 @@ const options = {
   path: '/ws',
 };
 
-const TemperatureScreen = ({navigation, route}) => {
+const PowerScreen = ({navigation, route}) => {
   const deviceId = route.params.deviceId;
   const deviceName = route.params.deviceName;
   const {token} = useAuth();
   const client = useRef(null);
-  const [temperature, setTemperature] = useState(0);
-  const [targetTemperature, setTargetTemperature] = useState(0);
+  const [power, setPower] = useState(0);
+  const [targetPower, setTargetPower] = useState(0);
   const [isConnected, setIsConnected] = useState(false);
 
   useFocusEffect(
@@ -55,14 +55,14 @@ const TemperatureScreen = ({navigation, route}) => {
         console.log('onMessageArrived');
         const parsedMessage = JSON.parse(message.payloadString);
         console.log(parsedMessage);
-        setTemperature(parsedMessage.value);
+        setPower(parsedMessage.value);
       };
 
       client.current.connect({
         onSuccess: function (...args) {
           console.log('onSuccess');
           console.log(...args);
-          client.current.subscribe(`${deviceId}/temperature`, {qos: 0});
+          client.current.subscribe(`${deviceId}/power`, {qos: 0});
           setIsConnected(true);
         },
         userName: deviceId,
@@ -83,11 +83,11 @@ const TemperatureScreen = ({navigation, route}) => {
   useEffect(() => {
     if (isConnected) {
       client.current?.send(
-        `${deviceId}/target_temperature`,
-        JSON.stringify({value: targetTemperature}),
+        `${deviceId}/target_power`,
+        JSON.stringify({value: targetPower}),
       );
     }
-  }, [targetTemperature, client.current, isConnected]);
+  }, [targetPower, client.current, isConnected]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -96,12 +96,12 @@ const TemperatureScreen = ({navigation, route}) => {
         <SectionTitle text={deviceName} style={{marginBottom: 10}} />
 
         <RangeSlider
-          value={targetTemperature}
-          title="MODO TEMPERATURA"
-          subTitleValue={temperature}
-          subTitle={'Temperatura actual:'}
-          unit="C°"
-          onChange={e => setTargetTemperature(e.target.value)}
+          value={targetPower}
+          title="MODO POTENCIA"
+          subTitleValue={power}
+          subTitle={'Potencia actual:'}
+          unit="W"
+          onChange={e => setTargetPower(e.target.value)}
         />
 
         <View style={{alignItems: 'center'}}>
@@ -148,4 +148,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TemperatureScreen;
+export default PowerScreen;

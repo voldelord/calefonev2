@@ -66,9 +66,6 @@ const ModesScreen = ({navigation}) => {
     });
   };
 
-  const powerPress = () => {
-    navigation.navigate('PowerScreen');
-  };
   const ecoPress = () => {
     navigation.navigate('EcoScreen');
   };
@@ -77,9 +74,6 @@ const ModesScreen = ({navigation}) => {
   };
   const smartPress = () => {
     navigation.navigate('SmartScreen');
-  };
-  const handleLoginPress = () => {
-    console.log('ChartScreen');
   };
 
   const handleDropdownChange = e => {
@@ -154,25 +148,25 @@ const ModesScreen = ({navigation}) => {
           title={'Modo potencia'}
           icon={powerIcon}
           style={{marginBottom: 20}}
-          onPress={powerPress}
+          onPress={() => navigateToScreenWithDevice('PowerScreen')}
         />
         <ModeButton
           title={'Modo ECO'}
           icon={ecoIcon}
           style={{marginBottom: 20}}
-          onPress={ecoPress}
+          onPress={() => navigateToScreenWithDevice('EcoScreen')}
         />
         <ModeButton
           title={'Ahorro de energía'}
           icon={saveEnergyIcon}
           style={{marginBottom: 20}}
-          onPress={energyPress}
+          // onPress={energyPress}
         />
         <ModeButton
           title={'Indicaciones ambientales'}
           icon={envIndicatorsIcon}
           style={{marginBottom: 20}}
-          onPress={handleLoginPress}
+          // onPress={handleLoginPress}
         />
         <ModeButton title={'Plan Avanzado'} icon={crownIcon} withGradient />
       </ScrollView>
