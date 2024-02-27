@@ -2,7 +2,7 @@ import {StyleSheet, View, Alert, SafeAreaView} from 'react-native';
 import React, {useState} from 'react';
 import CustomButton from '../components/CustomButton';
 import QRCodeScanner from 'react-native-qrcode-scanner';
-import WifiManager from 'react-native-wifi-reborn';
+// import WifiManager from 'react-native-wifi-reborn';
 import Header from '../components/layout/Header';
 import SectionTitle from '../components/typography/SectionTitle';
 
@@ -11,10 +11,10 @@ const ModesConetionScreen = ({navigation, route}) => {
 
   const [showScanner, setShowScanner] = useState(false);
 
-  const handleWifiPress = () => {
-    WifiManager.forceWifiUsage(true);
-    WifiManager.setEnabled(true);
-  };
+  // const handleWifiPress = () => {
+  //   WifiManager.forceWifiUsage(true);
+  //   WifiManager.setEnabled(true);
+  // };
 
   const handleQRCodePress = () => {
     setShowScanner(true);
