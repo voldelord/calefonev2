@@ -14,14 +14,25 @@ import useHomeEnvironments from '../hooks/useHomeEnvironments';
 import useControllers from '../hooks/useControllers';
 import {useFocusEffect} from '@react-navigation/native';
 import {useDeviceStore} from '../stores/device-store';
+import {useAuth} from '../context/AuthContext';
 
 const ModesScreen = ({navigation}) => {
+  const {user} = useAuth();
+
   const homeId = useDeviceStore(state => state.homeId);
   const environmentId = useDeviceStore(state => state.environmentId);
   const deviceId = useDeviceStore(state => state.deviceId);
   const setData = useDeviceStore(state => state.setData);
 
-  const {homes, loading: homesLoading, getHomes} = useHomes();
+  const {
+    homes,
+    loading: homesLoading,
+    getHomes,
+  } = useHomes({
+    params: {
+      filters: [{field: 'customerId', operator: '=', value: user?.id}],
+    },
+  });
 
   const {
     environments,
