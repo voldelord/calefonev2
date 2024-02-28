@@ -1,6 +1,6 @@
 import 'react-native-get-random-values';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import InputField from '../components/InputField';
 import CustomButton from '../components/CustomButton';
 import Header from '../components/layout/Header';
@@ -9,6 +9,7 @@ import {v4 as uuid} from 'uuid';
 import * as Yup from 'yup';
 import SectionTitle from '../components/typography/SectionTitle';
 import useAxios from '../hooks/useAxios';
+import {useLoadingOverlayStore} from '../stores/loadingOverlayStore';
 
 const initialValues = () => ({name: ''});
 
@@ -18,11 +19,17 @@ const scenarySchema = Yup.object().shape({
 
 const NewScenaryScreen = ({navigation, route}) => {
   const homeId = route.params.homeId;
-  console.log({homeId});
-  const [_, createEnvironment] = useAxios(
+
+  const setIsLoading = useLoadingOverlayStore(state => state.setIsLoading);
+
+  const [{loading: createEnvironmentLoading}, createEnvironment] = useAxios(
     {url: `/v1/homes/${homeId}/environments`, method: 'POST'},
     {manual: true},
   );
+
+  useEffect(() => {
+    setIsLoading(createEnvironmentLoading);
+  }, [createEnvironmentLoading]);
 
   const handleSubmit = async values => {
     await createEnvironment({

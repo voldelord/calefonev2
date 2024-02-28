@@ -1,6 +1,6 @@
 import 'react-native-get-random-values';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Field, Formik} from 'formik';
 import * as Yup from 'yup';
 import {v4 as uuid} from 'uuid';
@@ -9,6 +9,7 @@ import CustomButton from '../components/CustomButton';
 import Header from '../components/layout/Header';
 import SectionTitle from '../components/typography/SectionTitle';
 import useAxios from '../hooks/useAxios';
+import {useLoadingOverlayStore} from '../stores/loadingOverlayStore';
 
 const initialValues = () => ({name: '', address: ''});
 
@@ -18,10 +19,16 @@ const homeSchema = Yup.object().shape({
 });
 
 const NewHomeScreen = ({navigation}) => {
-  const [_, createHome] = useAxios(
+  const setIsLoading = useLoadingOverlayStore(state => state.setIsLoading);
+
+  const [{loading: createHomeLoading}, createHome] = useAxios(
     {url: '/v1/homes', method: 'POST'},
     {manual: true},
   );
+
+  useEffect(() => {
+    setIsLoading(createHomeLoading);
+  }, [createHomeLoading]);
 
   const handleSubmit = async values => {
     await createHome({
