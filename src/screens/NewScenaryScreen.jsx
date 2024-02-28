@@ -10,8 +10,9 @@ import * as Yup from 'yup';
 import SectionTitle from '../components/typography/SectionTitle';
 import useAxios from '../hooks/useAxios';
 import {useLoadingOverlayStore} from '../stores/loadingOverlayStore';
+import useScenaryFormStore from '../stores/scenaryFormStore';
 
-const initialValues = () => ({name: ''});
+const initialValues = ({name = ''} = {}) => ({name});
 
 const scenarySchema = Yup.object().shape({
   name: Yup.string().required('El nombre es requerido'),
@@ -19,8 +20,10 @@ const scenarySchema = Yup.object().shape({
 
 const NewScenaryScreen = ({navigation, route}) => {
   const homeId = route.params.homeId;
+  const editMode = route.params.editMode ?? false;
 
   const setIsLoading = useLoadingOverlayStore(state => state.setIsLoading);
+  const scenary = useScenaryFormStore(state => state.scenary);
 
   const [{loading: createEnvironmentLoading}, createEnvironment] = useAxios(
     {url: `/v1/homes/${homeId}/environments`, method: 'POST'},
@@ -34,7 +37,7 @@ const NewScenaryScreen = ({navigation, route}) => {
   const handleSubmit = async values => {
     await createEnvironment({
       data: {
-        id: uuid(),
+        id: scenary.id,
         ...values,
       },
     });
@@ -47,10 +50,13 @@ const NewScenaryScreen = ({navigation, route}) => {
       <Header onBackPress={() => navigation.goBack()} />
 
       <View style={styles.content}>
-        <SectionTitle text={'Nuevo Ambiente'} style={{marginBottom: 10}} />
+        <SectionTitle
+          text={editMode ? 'Editar Ambiente' : 'Nuevo Ambiente'}
+          style={{marginBottom: 10}}
+        />
 
         <Formik
-          initialValues={initialValues()}
+          initialValues={initialValues(scenary)}
           onSubmit={handleSubmit}
           validationSchema={scenarySchema}>
           {({handleSubmit}) => (
@@ -68,7 +74,7 @@ const NewScenaryScreen = ({navigation, route}) => {
                   onPress={handleSubmit}
                   buttonColor="#DA215D"
                   textColor="white"
-                  width={250}
+                  width={'100%'}
                   height={50}
                 />
               </View>

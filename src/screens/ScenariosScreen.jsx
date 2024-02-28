@@ -15,6 +15,7 @@ import useAxios from '../hooks/useAxios';
 import {showConfirmationAlert} from '../helpers/alerts';
 import {useLoadingOverlayStore} from '../stores/loadingOverlayStore';
 import TitleSection from '../components/TitleSection';
+import useScenaryFormStore from '../stores/scenaryFormStore';
 
 const ScenariosScreen = ({navigation, route}) => {
   const homeId = route.params.homeId;
@@ -23,6 +24,8 @@ const ScenariosScreen = ({navigation, route}) => {
   const setIsLoadingOverlay = useLoadingOverlayStore(
     state => state.setIsLoading,
   );
+  const crearScenary = useScenaryFormStore(state => state.crearScenary);
+  const updateScenary = useScenaryFormStore(state => state.updateScenary);
   const {environments, getEnvironments} = useHomeEnvironments({homeId});
 
   const [{loading: deleteHomeLoading}, deleteHome] = useAxios(
@@ -57,6 +60,12 @@ const ScenariosScreen = ({navigation, route}) => {
     });
   };
 
+  const handleAddScenaryPress = () => {
+    crearScenary();
+
+    navigation.navigate('NewScenaryScreen', {homeId});
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Header onBackPress={() => navigation.goBack()} />
@@ -71,13 +80,15 @@ const ScenariosScreen = ({navigation, route}) => {
           <TouchableOpacity
             key={environment.id}
             style={styles.myhouse}
-            onPress={() =>
+            onPress={() => {
+              updateScenary(environment);
+
               navigation.navigate('DevicesScreen', {
                 homeId,
                 environmentId: environment.id,
                 environmentName: environment.name,
-              })
-            }>
+              });
+            }}>
             <Icon
               name="home"
               size={80}
@@ -90,7 +101,7 @@ const ScenariosScreen = ({navigation, route}) => {
 
         <TouchableOpacity
           style={styles.buttonContainer}
-          onPress={() => navigation.navigate('NewScenaryScreen', {homeId})}>
+          onPress={handleAddScenaryPress}>
           <View style={styles.iconContainer}>
             <Icon name="plus" size={30} color="#DA215D" />
           </View>

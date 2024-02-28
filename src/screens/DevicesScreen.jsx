@@ -71,6 +71,9 @@ const DevicesScreen = ({navigation, route}) => {
           title={environmentName}
           onDeletePress={handleDeletePressed}
           deleteDisabled={deleteEnvironmentLoading}
+          onEditPress={() =>
+            navigation.navigate('NewScenaryScreen', {homeId, editMode: true})
+          }
         />
 
         {controllers.map((controller, i) => {
