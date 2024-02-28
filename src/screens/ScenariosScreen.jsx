@@ -74,6 +74,11 @@ const ScenariosScreen = ({navigation, route}) => {
           title={homeName}
           onDeletePress={handleDeletePressed}
           deleteDisabled={deleteHomeLoading}
+          onEditPress={() => {
+            navigation.navigate('NewHomeScreen', {
+              editMode: true,
+            });
+          }}
         />
 
         {environments.map(environment => (

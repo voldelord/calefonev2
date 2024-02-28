@@ -13,9 +13,12 @@ import SectionTitle from '../components/typography/SectionTitle';
 import useHomes from '../hooks/useHomes';
 import {useFocusEffect} from '@react-navigation/native';
 import {useAuth} from '../context/AuthContext';
+import homeFormStore from '../stores/homeFormStore';
 
 const HomeMenuScreen = ({navigation}) => {
   const {user} = useAuth();
+  const clearHome = homeFormStore(state => state.clearHome);
+  const updateHome = homeFormStore(state => state.updateHome);
 
   const {homes, getHomes} = useHomes({
     params: {
@@ -41,12 +44,14 @@ const HomeMenuScreen = ({navigation}) => {
           <TouchableOpacity
             key={home.id}
             style={styles.home}
-            onPress={() =>
+            onPress={() => {
+              updateHome(home);
+
               navigation.navigate('ScenariosScreen', {
                 homeId: home.id,
                 homeName: home.name,
-              })
-            }>
+              });
+            }}>
             <Text style={styles.homeTitle}>{home.name}</Text>
             <Text style={styles.homeAddress}>{home.address}</Text>
           </TouchableOpacity>
@@ -54,7 +59,11 @@ const HomeMenuScreen = ({navigation}) => {
 
         <TouchableOpacity
           style={styles.buttonContainer}
-          onPress={() => navigation.navigate('NewHomeScreen')}>
+          onPress={() => {
+            clearHome();
+
+            navigation.navigate('NewHomeScreen');
+          }}>
           <View style={styles.iconContainer}>
             <Icon name="plus" size={30} color="#DA215D" />
           </View>

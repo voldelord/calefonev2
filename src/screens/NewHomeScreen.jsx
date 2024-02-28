@@ -10,17 +10,21 @@ import Header from '../components/layout/Header';
 import SectionTitle from '../components/typography/SectionTitle';
 import useAxios from '../hooks/useAxios';
 import {useLoadingOverlayStore} from '../stores/loadingOverlayStore';
+import homeFormStore from '../stores/homeFormStore';
 
-const initialValues = () => ({name: '', address: ''});
+const initialValues = ({name = '', address = ''} = {}) => ({name, address});
 
 const homeSchema = Yup.object().shape({
   name: Yup.string().required('El nombre es requerido'),
   address: Yup.string().required('La dirección es requerida'),
 });
 
-const NewHomeScreen = ({navigation}) => {
-  const setIsLoading = useLoadingOverlayStore(state => state.setIsLoading);
+const NewHomeScreen = ({navigation, route}) => {
+  const editMode = route.params?.editMode ?? false;
 
+  const setIsLoading = useLoadingOverlayStore(state => state.setIsLoading);
+  const home = homeFormStore(state => state.home);
+  console.log(home);
   const [{loading: createHomeLoading}, createHome] = useAxios(
     {url: '/v1/homes', method: 'POST'},
     {manual: true},
@@ -33,7 +37,7 @@ const NewHomeScreen = ({navigation}) => {
   const handleSubmit = async values => {
     await createHome({
       data: {
-        id: uuid(),
+        id: home.id,
         ...values,
       },
     });
@@ -46,10 +50,13 @@ const NewHomeScreen = ({navigation}) => {
       <Header onBackPress={() => navigation.goBack()} />
 
       <View style={styles.content}>
-        <SectionTitle text={'Nuevo Hogar'} style={{marginBottom: 10}} />
+        <SectionTitle
+          text={editMode ? 'Editar Hogar' : 'Nuevo Hogar'}
+          style={{marginBottom: 10}}
+        />
 
         <Formik
-          initialValues={initialValues()}
+          initialValues={initialValues(home)}
           onSubmit={handleSubmit}
           validationSchema={homeSchema}>
           {({handleSubmit}) => (
@@ -74,7 +81,7 @@ const NewHomeScreen = ({navigation}) => {
                   onPress={handleSubmit}
                   buttonColor="#DA215D"
                   textColor="white"
-                  width={250}
+                  width={'100%'}
                   height={50}
                 />
               </View>
