@@ -13,6 +13,8 @@ const RangeSlider = ({
   subTitle,
   subTitleValue,
   unit,
+  min = 0,
+  max = 100,
 }) => {
   const handleChange = value => {
     onChange?.({target: {name, value}});
@@ -31,8 +33,8 @@ const RangeSlider = ({
   return (
     <View style={styles.rangePickerContainer}>
       <RadialSlider
-        min={0}
-        max={200}
+        min={min}
+        max={max}
         radius={150}
         value={value}
         subTitle=""
