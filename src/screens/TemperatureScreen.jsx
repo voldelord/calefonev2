@@ -9,6 +9,7 @@ import {COLORS} from '../constants/theme';
 import RangeSlider from '../components/forms/RangeSlider';
 import ModeButton from '../components/ModeButton';
 import useMqttController from '../hooks/useMqttController';
+import CustomSwitch from '../components/forms/CustomSwitch';
 
 const TemperatureScreen = ({navigation, route}) => {
   const deviceId = route.params.deviceId;
@@ -47,23 +48,9 @@ const TemperatureScreen = ({navigation, route}) => {
             Calefón apagado
           </Text>
 
-          <Toggle
+          <CustomSwitch
             value={isDeviceOn}
-            onPress={updateSysState}
-            trackBar={{
-              activeBackgroundColor: COLORS.primary,
-              inActiveBackgroundColor: '#dddddd',
-              borderWidth: 7,
-              width: 80,
-              height: 40,
-              radius: 25,
-            }}
-            thumbButton={{
-              inActiveBackgroundColor: COLORS.white,
-              activeBackgroundColor: COLORS.white,
-              width: 42,
-              height: 42,
-            }}
+            onChange={e => updateSysState(e.target.value)}
           />
         </View>
 
