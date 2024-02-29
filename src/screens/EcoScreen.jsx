@@ -23,7 +23,7 @@ const EcoScreen = ({navigation, route}) => {
   } = useMqttController({
     deviceId,
     topicToSubscribe: 'temperature',
-    topicToPublish: 'target_temperature',
+    topicToPublish: 'target_eco',
   });
 
   return (
