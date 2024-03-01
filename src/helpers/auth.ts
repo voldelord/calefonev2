@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import { AUTH_KEY } from "@env";
-const AUTH_KEY = 'auth_info';
+const AUTH_KEY = 'auth_info_v2';
 
 export const storeAuth = async ({
   token,
