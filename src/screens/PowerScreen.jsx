@@ -1,5 +1,5 @@
 import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useCallback} from 'react';
 import changeModeIcon from '../assets/change-mode-icon.png';
 import crownIcon from '../assets/crown-icon.png';
 import Header from '../components/layout/Header';
@@ -9,6 +9,8 @@ import RangeSlider from '../components/forms/RangeSlider';
 import ModeButton from '../components/ModeButton';
 import useMqttController from '../hooks/useMqttController';
 import CustomSwitch from '../components/forms/CustomSwitch';
+import {MQTT_DEVICE_MODES} from '../constants/mqttTopics';
+import {useFocusEffect} from '@react-navigation/native';
 
 const PowerScreen = ({navigation, route}) => {
   const deviceId = route.params.deviceId;
@@ -20,11 +22,21 @@ const PowerScreen = ({navigation, route}) => {
     setTargetValueDebounced: setTargetPower,
     isDeviceOn,
     updateSysState,
+    canSendMessage,
+    changeMode,
   } = useMqttController({
     deviceId,
     topicToSubscribe: 'power',
     topicToPublish: 'target_power',
   });
+
+  useFocusEffect(
+    useCallback(() => {
+      if (canSendMessage) {
+        changeMode(MQTT_DEVICE_MODES.POWER);
+      }
+    }, [changeMode, canSendMessage]),
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -44,7 +56,7 @@ const PowerScreen = ({navigation, route}) => {
 
         <View style={{alignItems: 'center'}}>
           <Text style={{fontSize: 18, color: COLORS.black, marginBottom: 10}}>
-            Calefón apagado
+            Calefón {isDeviceOn ? 'encendido' : 'apagado'}
           </Text>
 
           <CustomSwitch

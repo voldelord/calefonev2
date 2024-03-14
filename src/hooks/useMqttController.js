@@ -32,6 +32,7 @@ const useMqttController = ({deviceId, topicToSubscribe, topicToPublish}) => {
   const fullSubscriptionTopic = `${deviceId}/${topicToSubscribe}`;
   const fullPublicationTopic = `${deviceId}/${topicToPublish}`;
   const onOffTopic = `${deviceId}/${MQTT_TOPICS.ON_OFF}`;
+  const modeTopic = `${deviceId}/${MQTT_TOPICS.MODE}`;
 
   useFocusEffect(
     useCallback(() => {
@@ -138,7 +139,14 @@ const useMqttController = ({deviceId, topicToSubscribe, topicToPublish}) => {
     isDeviceOn => {
       sendMessage(onOffTopic, isDeviceOn);
     },
-    [sendMessage],
+    [sendMessage, onOffTopic],
+  );
+
+  const changeMode = useCallback(
+    mode => {
+      sendMessage(modeTopic, mode);
+    },
+    [sendMessage, modeTopic],
   );
 
   return {
@@ -148,6 +156,9 @@ const useMqttController = ({deviceId, topicToSubscribe, topicToPublish}) => {
     setTargetValueDebounced,
     isDeviceOn,
     updateSysState,
+    sendMessage,
+    canSendMessage: isConnected && client.current,
+    changeMode,
   };
 };
 
