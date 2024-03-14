@@ -24,7 +24,7 @@ const NewHomeScreen = ({navigation, route}) => {
 
   const setIsLoading = useLoadingOverlayStore(state => state.setIsLoading);
   const home = homeFormStore(state => state.home);
-  console.log(home);
+
   const [{loading: createHomeLoading}, createHome] = useAxios(
     {url: '/v1/homes', method: 'POST'},
     {manual: true},

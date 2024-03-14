@@ -4,6 +4,9 @@ import AppStackList from './src/navigation/AppStackList';
 import {Appearance} from 'react-native';
 import {AlertNotificationRoot} from 'react-native-alert-notification';
 import LoadingOverlay from './src/components/ui/LoadingOverlay';
+import {QueryClient, QueryClientProvider} from 'react-query';
+
+const queryClient = new QueryClient();
 
 const App = () => {
   useEffect(() => {
@@ -11,12 +14,14 @@ const App = () => {
   }, []);
 
   return (
-    <AuthProvider>
-      <AlertNotificationRoot theme="light">
-        <AppStackList />
-        <LoadingOverlay />
-      </AlertNotificationRoot>
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <AlertNotificationRoot theme="light">
+          <AppStackList />
+          <LoadingOverlay />
+        </AlertNotificationRoot>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 };
 

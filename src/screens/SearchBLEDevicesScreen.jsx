@@ -14,7 +14,6 @@ import {
   View,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {PERMISSIONS, RESULTS, requestMultiple} from 'react-native-permissions';
 import SectionTitle from '../components/typography/SectionTitle';
 import {v4 as uuid} from 'uuid';
 import Header from '../components/layout/Header';
@@ -24,28 +23,13 @@ import InputField from '../components/InputField';
 import CustomButton from '../components/CustomButton';
 import useAxios from '../hooks/useAxios';
 import {hostIp} from '../helpers/createAxios';
-
-const requestPermissions = async () => {
-  try {
-    const result = await requestMultiple([
-      PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION,
-      PERMISSIONS.ANDROID.BLUETOOTH_CONNECT,
-      PERMISSIONS.ANDROID.BLUETOOTH_SCAN,
-    ]);
-
-    return (
-      result[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] === RESULTS.GRANTED &&
-      result[PERMISSIONS.ANDROID.BLUETOOTH_CONNECT] === RESULTS.GRANTED &&
-      result[PERMISSIONS.ANDROID.BLUETOOTH_SCAN] === RESULTS.GRANTED
-    );
-  } catch (err) {
-    console.warn(err);
-    return false;
-  }
-};
+import {useLoadingOverlayStore} from '../stores/loadingOverlayStore';
+import requestLocationAndBLuetoothPermissions from '../helpers/requestLocationAndBLuetoothPermissions';
 
 const SearchBLEDevicesScreen = ({navigation, route}) => {
   const environmentId = route.params.environmentId;
+
+  const setIsLoading = useLoadingOverlayStore(state => state.setIsLoading);
 
   const [loadingDevices, setLoadingDevices] = useState(true);
   const [devices, setDevices] = useState([]);
@@ -68,7 +52,7 @@ const SearchBLEDevicesScreen = ({navigation, route}) => {
     const doSearch = async () => {
       setLoadingDevices(true);
 
-      await requestPermissions();
+      await requestLocationAndBLuetoothPermissions();
 
       setDevices([]);
 
@@ -99,6 +83,7 @@ const SearchBLEDevicesScreen = ({navigation, route}) => {
     try {
       setLoadingWifiList(true);
       setShowWifiModal(true);
+      setIsLoading(true);
 
       const wifiList = await device.scanWifiList();
 
@@ -106,6 +91,7 @@ const SearchBLEDevicesScreen = ({navigation, route}) => {
       setLoadingWifiList(false);
     } catch (e) {
       console.error(e);
+      setIsLoading(false);
       device.disconnect();
     }
   };
@@ -117,6 +103,7 @@ const SearchBLEDevicesScreen = ({navigation, route}) => {
     }
 
     try {
+      setIsLoading(true);
       const deviceId = await selectedDevice.sendData(
         'custom-data',
         JSON.stringify({mqttServer: `${hostIp}:1883`}),
@@ -139,6 +126,7 @@ const SearchBLEDevicesScreen = ({navigation, route}) => {
       console.error(e);
     } finally {
       selectedDevice.disconnect();
+      setIsLoading(false);
       setSelectedWifi(null);
       setShowWifiModal(false);
       setWifiPassword('');
