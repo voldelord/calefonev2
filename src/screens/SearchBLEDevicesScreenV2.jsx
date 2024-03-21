@@ -12,14 +12,12 @@ import Header from '../components/layout/Header';
 import {useLoadingOverlayStore} from '../stores/loadingOverlayStore';
 import BLEDevice from '../components/ble-devices/BLEDevice';
 import useBLEDevices from '../hooks/useBLEDevices';
-import {useEffect} from 'react';
 import WifiListModal from '../components/ble-devices/WifiListModal';
 import useDisclosure from '../hooks/useDisclosure';
 import WifiPasswordModal from '../components/ble-devices/WifiPasswordModal';
-import {useMutation} from 'react-query';
 import {createController} from '../API/controllers';
-import {provisionDevice, sendServerDataToDevice} from '../helpers/BLEDevices';
 import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
+import {useEffect} from 'react';
 
 const SearchBLEDevicesScreenV2 = ({navigation, route}) => {
   const environmentId = route.params.environmentId;
@@ -41,62 +39,27 @@ const SearchBLEDevicesScreenV2 = ({navigation, route}) => {
   const {
     devices,
     devicesIsLoading,
+    devicesIsError,
     deviceRefetch,
     selectedDevice,
     setSelectedDevice,
     wifiNetworks,
-    wifiNetworksIsLoading,
+    wifiNetworksIsFetched,
     selectedWifiNetwork,
     setSelectedWifiNetwork,
+    connectDevice,
+    provisionEsp,
   } = useBLEDevices();
 
-  const {mutateAsync} = useMutation(
-    async (device, ssid, password) => {
-      try {
-        setIsLoading(true);
-
-        const deviceId = await sendServerDataToDevice(device);
-
-        await createController({
-          id: uuid(),
-          description: device.name,
-          deviceId,
-          environmentId,
-        });
-
-        provisionDevice(device, ssid, password);
-      } catch (e) {
-        throw e;
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    {
-      onSuccess: () => {
-        passwordModalOnClose();
-        wifiModalOnClose();
-
-        Toast.show({
-          type: ALERT_TYPE.SUCCESS,
-          title: 'Dispositivos',
-          textBody: 'Panel calefactor apareado!',
-        });
-
-        navigation.goBack();
-      },
-      onError: error => {
-        console.log(error?.response?.data || error.message);
-      },
-    },
-  );
-
   useEffect(() => {
-    setIsLoading(wifiNetworksIsLoading);
-  }, [wifiNetworksIsLoading]);
+    if (wifiNetworksIsFetched) {
+      wifiModalOnOpen();
+    }
+  }, [wifiNetworksIsFetched]);
 
-  const handleDevicePress = device => {
+  const handleDevicePress = async device => {
     setSelectedDevice(device);
-    wifiModalOnOpen();
+    connectDevice(device);
   };
 
   const handleWifiPress = wifiNetwork => {
@@ -111,15 +74,52 @@ const SearchBLEDevicesScreenV2 = ({navigation, route}) => {
     wifiModalOnOpen();
   };
 
-  const handlePasswordSubmit = async (values, helpers) => {
-    if (!selectedDevice) {
+  const handlePasswordSubmit = (values, helpers) => {
+    if (!selectedDevice || !selectedWifiNetwork) {
       return;
     }
 
-    await mutateAsync(
-      selectedDevice,
-      selectedWifiNetwork.ssid,
-      values.password,
+    provisionEsp(
+      {
+        device: selectedDevice,
+        ssid: selectedWifiNetwork.ssid,
+        password: values.password,
+        createController: deviceId =>
+          createController({
+            id: uuid(),
+            description: selectedDevice.name,
+            deviceId,
+            environmentId,
+          }),
+      },
+      {
+        onSuccess: () => {
+          passwordModalOnClose();
+          wifiModalOnClose();
+
+          Toast.show({
+            type: ALERT_TYPE.SUCCESS,
+            title: 'Dispositivos',
+            textBody: 'Panel calefactor apareado!',
+          });
+
+          navigation.goBack();
+        },
+        onError: error => {
+          if (error.message === 'Provisioning Failed') {
+            passwordModalOnClose();
+            wifiModalOnClose();
+
+            Toast.show({
+              type: ALERT_TYPE.SUCCESS,
+              title: 'Dispositivos',
+              textBody: 'Panel calefactor apareado!',
+            });
+
+            navigation.goBack();
+          }
+        },
+      },
     );
   };
 
@@ -143,14 +143,20 @@ const SearchBLEDevicesScreenV2 = ({navigation, route}) => {
           <View>
             <SectionTitle text={'Dispositivos'} style={{marginBottom: 10}} />
 
-            {devices?.map((device, i) => (
-              <BLEDevice
-                key={device.name}
-                device={device}
-                noBorder={i === devices.length - 1}
-                onPress={() => handleDevicePress(device)}
-              />
-            ))}
+            {devicesIsError || devices.length === 0 ? (
+              <Text style={styles.loadingText}>
+                No se encontraron dispositivos
+              </Text>
+            ) : (
+              devices?.map((device, i) => (
+                <BLEDevice
+                  key={device.name}
+                  device={device}
+                  noBorder={i === devices.length - 1}
+                  onPress={() => handleDevicePress(device)}
+                />
+              ))
+            )}
           </View>
         )}
       </ScrollView>

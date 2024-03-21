@@ -46,20 +46,20 @@ class FakeDevice extends ESPDevice {
 }
 
 export const findDevices = async () => {
-  await sleep(2000);
+  // await sleep(2000);
 
-  return [
-    new FakeDevice({
-      name: 'PROV_121231',
-      transport: ESPTransport.ble,
-      security: ESPSecurity.secure,
-    }),
-    new FakeDevice({
-      name: 'PROV_234345',
-      transport: ESPTransport.ble,
-      security: ESPSecurity.secure,
-    }),
-  ];
+  // return [
+  //   new FakeDevice({
+  //     name: 'PROV_121231',
+  //     transport: ESPTransport.ble,
+  //     security: ESPSecurity.secure,
+  //   }),
+  //   new FakeDevice({
+  //     name: 'PROV_234345',
+  //     transport: ESPTransport.ble,
+  //     security: ESPSecurity.secure,
+  //   }),
+  // ];
   return await ESPProvisionManager.searchESPDevices(
     'PROV_',
     ESPTransport.ble,
@@ -68,14 +68,7 @@ export const findDevices = async () => {
 };
 
 export const getWifiListForDevice = async (device: ESPDevice) => {
-  await device.connect('abcd1234', null, 'wifiprov');
-
-  try {
-    return await device.scanWifiList();
-  } catch (e) {
-    device.disconnect();
-    throw e;
-  }
+  return await device.scanWifiList();
 };
 
 export const sendServerDataToDevice = async (device: ESPDevice) => {
@@ -92,5 +85,5 @@ export const provisionDevice = async (
   ssid: string,
   password: string,
 ) => {
-  await device.provision(ssid, password);
+  return await device.provision(ssid, password);
 };

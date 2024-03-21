@@ -2,13 +2,17 @@ import {
   ESPDevice,
   ESPWifiList,
 } from '@orbital-systems/react-native-esp-idf-provisioning';
-import {useQuery} from 'react-query';
+import {useMutation, useQuery} from 'react-query';
 import requestLocationAndBLuetoothPermissions from '../helpers/requestLocationAndBLuetoothPermissions';
 import {useState} from 'react';
-import {findDevices, getWifiListForDevice} from '../helpers/BLEDevices';
+import {findDevices} from '../helpers/BLEDevices';
+import {useLoadingOverlayStore} from '../stores/loadingOverlayStore';
+import {hostIp} from '../helpers/createAxios';
 
 const useBLEDevices = () => {
+  const setIsLoading = useLoadingOverlayStore(state => state.setIsLoading);
   const [selectedDevice, setSelectedDevice] = useState<ESPDevice | null>(null);
+  1;
   const [selectedWifiNetwork, setSelectedWifiNetwork] =
     useState<ESPWifiList | null>(null);
 
@@ -24,22 +28,71 @@ const useBLEDevices = () => {
 
       return await findDevices();
     },
-    {retry: false},
+    {retry: false, cacheTime: 0},
+  );
+
+  const {mutate: connectDevice} = useMutation(
+    async (device: ESPDevice) => {
+      await device.connect('abcd1234', null, 'wifiprov');
+    },
+    {
+      onMutate: () => setIsLoading(true),
+      onSettled: () => setIsLoading(false),
+    },
+  );
+
+  const {mutate: provisionEsp} = useMutation(
+    async ({
+      device,
+      ssid,
+      password,
+      createController,
+    }: {
+      device: ESPDevice;
+      ssid: string;
+      password: string;
+      createController: (deviceId: string) => Promise<void>;
+    }) => {
+      const deviceId = (
+        await device.sendData(
+          'custom-data',
+          JSON.stringify({mqttServer: `${hostIp}:1883`}),
+        )
+      ).replaceAll('\0', '');
+
+      await createController(deviceId);
+
+      await device.provision(ssid, password);
+    },
+    {
+      onMutate: () => setIsLoading(true),
+      onSettled: () => {
+        setIsLoading(false);
+        selectedDevice?.disconnect();
+      },
+      onError: (error: any) => {
+        console.log(error?.response?.data || error.message);
+      },
+    },
   );
 
   const {
     data: wifiNetworks,
-    isLoading: wifiNetworksIsLoading,
     isError: wifiNetworksIsError,
+    isFetched: wifiNetworksIsFetched,
   } = useQuery(['deviceWifiNetworks', selectedDevice], {
     queryFn: async () => {
       if (!selectedDevice) {
-        return [];
+        throw new Error('No device selected');
       }
 
-      return await getWifiListForDevice(selectedDevice);
+      setIsLoading(true);
+
+      return await selectedDevice.scanWifiList();
     },
-    enabled: !!selectedDevice,
+    enabled: !!selectedDevice?.connected,
+    retry: false,
+    onSettled: () => setIsLoading(false),
   });
 
   return {
@@ -50,10 +103,12 @@ const useBLEDevices = () => {
     devicesIsError,
     deviceRefetch,
     wifiNetworks,
-    wifiNetworksIsLoading,
     wifiNetworksIsError,
+    wifiNetworksIsFetched,
     selectedWifiNetwork,
     setSelectedWifiNetwork,
+    connectDevice,
+    provisionEsp,
   };
 };
 
