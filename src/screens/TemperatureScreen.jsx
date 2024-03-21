@@ -11,6 +11,7 @@ import useMqttController from '../hooks/useMqttController';
 import CustomSwitch from '../components/forms/CustomSwitch';
 import {MQTT_DEVICE_MODES} from '../constants/mqttTopics';
 import {useFocusEffect} from '@react-navigation/native';
+import CalefonOnOffText from '../components/ui/CalefonOnOffText';
 
 const TemperatureScreen = ({navigation, route}) => {
   const deviceId = route.params.deviceId;
@@ -55,9 +56,7 @@ const TemperatureScreen = ({navigation, route}) => {
         />
 
         <View style={{alignItems: 'center'}}>
-          <Text style={{fontSize: 18, color: COLORS.black, marginBottom: 10}}>
-            Calefón {isDeviceOn ? 'encendido' : 'apagado'}
-          </Text>
+          <CalefonOnOffText isDeviceOn={isDeviceOn} />
 
           <CustomSwitch
             value={isDeviceOn}

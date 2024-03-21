@@ -58,7 +58,7 @@ const useMqttController = ({deviceId, topicToSubscribe, topicToPublish}) => {
           parsedMessage = JSON.parse(message.payloadString);
         } catch (e) {}
 
-        const {from, value} = parsedMessage;
+        const {from, value, power} = parsedMessage;
         const isFromDevice = from === 'device';
 
         if (!isFromDevice) {
@@ -70,7 +70,7 @@ const useMqttController = ({deviceId, topicToSubscribe, topicToPublish}) => {
             setIsDeviceOn(Boolean(value));
             break;
           case fullSubscriptionTopic:
-            setValue(value);
+            setValue(value || power);
             break;
           case fullPublicationTopic:
             setTargetValue(value);

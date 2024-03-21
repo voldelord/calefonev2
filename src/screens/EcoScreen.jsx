@@ -11,6 +11,7 @@ import CustomSwitch from '../components/forms/CustomSwitch';
 import useMqttController from '../hooks/useMqttController';
 import {MQTT_DEVICE_MODES} from '../constants/mqttTopics';
 import {useFocusEffect} from '@react-navigation/native';
+import CalefonOnOffText from '../components/ui/CalefonOnOffText';
 
 const EcoScreen = ({navigation, route}) => {
   const deviceId = route.params.deviceId;
@@ -55,9 +56,7 @@ const EcoScreen = ({navigation, route}) => {
         />
 
         <View style={{alignItems: 'center'}}>
-          <Text style={{fontSize: 18, color: COLORS.black, marginBottom: 10}}>
-            Calefón {isDeviceOn ? 'encendido' : 'apagado'}
-          </Text>
+          <CalefonOnOffText isDeviceOn={isDeviceOn} />
 
           <CustomSwitch
             value={isDeviceOn}
