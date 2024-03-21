@@ -87,7 +87,7 @@ const SearchBLEDevicesScreenV2 = ({navigation, route}) => {
         createController: deviceId =>
           createController({
             id: uuid(),
-            description: selectedDevice.name,
+            description: values.name,
             deviceId,
             environmentId,
           }),

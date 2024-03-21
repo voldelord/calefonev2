@@ -1,6 +1,7 @@
 import {StyleSheet, Text, View} from 'react-native';
 import ReactNativeModal from 'react-native-modal';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {COLORS} from '../../constants/theme';
 import Header from '../layout/Header';
 import InputField from '../InputField';
@@ -9,6 +10,7 @@ import {Field, Formik} from 'formik';
 import {object, string} from 'yup';
 
 const validationSchema = object({
+  name: string().required('Ingrese el nombre del panel'),
   password: string()
     .min(8, 'Debe ingresar un mínimo de 8 caracteres')
     .required('La contraseña es requerida'),
@@ -21,12 +23,12 @@ const WifiPasswordModal = ({isOpen, onBackPress, ssid, onSubmit}) => {
         <Header
           onBackPress={onBackPress}
           hideNotificationIcon
-          title="Contraseña del WIFI"
+          title="Aparear Panel Calefactor"
         />
 
         <View style={styles.content}>
           <Formik
-            initialValues={{password: ''}}
+            initialValues={{password: '', name: ''}}
             validationSchema={validationSchema}
             onSubmit={onSubmit}>
             {({handleSubmit}) => (
@@ -48,6 +50,21 @@ const WifiPasswordModal = ({isOpen, onBackPress, ssid, onSubmit}) => {
                     />
                   }
                   inputType="password"
+                  showFormikError
+                  as={InputField}
+                />
+
+                <Field
+                  label={'Nombre del panel'}
+                  name="name"
+                  icon={
+                    <MaterialIcons
+                      name="drive-file-rename-outline"
+                      size={20}
+                      color="#666"
+                      style={{marginRight: 5}}
+                    />
+                  }
                   showFormikError
                   as={InputField}
                 />

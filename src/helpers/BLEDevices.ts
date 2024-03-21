@@ -66,24 +66,3 @@ export const findDevices = async () => {
     ESPSecurity.secure,
   );
 };
-
-export const getWifiListForDevice = async (device: ESPDevice) => {
-  return await device.scanWifiList();
-};
-
-export const sendServerDataToDevice = async (device: ESPDevice) => {
-  return (
-    await device.sendData(
-      'custom-data',
-      JSON.stringify({mqttServer: `${hostIp}:1883`}),
-    )
-  ).replaceAll('\0', '');
-};
-
-export const provisionDevice = async (
-  device: ESPDevice,
-  ssid: string,
-  password: string,
-) => {
-  return await device.provision(ssid, password);
-};
