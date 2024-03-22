@@ -1,4 +1,4 @@
-import {Alert, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
+import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import React, {useCallback, useEffect} from 'react';
 import Header from '../components/layout/Header';
 import tempIcon from '../assets/temp-mode-icon.png';
@@ -15,6 +15,7 @@ import useControllers from '../hooks/useControllers';
 import {useFocusEffect} from '@react-navigation/native';
 import {useDeviceStore} from '../stores/device-store';
 import {useAuth} from '../context/AuthContext';
+import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 
 const ModesScreen = ({navigation}) => {
   const {user} = useAuth();
@@ -65,7 +66,11 @@ const ModesScreen = ({navigation}) => {
 
   const navigateToScreenWithDevice = screenName => {
     if (!deviceId) {
-      return Alert.alert('Seleccione un dispositivo');
+      return Toast.show({
+        type: ALERT_TYPE.INFO,
+        title: 'Atención',
+        textBody: 'Seleccione un dispositivo',
+      });
     }
 
     const device = controllers.find(c => c.deviceId === deviceId);
@@ -77,12 +82,6 @@ const ModesScreen = ({navigation}) => {
     });
   };
 
-  const ecoPress = () => {
-    navigation.navigate('EcoScreen');
-  };
-  const energyPress = () => {
-    navigation.navigate('ChartScreen');
-  };
   const smartPress = () => {
     navigation.navigate('SmartScreen');
   };
@@ -171,7 +170,7 @@ const ModesScreen = ({navigation}) => {
           title={'Ahorro de energía'}
           icon={saveEnergyIcon}
           style={{marginBottom: 20}}
-          // onPress={energyPress}
+          onPress={() => navigateToScreenWithDevice('ChartScreen')}
         />
         <ModeButton
           title={'Indicaciones ambientales'}
