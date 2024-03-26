@@ -10,6 +10,7 @@ const ModeButton = ({
   style,
   small = false,
   withGradient = false,
+  redBg = false,
 }) => {
   const buttonHeight = small ? 50 : 68;
   const buttonPadding = small ? 6 : 10;
@@ -19,6 +20,8 @@ const ModeButton = ({
 
   const colors = withGradient
     ? ['#6B6BDB', '#8858BC', '#964FAB', COLORS.primary]
+    : redBg
+    ? [COLORS.primary, COLORS.primary]
     : ['#eee', '#eee'];
 
   return (
@@ -37,7 +40,7 @@ const ModeButton = ({
             styles.buttonTitle,
             {
               fontSize: titleFontSize,
-              color: withGradient ? COLORS.white : COLORS.black,
+              color: withGradient || redBg ? COLORS.white : COLORS.black,
             },
           ]}>
           {title}

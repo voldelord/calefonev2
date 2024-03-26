@@ -176,9 +176,13 @@ const ModesScreen = ({navigation}) => {
           title={'Indicaciones ambientales'}
           icon={envIndicatorsIcon}
           style={{marginBottom: 20}}
-          // onPress={handleLoginPress}
         />
-        <ModeButton title={'Plan Avanzado'} icon={crownIcon} withGradient />
+        <ModeButton
+          title={'Plan Avanzado'}
+          icon={crownIcon}
+          withGradient
+          onPress={() => navigateToScreenWithDevice('SmartScreen')}
+        />
       </ScrollView>
     </SafeAreaView>
   );

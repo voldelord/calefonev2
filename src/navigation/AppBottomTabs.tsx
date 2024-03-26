@@ -1,10 +1,9 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import HomeStack from './HomeStack';
 import homeBlack from '../assets/home_black.png';
 import homePink from '../assets/home_pink.png';
 import leafBlack from '../assets/leaf_black.png';
-import {Image, Text, View} from 'react-native';
+import {Image} from 'react-native';
 import leafPink from '../assets/leaf_pink.png';
 import accountBlack from '../assets/account_black.png';
 import accountPink from '../assets/account_pink.png';
