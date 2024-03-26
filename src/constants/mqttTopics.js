@@ -16,3 +16,9 @@ export const MQTT_DEVICE_MODES = {
   ECHO: 'Eco',
   POWER: 'Potencia',
 };
+
+export const MQTT_MODE_TO_SCREEN = {
+  [MQTT_DEVICE_MODES.TEMPERATURE]: 'TemperatureScreen',
+  [MQTT_DEVICE_MODES.ECHO]: 'EcoScreen',
+  [MQTT_DEVICE_MODES.POWER]: 'PowerScreen',
+};

@@ -1,22 +1,13 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import init from 'react_native_mqtt';
 import {useCallback, useRef, useState} from 'react';
 import {useAuth} from '../context/AuthContext';
 import {hostIp} from '../helpers/createAxios';
 import {useFocusEffect} from '@react-navigation/native';
 import {MQTT_TOPICS} from '../constants/mqttTopics';
 import {debounce} from 'lodash';
-
-init({
-  size: 10000,
-  storageBackend: AsyncStorage,
-  defaultExpires: 1000 * 3600 * 24,
-  enableCache: true,
-  sync: {},
-});
+import {SETTINGS} from '../constants/settings';
 
 const options = {
-  host: hostIp,
+  host: SETTINGS.hostIp,
   port: 8883,
   path: '/ws',
 };

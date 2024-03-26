@@ -5,6 +5,7 @@ import {Appearance} from 'react-native';
 import {AlertNotificationRoot} from 'react-native-alert-notification';
 import LoadingOverlay from './src/components/ui/LoadingOverlay';
 import {QueryClient, QueryClientProvider} from 'react-query';
+import {MqttProvider} from './src/context/MqttContext';
 
 const queryClient = new QueryClient();
 
@@ -16,10 +17,12 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <AlertNotificationRoot theme="light">
-          <AppStackList />
-          <LoadingOverlay />
-        </AlertNotificationRoot>
+        <MqttProvider>
+          <AlertNotificationRoot theme="light">
+            <AppStackList />
+            <LoadingOverlay />
+          </AlertNotificationRoot>
+        </MqttProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

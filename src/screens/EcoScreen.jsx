@@ -1,43 +1,42 @@
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import React, {useCallback} from 'react';
 import changeModeIcon from '../assets/change-mode-icon.png';
 import crownIcon from '../assets/crown-icon.png';
 import Header from '../components/layout/Header';
 import SectionTitle from '../components/typography/SectionTitle';
-import {COLORS} from '../constants/theme';
 import RangeSlider from '../components/forms/RangeSlider';
 import ModeButton from '../components/ModeButton';
 import CustomSwitch from '../components/forms/CustomSwitch';
-import useMqttController from '../hooks/useMqttController';
-import {MQTT_DEVICE_MODES} from '../constants/mqttTopics';
-import {useFocusEffect} from '@react-navigation/native';
+import {MQTT_DEVICE_MODES, MQTT_MODE_TO_SCREEN} from '../constants/mqttTopics';
 import CalefonOnOffText from '../components/ui/CalefonOnOffText';
+import useModeScreen from '../hooks/useModeScreen';
+
+const allowedModes = [
+  MQTT_DEVICE_MODES.TEMPERATURE,
+  MQTT_DEVICE_MODES.TEMPERATURE,
+];
 
 const EcoScreen = ({navigation, route}) => {
   const deviceId = route.params.deviceId;
   const deviceName = route.params.deviceName;
 
   const {
-    value: temperature,
+    subscriptionValue: temperature,
     targetValue: targetTemperature,
-    setTargetValueDebounced: setTargetTemperature,
+    updateTargetValue: setTargetTemperature,
     isDeviceOn,
     updateSysState,
-    canSendMessage,
-    changeMode,
-  } = useMqttController({
+  } = useModeScreen({
+    mode: MQTT_DEVICE_MODES.ECHO,
     deviceId,
     topicToSubscribe: 'temperature',
     topicToPublish: 'target_eco',
-  });
-
-  useFocusEffect(
-    useCallback(() => {
-      if (canSendMessage) {
-        changeMode(MQTT_DEVICE_MODES.ECHO);
+    onModeChange: useCallback(mode => {
+      if (allowedModes.includes(mode)) {
+        navigation.replace(MQTT_MODE_TO_SCREEN[mode], {deviceId, deviceName});
       }
-    }, [changeMode, canSendMessage]),
-  );
+    }, []),
+  });
 
   return (
     <SafeAreaView style={styles.container}>

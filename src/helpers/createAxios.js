@@ -1,10 +1,7 @@
 import * as Axios from 'axios';
 import qs from 'qs';
 import {getAuth} from './auth';
-
-export const hostIp = '192.168.1.116';
-// export const hostIp = '54.207.97.89';
-const host = `http://${hostIp}:3000/api`;
+import {SETTINGS} from '../constants/settings';
 
 export const createAxios = () => {
   const headers = {
@@ -13,7 +10,7 @@ export const createAxios = () => {
   };
 
   const axiosInstance = Axios.default.create({
-    baseURL: host,
+    baseURL: SETTINGS.apiUrl,
     headers,
     paramsSerializer: params => qs.stringify(params),
   });
