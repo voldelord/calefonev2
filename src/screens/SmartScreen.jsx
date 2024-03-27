@@ -16,6 +16,7 @@ import CalefonOnOffText from '../components/ui/CalefonOnOffText';
 import useModeScreen from '../hooks/useModeScreen';
 import {COLORS} from '../constants/theme';
 import Slider from '../components/slider/Slider';
+import {useAuth} from '../context/AuthContext';
 
 const allowedModes = [
   MQTT_DEVICE_MODES.POWER,
@@ -27,8 +28,12 @@ const SmartScreen = ({navigation, route}) => {
   const deviceId = route.params.deviceId;
   const deviceName = route.params.deviceName;
 
-  const [kwLimit, setKwLimit] = useState(0);
-  const [arsLimit, setArsLimit] = useState(0);
+  const {user} = useAuth();
+
+  const [kwLimit, setKwLimit] = useState(user.measurementConfig.maxKWHPerMonth);
+  const [arsLimit, setArsLimit] = useState(
+    user.measurementConfig.maxArsPerMonth,
+  );
 
   const {
     subscriptionValue: temperature,
@@ -56,12 +61,13 @@ const SmartScreen = ({navigation, route}) => {
 
         <RangeSlider
           value={targetTemperature}
-          title="MODO TEMPERATURA"
+          title="MODO SMART"
           subTitleValue={temperature}
           subTitle={'Temperatura actual:'}
           unit="C°"
           max={35}
-          onChange={e => setTargetTemperature(e.target.value)}
+          // onChange={e => setTargetTemperature(e.target.value)}
+          onChange={e => console.log(e.target.value)}
         />
 
         <View style={{alignItems: 'center'}}>
