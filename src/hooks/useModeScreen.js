@@ -24,7 +24,9 @@ const useModeScreen = ({
 
   useFocusEffect(
     useCallback(() => {
-      subscribe(subscriptionTopic, msg => setSubscriptionValue(msg.value));
+      subscribe(subscriptionTopic, msg =>
+        setSubscriptionValue(msg.value || msg.power),
+      );
       subscribe(targetTopic, msg => setTargetValue(msg.value));
 
       subscribe(sysStateTopic, msg => setIsDeviceOn(Boolean(msg.value)));
@@ -47,10 +49,9 @@ const useModeScreen = ({
 
   const updateTargetValue = useCallback(
     value => {
-      const targetTemperatureTopic = `${deviceId}/${MQTT_TOPICS.TARGET_TEMPERATURE}`;
-      sendMessageDebounced(targetTemperatureTopic, value);
+      sendMessageDebounced(targetTopic, value);
     },
-    [sendMessageDebounced, deviceId],
+    [sendMessageDebounced, targetTopic],
   );
 
   const updateSysState = useCallback(
