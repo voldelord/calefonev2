@@ -6,6 +6,7 @@ import EcoScreen from '../screens/EcoScreen';
 import ChartScreen from '../screens/ChartScreen';
 import SmartScreen from '../screens/SmartScreen';
 import AlarmScreen from '../screens/AlarmScreen';
+import NewAlarmScreen from '../screens/NewAlarmScreen';
 
 const Stack = createStackNavigator();
 
@@ -19,6 +20,7 @@ const DeviceControlStack = () => {
       <Stack.Screen name="ChartScreen" component={ChartScreen} />
       <Stack.Screen name="SmartScreen" component={SmartScreen} />
       <Stack.Screen name="AlarmScreen" component={AlarmScreen} />
+      <Stack.Screen name="NewAlarmScreen" component={NewAlarmScreen} />
     </Stack.Navigator>
   );
 };

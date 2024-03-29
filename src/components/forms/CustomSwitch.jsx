@@ -28,7 +28,15 @@ const SIZES = {
   },
 };
 
-const CustomSwitch = ({value, onChange, name, size = 'md', containerStyle}) => {
+const CustomSwitch = ({
+  value,
+  onChange,
+  name,
+  size = 'md',
+  containerStyle,
+  trackBarActiveColor = COLORS.primary,
+  trackBarInactiveColor = '#dddddd',
+}) => {
   const sizeData = SIZES[size];
 
   const handleChange = value => {
@@ -41,8 +49,8 @@ const CustomSwitch = ({value, onChange, name, size = 'md', containerStyle}) => {
       value={value}
       onPress={handleChange}
       trackBar={{
-        activeBackgroundColor: COLORS.primary,
-        inActiveBackgroundColor: '#dddddd',
+        activeBackgroundColor: trackBarActiveColor,
+        inActiveBackgroundColor: trackBarInactiveColor,
         ...sizeData.trackBar,
       }}
       thumbButton={{

@@ -7,3 +7,9 @@ export const DAY_MAPPING = {
   5: 'Viernes',
   6: 'Sábado',
 };
+
+export const getDaysTextFromRecurrence = recurrence =>
+  recurrence
+    .sort()
+    .map(day => DAY_MAPPING[day])
+    .join(', ');

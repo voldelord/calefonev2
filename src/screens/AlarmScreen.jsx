@@ -30,7 +30,11 @@ const AlarmScreen = ({navigation, route}) => {
       <View style={styles.content}>
         <View style={styles.titleSection}>
           <SectionTitle text={deviceName} />
-          <TouchableOpacity style={styles.addButton}>
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() =>
+              navigation.navigate('NewAlarmScreen', {deviceId, deviceName})
+            }>
             <Entypo name="plus" style={styles.addButtonIcon} />
           </TouchableOpacity>
         </View>
