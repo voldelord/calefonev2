@@ -92,6 +92,9 @@ const SmartScreen = ({navigation, route}) => {
             icon={clockIcon}
             title={'Programar horario'}
             redBg
+            onPress={() =>
+              navigation.navigate('AlarmScreen', {deviceId, deviceName})
+            }
           />
         </View>
 
