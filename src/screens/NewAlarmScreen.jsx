@@ -1,4 +1,4 @@
-import {SafeAreaView, ScrollView, StyleSheet, Text} from 'react-native';
+import {SafeAreaView, ScrollView, StyleSheet} from 'react-native';
 import Header from '../components/layout/Header';
 import SectionTitle from '../components/typography/SectionTitle';
 import {View} from 'react-native';
@@ -19,7 +19,9 @@ import {useMutation, useQueryClient} from 'react-query';
 import {useLoadingOverlayStore} from '../stores/loadingOverlayStore';
 import {createDeviceSchedule} from '../API/deviceSchedules';
 import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
-import {v4 as uuid} from 'uuid';
+import useDeviceScheduleFormStore, {
+  initialDeviceSchedule,
+} from '../stores/deviceScheduleFormStore';
 
 const validationSchema = object().shape({
   recurrence: array()
@@ -52,9 +54,14 @@ const validationSchema = object().shape({
 const NewAlarmScreen = ({navigation, route}) => {
   const deviceId = route.params.deviceId;
   const deviceName = route.params.deviceName;
+  const editMode = route.params.editMode ?? false;
 
   const setIsLoading = useLoadingOverlayStore(state => state.setIsLoading);
   const queryClient = useQueryClient();
+
+  const deviceSchedule = useDeviceScheduleFormStore(
+    state => state.deviceSchedule,
+  );
 
   const {
     isOpen: daysPickerIsOpen,
@@ -94,7 +101,7 @@ const NewAlarmScreen = ({navigation, route}) => {
   const handleSubmit = async values => {
     await createScheduleMutation({
       ...values,
-      id: uuid(),
+      id: deviceSchedule.id,
       deviceId,
       recurrence: values.recurrence.map(Number),
     });
@@ -104,15 +111,12 @@ const NewAlarmScreen = ({navigation, route}) => {
     <SafeAreaView style={styles.container}>
       <Header onBackPress={() => navigation.goBack()} />
       <ScrollView style={styles.content}>
-        <SectionTitle text={deviceName} />
+        <SectionTitle
+          text={editMode ? 'Editar Programación' : 'Nuevo Programación'}
+        />
 
         <Formik
-          initialValues={{
-            recurrence: [],
-            startTime: '',
-            endTime: '',
-            isActive: true,
-          }}
+          initialValues={initialDeviceSchedule(deviceSchedule)}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}>
           {({values, handleChange, handleSubmit, setFieldValue, errors}) => (

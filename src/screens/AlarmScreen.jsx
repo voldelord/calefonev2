@@ -14,10 +14,18 @@ import DeviceSchedule from '../components/DeviceSchedule';
 import {useQuery} from 'react-query';
 import {getDeviceSchedules} from '../API/deviceSchedules';
 import LoadingView from '../components/ui/LoadingView';
+import useDeviceScheduleFormStore from '../stores/deviceScheduleFormStore';
 
 const AlarmScreen = ({navigation, route}) => {
   const deviceId = route.params.deviceId;
   const deviceName = route.params.deviceName;
+
+  const updateDeviceSchedule = useDeviceScheduleFormStore(
+    state => state.updateDeviceSchedule,
+  );
+  const crearDeviceSchedule = useDeviceScheduleFormStore(
+    state => state.crearDeviceSchedule,
+  );
 
   const {data: schedules, isLoading: schedulesIsLoading} = useQuery(
     ['device-schedules', deviceId],
@@ -32,9 +40,10 @@ const AlarmScreen = ({navigation, route}) => {
           <SectionTitle text={deviceName} />
           <TouchableOpacity
             style={styles.addButton}
-            onPress={() =>
-              navigation.navigate('NewAlarmScreen', {deviceId, deviceName})
-            }>
+            onPress={() => {
+              crearDeviceSchedule();
+              navigation.navigate('NewAlarmScreen', {deviceId, deviceName});
+            }}>
             <Entypo name="plus" style={styles.addButtonIcon} />
           </TouchableOpacity>
         </View>
@@ -47,7 +56,18 @@ const AlarmScreen = ({navigation, route}) => {
               ItemSeparatorComponent={<View style={{height: 15}} />}
               data={schedules?.items ?? []}
               renderItem={({item}) => (
-                <DeviceSchedule schedule={item} onToggle={console.log} />
+                <DeviceSchedule
+                  schedule={item}
+                  onToggle={console.log}
+                  onPress={() => {
+                    updateDeviceSchedule(item);
+                    navigation.navigate('NewAlarmScreen', {
+                      deviceId,
+                      deviceName,
+                      editMode: true,
+                    });
+                  }}
+                />
               )}
             />
           )}

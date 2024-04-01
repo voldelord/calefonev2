@@ -3,7 +3,7 @@ import {COLORS} from '../constants/theme';
 import CustomSwitch from './forms/CustomSwitch';
 import {DAY_MAPPING} from '../constants/day-mapping';
 
-const DeviceSchedule = ({style, schedule, onToggle}) => {
+const DeviceSchedule = ({style, schedule, onToggle, onPress}) => {
   const daysText = schedule.recurrence
     .sort()
     .map(day => DAY_MAPPING[day])
@@ -12,7 +12,7 @@ const DeviceSchedule = ({style, schedule, onToggle}) => {
   return (
     <View style={[styles.root, style]}>
       <View style={styles.scheduleRoot}>
-        <Pressable style={styles.hourRoot}>
+        <Pressable style={styles.hourRoot} onPress={onPress}>
           <Text style={styles.hour}>
             {schedule.startTime.substring(0, 5)} -{' '}
           </Text>
