@@ -7,7 +7,7 @@ import requestLocationAndBLuetoothPermissions from '../helpers/requestLocationAn
 import {useState} from 'react';
 import {findDevices} from '../helpers/BLEDevices';
 import {useLoadingOverlayStore} from '../stores/loadingOverlayStore';
-import {hostIp} from '../helpers/createAxios';
+import {SETTINGS} from '../constants/settings';
 
 const useBLEDevices = () => {
   const setIsLoading = useLoadingOverlayStore(state => state.setIsLoading);
@@ -56,7 +56,7 @@ const useBLEDevices = () => {
       const deviceId = (
         await device.sendData(
           'custom-data',
-          JSON.stringify({mqttServer: `${hostIp}:1883`}),
+          JSON.stringify({mqttServer: `${SETTINGS.hostIp}:1883`}),
         )
       ).replaceAll('\0', '');
 

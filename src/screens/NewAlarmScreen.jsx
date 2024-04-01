@@ -1,4 +1,4 @@
-import {SafeAreaView, ScrollView, StyleSheet} from 'react-native';
+import {SafeAreaView, ScrollView, StyleSheet, Text} from 'react-native';
 import Header from '../components/layout/Header';
 import SectionTitle from '../components/typography/SectionTitle';
 import {View} from 'react-native';
@@ -8,14 +8,53 @@ import CustomSwitch from '../components/forms/CustomSwitch';
 import DaysPicker from '../components/forms/DaysPicker';
 import LeftRightRow from '../components/ui/LeftRightRow';
 import useDisclosure from '../hooks/useDisclosure';
-import {Formik} from 'formik';
+import {ErrorMessage, Formik} from 'formik';
 import {getDaysTextFromRecurrence} from '../constants/day-mapping';
 import DatePicker from 'react-native-date-picker';
-import {format, parse} from 'date-fns';
+import {format, isAfter, parse} from 'date-fns';
+import {array, boolean, object, string} from 'yup';
+import FormError from '../components/forms/FormError';
+import {parseFrom24hTime} from '../helpers/dateParsers';
+import {useMutation, useQueryClient} from 'react-query';
+import {useLoadingOverlayStore} from '../stores/loadingOverlayStore';
+import {createDeviceSchedule} from '../API/deviceSchedules';
+import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
+import {v4 as uuid} from 'uuid';
+
+const validationSchema = object().shape({
+  recurrence: array()
+    .min(1, 'Debe seleccionar al menos un día')
+    .required('Seleccione en que diás se repite'),
+  startTime: string().required('Seleccione una hora de inicio'),
+  endTime: string()
+    .required('Seleccione una hora de fin')
+    .test(
+      'is-greater',
+      'La hora de fin debe ser mayor a la hora de inicio',
+      (value, ctx) => {
+        if (!ctx.parent.startTime) {
+          return true;
+        }
+
+        const baseDate = new Date();
+        const parsedStartTime = parseFrom24hTime(
+          ctx.parent.startTime,
+          baseDate,
+        );
+        const parsedEndTime = parseFrom24hTime(value, baseDate);
+
+        return isAfter(parsedEndTime, parsedStartTime);
+      },
+    ),
+  isActive: boolean().required('Active o desactive la alarma'),
+});
 
 const NewAlarmScreen = ({navigation, route}) => {
   const deviceId = route.params.deviceId;
   const deviceName = route.params.deviceName;
+
+  const setIsLoading = useLoadingOverlayStore(state => state.setIsLoading);
+  const queryClient = useQueryClient();
 
   const {
     isOpen: daysPickerIsOpen,
@@ -35,8 +74,30 @@ const NewAlarmScreen = ({navigation, route}) => {
     onClose: endTimePickerOnClose,
   } = useDisclosure();
 
-  const handleSubmit = values => {
-    console.log(values);
+  const {mutateAsync: createScheduleMutation} = useMutation(
+    data => createDeviceSchedule(data),
+    {
+      onMutate: () => setIsLoading(true),
+      onSettled: () => setIsLoading(false),
+      onSuccess: () => {
+        Toast.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: 'Programación creada!',
+          textBody: 'Se ha programado el encendido y apagado del dispositivo.',
+        });
+        queryClient.invalidateQueries('device-schedules');
+        navigation.goBack();
+      },
+    },
+  );
+
+  const handleSubmit = async values => {
+    await createScheduleMutation({
+      ...values,
+      id: uuid(),
+      deviceId,
+      recurrence: values.recurrence.map(Number),
+    });
   };
 
   return (
@@ -50,10 +111,11 @@ const NewAlarmScreen = ({navigation, route}) => {
             recurrence: [],
             startTime: '',
             endTime: '',
-            isActive: false,
+            isActive: true,
           }}
+          validationSchema={validationSchema}
           onSubmit={handleSubmit}>
-          {({values, handleChange, handleSubmit, setFieldValue}) => (
+          {({values, handleChange, handleSubmit, setFieldValue, errors}) => (
             <>
               <View style={styles.scheduleForm}>
                 <LeftRightRow
@@ -91,6 +153,11 @@ const NewAlarmScreen = ({navigation, route}) => {
                   noSeparator
                 />
               </View>
+
+              <ErrorMessage component={FormError} name="recurrence" />
+              <ErrorMessage component={FormError} name="startTime" />
+              <ErrorMessage component={FormError} name="endTime" />
+              <ErrorMessage component={FormError} name="isActive" />
 
               <CustomButton
                 label="Eliminar Programación"

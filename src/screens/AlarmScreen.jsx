@@ -12,7 +12,7 @@ import SectionTitle from '../components/typography/SectionTitle';
 import {COLORS} from '../constants/theme';
 import DeviceSchedule from '../components/DeviceSchedule';
 import {useQuery} from 'react-query';
-import {deviceSchedules} from '../API/deviceSchedules';
+import {getDeviceSchedules} from '../API/deviceSchedules';
 import LoadingView from '../components/ui/LoadingView';
 
 const AlarmScreen = ({navigation, route}) => {
@@ -21,7 +21,7 @@ const AlarmScreen = ({navigation, route}) => {
 
   const {data: schedules, isLoading: schedulesIsLoading} = useQuery(
     ['device-schedules', deviceId],
-    () => deviceSchedules(deviceId),
+    () => getDeviceSchedules(deviceId),
   );
 
   return (
