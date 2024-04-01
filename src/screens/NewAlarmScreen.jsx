@@ -17,11 +17,15 @@ import FormError from '../components/forms/FormError';
 import {parseFrom24hTime} from '../helpers/dateParsers';
 import {useMutation, useQueryClient} from 'react-query';
 import {useLoadingOverlayStore} from '../stores/loadingOverlayStore';
-import {createDeviceSchedule} from '../API/deviceSchedules';
+import {
+  createDeviceSchedule,
+  deleteDeviceSchedule,
+} from '../API/deviceSchedules';
 import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
 import useDeviceScheduleFormStore, {
   initialDeviceSchedule,
 } from '../stores/deviceScheduleFormStore';
+import {showConfirmationAlert} from '../helpers/alerts';
 
 const validationSchema = object().shape({
   recurrence: array()
@@ -98,12 +102,37 @@ const NewAlarmScreen = ({navigation, route}) => {
     },
   );
 
+  const {mutate: deleteScheduleMutation} = useMutation(
+    data => deleteDeviceSchedule(deviceSchedule.id),
+    {
+      onMutate: () => setIsLoading(true),
+      onSettled: () => setIsLoading(false),
+      onSuccess: () => {
+        Toast.show({
+          type: ALERT_TYPE.SUCCESS,
+          title: 'Programación eliminada!',
+          textBody: 'Se elimino una programación de dispositivo.',
+        });
+        queryClient.invalidateQueries('device-schedules');
+        navigation.goBack();
+      },
+    },
+  );
+
   const handleSubmit = async values => {
     await createScheduleMutation({
       ...values,
       id: deviceSchedule.id,
       deviceId,
       recurrence: values.recurrence.map(Number),
+    });
+  };
+
+  const handleDelete = () => {
+    showConfirmationAlert({
+      title: 'Eliminar programación',
+      message: '¿Está seguro?',
+      okButtonPress: deleteScheduleMutation,
     });
   };
 
@@ -163,14 +192,16 @@ const NewAlarmScreen = ({navigation, route}) => {
               <ErrorMessage component={FormError} name="endTime" />
               <ErrorMessage component={FormError} name="isActive" />
 
-              <CustomButton
-                label="Eliminar Programación"
-                //   onPress={handleSubmit}
-                buttonColor={COLORS.lightGrey}
-                textColor={COLORS.primary}
-                width={'100%'}
-                height={50}
-              />
+              {editMode && (
+                <CustomButton
+                  label="Eliminar Programación"
+                  onPress={handleDelete}
+                  buttonColor={COLORS.lightGrey}
+                  textColor={COLORS.primary}
+                  width={'100%'}
+                  height={50}
+                />
+              )}
               <CustomButton
                 label="Programar Horario"
                 onPress={handleSubmit}
@@ -212,7 +243,7 @@ const NewAlarmScreen = ({navigation, route}) => {
               <DatePicker
                 modal
                 mode="time"
-                title="Hora de inicio"
+                title="Hora de fin"
                 confirmText="Aceptar"
                 cancelText="Cancelar"
                 open={endTimePickerIsOpen}

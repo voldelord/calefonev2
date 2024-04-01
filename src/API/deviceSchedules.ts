@@ -15,3 +15,7 @@ export const createDeviceSchedule = async (data: {
 }) => {
   await axios.post('/v1/device-schedules', data);
 };
+
+export const deleteDeviceSchedule = async (scheduleId: string) => {
+  await axios.delete(`/v1/device-schedules/${scheduleId}`);
+};
