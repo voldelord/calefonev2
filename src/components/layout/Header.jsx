@@ -1,22 +1,30 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import bell from '../../assets/bell.png';
-import { COLORS } from '../../constants/theme';
+import {COLORS} from '../../constants/theme';
+import logoFull from '../../assets/logo-full.png';
 
 const Header = ({onBackPress, hideNotificationIcon = false, title}) => {
   return (
     <View style={styles.container}>
-      {onBackPress && (
-        <TouchableOpacity onPress={onBackPress}>
-          <Entypo name="chevron-thin-left" size={30} color={COLORS.black} />
-        </TouchableOpacity>
-      )}
+      <View style={styles.leftSection}>
+        {onBackPress && (
+          <TouchableOpacity onPress={onBackPress}>
+            <Entypo name="chevron-thin-left" size={30} color={COLORS.black} />
+          </TouchableOpacity>
+        )}
+      </View>
+      <View style={styles.middleSection}>
+        <Image source={logoFull} style={styles.logo} resizeMode="contain" />
+      </View>
 
-      {title && <Text style={styles.title}>{title}</Text>}
-
-      {!hideNotificationIcon && <TouchableOpacity style={styles.notificationButton}>
-        <Image source={bell} style={styles.bellImage} />
-      </TouchableOpacity>}
+      <View style={styles.rightSection}>
+        {!hideNotificationIcon && (
+          <TouchableOpacity style={styles.notificationButton}>
+            <Image source={bell} style={styles.bellImage} />
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   );
 };
@@ -28,7 +36,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingLeft: 10,
     paddingRight: 15,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   bellImage: {
     height: 30,
@@ -37,11 +45,29 @@ const styles = StyleSheet.create({
   notificationButton: {
     marginLeft: 'auto',
   },
-  title: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginLeft: 10
-  }
+  middleSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+  },
+  logo: {
+    height: 40,
+  },
+  logoName: {
+    fontSize: 26,
+    fontWeight: '600',
+    color: COLORS.black,
+    marginLeft: 8,
+  },
+  rightSection: {
+    height: 30,
+    width: 30,
+  },
+  leftSection: {
+    height: 30,
+    width: 30,
+  },
 });
 
 export default Header;
