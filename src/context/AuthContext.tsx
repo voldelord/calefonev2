@@ -1,4 +1,10 @@
-import {createContext, useContext, useEffect, useState} from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import {clearAuth, getAuth, storeAuth} from '../helpers/auth';
 
 const AuthContext = createContext<{
@@ -8,6 +14,7 @@ const AuthContext = createContext<{
   isLoading: boolean;
   login: (data: {token: string; user: Record<string, any>}) => Promise<void>;
   logout: () => Promise<void>;
+  updateUserProfile: (profile: Record<string, any>) => void;
 } | null>(null);
 
 export const AuthProvider = ({children}: React.PropsWithChildren) => {
@@ -36,6 +43,25 @@ export const AuthProvider = ({children}: React.PropsWithChildren) => {
 
     setUser(null);
   };
+
+  const updateUserProfile = useCallback(
+    async (profile: Record<string, any>) => {
+      if (user && authToken) {
+        const newUser = {
+          ...user,
+          profile: {
+            ...profile,
+            userId: user!.id,
+          },
+        };
+
+        setUser(newUser);
+
+        await storeAuth({token: authToken, user: user});
+      }
+    },
+    [user, authToken],
+  );
 
   useEffect(() => {
     const loadAuthInfo = async () => {
@@ -66,6 +92,7 @@ export const AuthProvider = ({children}: React.PropsWithChildren) => {
         isLoading,
         login,
         logout,
+        updateUserProfile,
       }}>
       {children}
     </AuthContext.Provider>

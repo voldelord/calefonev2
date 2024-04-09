@@ -12,7 +12,7 @@ import {SETTINGS} from '../constants/settings';
 const useBLEDevices = () => {
   const setIsLoading = useLoadingOverlayStore(state => state.setIsLoading);
   const [selectedDevice, setSelectedDevice] = useState<ESPDevice | null>(null);
-  1;
+
   const [selectedWifiNetwork, setSelectedWifiNetwork] =
     useState<ESPWifiList | null>(null);
 

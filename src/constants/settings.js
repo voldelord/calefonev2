@@ -1,5 +1,5 @@
 const HOST_IP = '192.168.1.116';
-// const BASE_HOST = '54.207.97.89';
+// const HOST_IP = '54.207.97.89';
 
 export const SETTINGS = Object.freeze({
   hostIp: HOST_IP,

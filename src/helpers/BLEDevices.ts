@@ -7,7 +7,6 @@ import {
   ESPStatusResponse,
 } from '@orbital-systems/react-native-esp-idf-provisioning';
 import {sleep} from './sleep';
-import {hostIp} from './createAxios';
 
 class FakeDevice extends ESPDevice {
   async scanWifiList(): Promise<ESPWifiList[]> {
