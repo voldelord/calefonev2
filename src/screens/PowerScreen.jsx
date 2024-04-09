@@ -48,7 +48,9 @@ const PowerScreen = ({navigation, route}) => {
           subTitle={'Potencia actual:'}
           unit="W"
           max={10}
-          onChange={e => setTargetPower(e.target.value)}
+          onNewValue={setTargetPower}
+          onMinus={setTargetPower}
+          onPlus={setTargetPower}
         />
 
         <View style={{alignItems: 'center'}}>

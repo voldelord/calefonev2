@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {RadialSlider} from 'react-native-radial-slider';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -8,6 +8,9 @@ const RangeSlider = ({
   value,
   name,
   onChange,
+  onNewValue,
+  onMinus,
+  onPlus,
   step = 1,
   title,
   subTitle,
@@ -16,19 +19,34 @@ const RangeSlider = ({
   min = 0,
   max = 100,
 }) => {
-  const handleChange = value => {
-    onChange?.({target: {name, value}});
-  };
+  const handleChange = useCallback(
+    _value => {
+      onChange?.({target: {name, value: _value}});
 
-  const onMinusPress = () => {
-    // TODO: VALIDATE MINUS
-    onChange?.({target: {name, value: value - step}});
-  };
+      if (_value === value) {
+        return;
+      }
 
-  const onPlusPress = () => {
-    // TODO: VALIDATE PLUS
-    onChange?.({target: {name, value: value + step}});
-  };
+      onNewValue?.(_value);
+    },
+    [onChange, name, value, onNewValue],
+  );
+
+  const handleMinusPress = useCallback(() => {
+    const newValue = value - step;
+
+    if (newValue >= min) {
+      onMinus?.(newValue);
+    }
+  }, [onMinus, value, step, min]);
+
+  const handlePlusPress = useCallback(() => {
+    const newValue = value + step;
+
+    if (newValue <= max) {
+      onPlus?.(newValue);
+    }
+  }, [onPlus, value, step, max]);
 
   return (
     <View style={styles.rangePickerContainer}>
@@ -68,12 +86,12 @@ const RangeSlider = ({
         <View style={styles.rangePickerButtonContainer}>
           <TouchableOpacity
             style={styles.rangePickerButton}
-            onPress={onMinusPress}>
+            onPress={handleMinusPress}>
             <FontAwesome5 name="minus" style={styles.rangePickerButtonIcon} />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.rangePickerButton}
-            onPress={onPlusPress}>
+            onPress={handlePlusPress}>
             <FontAwesome5 name="plus" style={styles.rangePickerButtonIcon} />
           </TouchableOpacity>
         </View>

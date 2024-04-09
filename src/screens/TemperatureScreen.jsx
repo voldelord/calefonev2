@@ -1,4 +1,4 @@
-import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {Button, SafeAreaView, StyleSheet, View} from 'react-native';
 import React, {useCallback} from 'react';
 import changeModeIcon from '../assets/change-mode-icon.png';
 import crownIcon from '../assets/crown-icon.png';
@@ -52,7 +52,9 @@ const TemperatureScreen = ({navigation, route}) => {
           subTitle={'Temperatura actual:'}
           unit="C°"
           max={35}
-          onChange={e => setTargetTemperature(e.target.value)}
+          onNewValue={setTargetTemperature}
+          onMinus={setTargetTemperature}
+          onPlus={setTargetTemperature}
         />
 
         <View style={{alignItems: 'center'}}>

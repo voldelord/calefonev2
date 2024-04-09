@@ -66,8 +66,9 @@ const SmartScreen = ({navigation, route}) => {
           subTitle={'Temperatura actual:'}
           unit="C°"
           max={35}
-          // onChange={e => setTargetTemperature(e.target.value)}
-          onChange={e => console.log(e.target.value)}
+          onNewValue={setTargetTemperature}
+          onMinus={setTargetTemperature}
+          onPlus={setTargetTemperature}
         />
 
         <View style={{alignItems: 'center'}}>
