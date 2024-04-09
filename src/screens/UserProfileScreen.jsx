@@ -37,18 +37,7 @@ const MenuItem = ({title, icon, onPress}) => {
 };
 
 const UserProfileScreen = ({navigation}) => {
-  const {logout} = useAuth();
-
-  const smartPress = () => {
-    navigation.navigate('AdvancedPlanScreen');
-  };
-
-  const navigateToScreen = destino => {
-    navigation.navigate(destino);
-  };
-  const onPress = () => {
-    navigation.navigate('AllNotificationsScreens');
-  };
+  const {logout, user} = useAuth();
 
   return (
     <View style={styles.container}>
@@ -61,8 +50,14 @@ const UserProfileScreen = ({navigation}) => {
             style={styles.profileImage}
             resizeMode="cover"
           />
-          <Text style={styles.profileName}>Franco Duek</Text>
-          <Text style={styles.profileEmail}>francoduek@gmail.com</Text>
+          <Text
+            style={[
+              styles.profileName,
+              {fontStyle: user.profile ? 'normal' : 'italic'},
+            ]}>
+            {user.profile?.fullName ?? 'No profile'}
+          </Text>
+          <Text style={styles.profileEmail}>{user.email}</Text>
         </View>
 
         <TouchableOpacity>
