@@ -1,8 +1,16 @@
-import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import bell from '../../assets/bell.png';
 import {COLORS} from '../../constants/theme';
 import logoFull from '../../assets/logo-full.png';
+// import backCaret from '../../assets/back-caret.png';
+import backCaret from '../../assets/back-caret-2.png';
 
 const Header = ({onBackPress, hideNotificationIcon = false, title}) => {
   return (
@@ -10,7 +18,11 @@ const Header = ({onBackPress, hideNotificationIcon = false, title}) => {
       <View style={styles.leftSection}>
         {onBackPress && (
           <TouchableOpacity onPress={onBackPress}>
-            <Entypo name="chevron-thin-left" size={30} color={COLORS.black} />
+            <Image
+              source={backCaret}
+              style={{width: 30, height: 30}}
+              resizeMode="contain"
+            />
           </TouchableOpacity>
         )}
       </View>
@@ -53,6 +65,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     height: 40,
+    width: '100%',
   },
   logoName: {
     fontSize: 26,
