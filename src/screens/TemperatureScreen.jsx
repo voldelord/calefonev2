@@ -49,7 +49,7 @@ const TemperatureScreen = ({navigation, route}) => {
           value={targetTemperature}
           title="MODO TEMPERATURA"
           subTitleValue={temperature}
-          subTitle={'Temperatura actual:'}
+          subTitle={'Temperatura ambiente:'}
           unit="C°"
           max={35}
           onNewValue={setTargetTemperature}

@@ -48,7 +48,7 @@ const EcoScreen = ({navigation, route}) => {
           value={targetTemperature}
           title="MODO ECO"
           subTitleValue={temperature}
-          subTitle={'Temperatura actual:'}
+          subTitle={'Temperatura ambiente:'}
           unit="C°"
           max={35}
           onNewValue={setTargetTemperature}

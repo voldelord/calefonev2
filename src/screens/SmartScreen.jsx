@@ -63,7 +63,7 @@ const SmartScreen = ({navigation, route}) => {
           value={targetTemperature}
           title="MODO SMART"
           subTitleValue={temperature}
-          subTitle={'Temperatura actual:'}
+          subTitle={'Temperatura ambiente:'}
           unit="C°"
           max={35}
           onNewValue={setTargetTemperature}
