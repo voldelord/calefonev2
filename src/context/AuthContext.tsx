@@ -91,7 +91,6 @@ export const AuthProvider = ({children}: React.PropsWithChildren) => {
     );
 
     if (user?.id) {
-      console.log(user.id);
       messaging().subscribeToTopic(user.id);
     }
 
