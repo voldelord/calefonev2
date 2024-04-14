@@ -45,23 +45,23 @@ class FakeDevice extends ESPDevice {
 }
 
 export const findDevices = async () => {
-  await sleep(2000);
+  // await sleep(2000);
 
-  return [
-    new FakeDevice({
-      name: 'PROV_121231',
-      transport: ESPTransport.ble,
-      security: ESPSecurity.secure,
-    }),
-    new FakeDevice({
-      name: 'PROV_234345',
-      transport: ESPTransport.ble,
-      security: ESPSecurity.secure,
-    }),
-  ];
+  // return [
+  //   new FakeDevice({
+  //     name: 'PROV_121231',
+  //     transport: ESPTransport.ble,
+  //     security: ESPSecurity.secure,
+  //   }),
+  //   new FakeDevice({
+  //     name: 'PROV_234345',
+  //     transport: ESPTransport.ble,
+  //     security: ESPSecurity.secure,
+  //   }),
+  // ];
   return await ESPProvisionManager.searchESPDevices(
-    'Firenze_',
-    // 'PROV_',
+    // 'Firenze_',
+    'PROV_',
     ESPTransport.ble,
     ESPSecurity.secure,
   );

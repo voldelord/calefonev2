@@ -9,4 +9,5 @@ export const SETTINGS = Object.freeze({
     port: 8883,
     path: '/ws',
   },
+  maxDistanceFromHomeInMeters: 50,
 });
