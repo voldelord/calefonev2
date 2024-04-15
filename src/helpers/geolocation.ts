@@ -1,6 +1,4 @@
-import Geolocation, {
-  GeolocationResponse,
-} from '@react-native-community/geolocation';
+import Geolocation, {GeoPosition} from 'react-native-geolocation-service';
 
 export type GeoLocation = {lat: number; long: number};
 
@@ -33,10 +31,9 @@ export function calculateDistance(
 }
 
 export const getCurrentPosition = () =>
-  new Promise<GeolocationResponse>((resolve, reject) =>
+  new Promise<GeoPosition>((resolve, reject) =>
     Geolocation.getCurrentPosition(resolve, reject, {
       enableHighAccuracy: true,
-      timeout: 15000,
-      maximumAge: 10000,
+      timeout: 20000,
     }),
   );

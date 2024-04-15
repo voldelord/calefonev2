@@ -23,6 +23,7 @@ import {requestLocationPermission} from '../helpers/permissions';
 import {getCurrentPosition} from '../helpers/geolocation';
 import {useMutation} from 'react-query';
 import FormError from '../components/forms/FormError';
+import {showErrorToast} from '../helpers/toast';
 
 const initialValues = ({
   name = '',
@@ -40,26 +41,30 @@ const homeSchema = Yup.object().shape({
 });
 
 const LocationGetter = ({value, onLocation}) => {
-  const {mutate, isLoading} = useMutation(async () => {
-    const isLocationAllowed = await requestLocationPermission();
+  const {mutate, isLoading} = useMutation(
+    async () => {
+      const isLocationAllowed = await requestLocationPermission();
 
-    if (!isLocationAllowed) {
-      throw new Error('Permiso de ubicación denegado.');
-    }
+      if (!isLocationAllowed) {
+        throw new Error('Permiso de ubicación denegado.');
+      }
 
-    const position = await getCurrentPosition();
+      const position = await getCurrentPosition();
 
-    return {
-      lat: position.coords.latitude,
-      long: position.coords.longitude,
-    };
-  });
-
-  const onPress = async () => {
-    mutate(null, {
+      return {
+        lat: position.coords.latitude,
+        long: position.coords.longitude,
+      };
+    },
+    {
       onSuccess: data => onLocation?.(data),
-    });
-  };
+      onError: error =>
+        showErrorToast({
+          title: 'Permisos de ubicación',
+          description: error.message,
+        }),
+    },
+  );
 
   return (
     <TouchableOpacity
@@ -68,7 +73,7 @@ const LocationGetter = ({value, onLocation}) => {
         flexDirection: 'row',
         alignItems: 'center',
       }}
-      onPress={onPress}
+      onPress={mutate}
       disabled={isLoading}>
       <EvilIcons name="location" size={30} />
       {isLoading ? (
