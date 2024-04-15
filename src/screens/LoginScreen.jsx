@@ -10,7 +10,7 @@ import {
 import CustomButton from '../components/CustomButton';
 import {Field, Formik} from 'formik';
 import * as Yup from 'yup';
-import logo from '../assets/logo.jpg';
+import logo from '../assets/logo-full.png';
 import InputField from '../components/InputField';
 import Ionicons from 'react-native-vector-icons/Ionicons'; // importa Ionicons
 import google from '../assets/google.png';

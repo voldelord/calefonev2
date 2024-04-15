@@ -10,7 +10,7 @@ import {
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import {v4 as uuid} from 'uuid';
 import CustomButton from '../components/CustomButton';
-import logo from '../assets/logo.jpg';
+import logo from '../assets/logo-full.png';
 import InputField from '../components/InputField';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import google from '../assets/google.png';

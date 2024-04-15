@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import perfil from '../assets/profile.png';
+import logo from '../assets/logo.png';
 import editProfileIcon from '../assets/edit-profile-icon.png';
 import notifiactionsIcon from '../assets/notifications-icon.png';
 import logoutIcon from '../assets/logout-icon.png';
@@ -56,7 +56,7 @@ const UserProfileScreen = ({navigation}) => {
         if (!mainHome) {
           return showErrorToast({
             title: 'Monitoreo de ubicación.',
-            description: 'Establesca una casa como su hogar principal',
+            description: 'Establezca una casa como su hogar principal',
           });
         }
 
@@ -75,9 +75,9 @@ const UserProfileScreen = ({navigation}) => {
       <View style={styles.content}>
         <View style={styles.profile}>
           <Image
-            source={perfil}
+            source={logo}
             style={styles.profileImage}
-            resizeMode="cover"
+            resizeMode="contain"
           />
           <Text
             style={[
@@ -146,9 +146,10 @@ const styles = StyleSheet.create({
   },
   profile: {alignItems: 'center', marginBottom: 20},
   profileImage: {
-    width: 200,
-    height: 200,
-    borderRadius: 75,
+    width: 120,
+    height: 120,
+    marginBottom: 15,
+    // borderRadius: 75,
   },
   profileName: {
     fontSize: 30,
