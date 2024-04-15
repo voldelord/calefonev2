@@ -10,8 +10,6 @@ import {calculateDistance} from './src/helpers/geolocation';
 import Geolocation from '@react-native-community/geolocation';
 import {SETTINGS} from './src/constants/settings';
 
-const HOME_LOCATION = {lat: 37.3595, long: -121.9141};
-
 init({
   size: 10000,
   storageBackend: AsyncStorage,
@@ -39,7 +37,10 @@ notifee.registerForegroundService(notification => {
           long: position.coords.longitude,
         };
 
-        const distance = calculateDistance(location, HOME_LOCATION).meters;
+        const distance = calculateDistance(
+          location,
+          notification.data.homeLocation,
+        ).meters;
 
         const notificationBody =
           distance > SETTINGS.maxDistanceFromHomeInMeters
@@ -50,6 +51,9 @@ notifee.registerForegroundService(notification => {
           id: notification.id,
           title: notification.title,
           body: notificationBody,
+          data: {
+            ...notification.data,
+          },
           android: {
             ...notification.android,
           },

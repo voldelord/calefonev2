@@ -12,6 +12,8 @@ import Header from '../components/layout/Header';
 import {COLORS} from '../constants/theme';
 import {showConfirmationAlert} from '../helpers/alerts';
 import {startMonitoring} from '../helpers/locationTracking';
+import {showErrorToast} from '../helpers/toast';
+import {getMainHome} from '../API/homes';
 
 const opciones = [
   {
@@ -48,7 +50,21 @@ const UserProfileScreen = ({navigation}) => {
     showConfirmationAlert({
       title: 'Monitoreo de ubicación.',
       message: '¿Deseas que se le notifique cuando salga del hogar?',
-      okButtonPress: startMonitoring,
+      okButtonPress: async () => {
+        const mainHome = await getMainHome(user.id);
+
+        if (!mainHome) {
+          return showErrorToast({
+            title: 'Monitoreo de ubicación.',
+            description: 'Establesca una casa como su hogar principal',
+          });
+        }
+
+        await startMonitoring({
+          lat: mainHome.latitude,
+          long: mainHome.longitude,
+        });
+      },
     });
   };
 

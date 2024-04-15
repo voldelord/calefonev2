@@ -4,11 +4,12 @@ import {calculateDistance, getCurrentPosition} from './geolocation';
 import {SETTINGS} from '../constants/settings';
 import {v4 as uuid} from 'uuid';
 
-const HOME_LOCATION = {lat: 37.3595, long: -121.9141};
-
 let channelId: string;
 
-export async function startMonitoring() {
+export async function startMonitoring(homeLocation: {
+  lat: number;
+  long: number;
+}) {
   await notifee.requestPermission();
 
   const isLocationAllowed = await requestLocationPermission();
@@ -31,7 +32,7 @@ export async function startMonitoring() {
     long: position.coords.longitude,
   };
 
-  const distance = calculateDistance(location, HOME_LOCATION).meters;
+  const distance = calculateDistance(location, homeLocation).meters;
 
   const notificationBody =
     distance > SETTINGS.maxDistanceFromHomeInMeters
@@ -53,6 +54,9 @@ export async function startMonitoring() {
           },
         },
       ],
+    },
+    data: {
+      homeLocation,
     },
   });
 }

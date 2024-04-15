@@ -1,6 +1,5 @@
 import 'react-native-get-random-values';
 import {
-  Pressable,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -11,7 +10,6 @@ import React, {useEffect} from 'react';
 import {ErrorMessage, Field, Formik} from 'formik';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import * as Yup from 'yup';
-import {v4 as uuid} from 'uuid';
 import InputField from '../components/InputField';
 import CustomButton from '../components/CustomButton';
 import Header from '../components/layout/Header';
@@ -43,7 +41,6 @@ const homeSchema = Yup.object().shape({
 
 const LocationGetter = ({value, onLocation}) => {
   const {mutate, isLoading} = useMutation(async () => {
-    console.log('INVOKED');
     const isLocationAllowed = await requestLocationPermission();
 
     if (!isLocationAllowed) {
