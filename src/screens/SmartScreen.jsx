@@ -30,9 +30,11 @@ const SmartScreen = ({navigation, route}) => {
 
   const {user} = useAuth();
 
-  const [kwLimit, setKwLimit] = useState(user.measurementConfig.maxKWHPerMonth);
+  const [kwLimit, setKwLimit] = useState(
+    user.measurementConfig?.maxKWHPerMonth ?? 0,
+  );
   const [arsLimit, setArsLimit] = useState(
-    user.measurementConfig.maxArsPerMonth,
+    user.measurementConfig?.maxArsPerMonth ?? 0,
   );
 
   const {
