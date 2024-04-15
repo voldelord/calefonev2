@@ -1,15 +1,17 @@
 import React from 'react';
 import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import perfil from '../assets/profile.png';
 import editProfileIcon from '../assets/edit-profile-icon.png';
 import notifiactionsIcon from '../assets/notifications-icon.png';
-import securityIcon from '../assets/security-icon.png';
 import logoutIcon from '../assets/logout-icon.png';
 import crownWhiteIcon from '../assets/crown-white-icon.png';
 import {useAuth} from '../context/AuthContext';
 import Header from '../components/layout/Header';
 import {COLORS} from '../constants/theme';
+import {showConfirmationAlert} from '../helpers/alerts';
+import {startMonitoring} from '../helpers/locationTracking';
 
 const opciones = [
   {
@@ -24,13 +26,16 @@ const opciones = [
     icono: notifiactionsIcon,
     destino: 'NotificationsScreen',
   },
-  {id: 3, nombre: 'Seguridad', icono: securityIcon, destino: 'SecurityScreen'},
 ];
 
-const MenuItem = ({title, icon, onPress}) => {
+const MenuItem = ({title, icon, iconComponent, onPress}) => {
   return (
     <TouchableOpacity style={styles.menuItem} onPress={onPress}>
-      <Image source={icon} style={styles.menuItemIcon} resizeMode="contain" />
+      {iconComponent ? (
+        iconComponent
+      ) : (
+        <Image source={icon} style={styles.menuItemIcon} resizeMode="contain" />
+      )}
       <Text style={styles.menuItemText}>{title}</Text>
     </TouchableOpacity>
   );
@@ -38,6 +43,14 @@ const MenuItem = ({title, icon, onPress}) => {
 
 const UserProfileScreen = ({navigation}) => {
   const {logout, user} = useAuth();
+
+  const onStartTrackingPress = () => {
+    showConfirmationAlert({
+      title: 'Monitoreo de ubicación.',
+      message: '¿Deseas que se le notifique cuando salga del hogar?',
+      okButtonPress: startMonitoring,
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -86,6 +99,16 @@ const UserProfileScreen = ({navigation}) => {
               onPress={() => navigation.navigate(option.destino)}
             />
           ))}
+          <MenuItem
+            title={'Monitorear salida del hogar'}
+            iconComponent={
+              <View style={styles.menuItemIcon}>
+                <Ionicons name="location" size={21} color="#bbb" />
+              </View>
+            }
+            onPress={onStartTrackingPress}
+          />
+
           <MenuItem
             title={'Cerrar sesión'}
             icon={logoutIcon}

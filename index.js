@@ -28,47 +28,49 @@ notifee.onBackgroundEvent(async ({type, detail}) => {
   console.log(type, detail);
 });
 
-notifee.registerForegroundService(async notification => {
-  let watchId;
+notifee.registerForegroundService(notification => {
+  return new Promise(() => {
+    let watchId;
 
-  watchId = Geolocation.watchPosition(
-    async position => {
-      const location = {
-        lat: position.coords.latitude,
-        long: position.coords.longitude,
-      };
+    watchId = Geolocation.watchPosition(
+      async position => {
+        const location = {
+          lat: position.coords.latitude,
+          long: position.coords.longitude,
+        };
 
-      const distance = calculateDistance(location, HOME_LOCATION).meters;
+        const distance = calculateDistance(location, HOME_LOCATION).meters;
 
-      const notificationBody =
-        distance > SETTINGS.maxDistanceFromHomeInMeters
-          ? `Estás fuera del hogar (a ${Math.round(distance)}m)`
-          : 'Estás dentro del hogar';
+        const notificationBody =
+          distance > SETTINGS.maxDistanceFromHomeInMeters
+            ? `Estás fuera del hogar (a ${Math.round(distance)}m)`
+            : 'Estás dentro del hogar';
 
-      await notifee.displayNotification({
-        id: notification.id,
-        title: notification.title,
-        body: notificationBody,
-        android: {
-          ...notification.android,
-        },
-      });
-    },
-    async error => {
-      console.error('watchPosition error + ', error.message);
-      await notifee.stopForegroundService();
-    },
-    {enableHighAccuracy: true},
-  );
+        await notifee.displayNotification({
+          id: notification.id,
+          title: notification.title,
+          body: notificationBody,
+          android: {
+            ...notification.android,
+          },
+        });
+      },
+      async error => {
+        console.error('watchPosition error + ', error.message);
+        await notifee.stopForegroundService();
+      },
+      {enableHighAccuracy: true},
+    );
 
-  notifee.onForegroundEvent(async ({type, detail}) => {
-    if (type === EventType.ACTION_PRESS && detail.pressAction.id === 'stop') {
-      if (typeof watchId !== 'undefined') {
-        Geolocation.clearWatch(watchId);
+    notifee.onForegroundEvent(async ({type, detail}) => {
+      if (type === EventType.ACTION_PRESS && detail.pressAction.id === 'stop') {
+        if (typeof watchId !== 'undefined') {
+          Geolocation.clearWatch(watchId);
+        }
+
+        await notifee.stopForegroundService();
       }
-
-      await notifee.stopForegroundService();
-    }
+    });
   });
 });
 
