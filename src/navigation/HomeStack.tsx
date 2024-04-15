@@ -1,7 +1,6 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import HomeMenuScreen from '../screens/HomeMenuScreen';
 import NewHomeScreen from '../screens/NewHomeScreen';
-import HomesScreen from '../screens/HomesScreen';
 import AddScenaryScreen from '../screens/AddScenaryScreen';
 import NewScenaryScreen from '../screens/NewScenaryScreen';
 import ScenariosScreen from '../screens/ScenariosScreen';
@@ -19,7 +18,6 @@ const HomeStack = () => {
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="HomeMenuScreen" component={HomeMenuScreen} />
       <Stack.Screen name="NewHomeScreen" component={NewHomeScreen} />
-      <Stack.Screen name="HomesScreen" component={HomesScreen} />
       <Stack.Screen name="AddScenaryScreen" component={AddScenaryScreen} />
       <Stack.Screen name="NewScenaryScreen" component={NewScenaryScreen} />
       <Stack.Screen name="ScenariosScreen" component={ScenariosScreen} />
