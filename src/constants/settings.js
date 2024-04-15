@@ -1,9 +1,8 @@
-// const HOST_IP = '192.168.1.116';
-const HOST_IP = '54.207.97.89';
+import {HOST_IP, API_URL} from '@env';
 
 export const SETTINGS = Object.freeze({
   hostIp: HOST_IP,
-  apiUrl: `http://${HOST_IP}:3000/api`,
+  apiUrl: API_URL,
   mqttOptions: {
     host: HOST_IP,
     port: 8883,
