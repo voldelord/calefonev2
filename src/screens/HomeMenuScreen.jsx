@@ -8,12 +8,27 @@ import {
 } from 'react-native';
 import React, {useCallback} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import Header from '../components/layout/Header';
 import SectionTitle from '../components/typography/SectionTitle';
 import useHomes from '../hooks/useHomes';
 import {useFocusEffect} from '@react-navigation/native';
 import {useAuth} from '../context/AuthContext';
 import homeFormStore from '../stores/homeFormStore';
+import {COLORS} from '../constants/theme';
+
+const MainIcon = () => (
+  <AntDesign
+    name="checkcircleo"
+    style={{
+      fontSize: 25,
+      color: COLORS.white,
+      position: 'absolute',
+      top: 12,
+      right: 12,
+    }}
+  />
+);
 
 const HomeMenuScreen = ({navigation}) => {
   const {user} = useAuth();
@@ -52,6 +67,7 @@ const HomeMenuScreen = ({navigation}) => {
                 homeName: home.name,
               });
             }}>
+            {home.isMain && <MainIcon />}
             <Text style={styles.homeTitle}>{home.name}</Text>
             <Text style={styles.homeAddress}>{home.address}</Text>
           </TouchableOpacity>
