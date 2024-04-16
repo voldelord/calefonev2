@@ -7,7 +7,7 @@ import RailSelected from './RailSelected';
 import Label from './Label';
 import Notch from './Notch';
 
-const Slider = ({style, min, max, low, onChange}) => {
+const Slider = ({style, min, max, low, onChange, disabled}) => {
   const renderThumb = useCallback(() => <Thumb />, []);
   const renderRail = useCallback(() => <Rail />, []);
   const renderRailSelected = useCallback(() => <RailSelected />, []);
@@ -29,6 +29,7 @@ const Slider = ({style, min, max, low, onChange}) => {
       renderLabel={renderLabel}
       renderNotch={renderNotch}
       onValueChanged={onChange}
+      disabled={disabled}
     />
   );
 };

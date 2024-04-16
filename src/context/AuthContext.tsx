@@ -17,6 +17,7 @@ const AuthContext = createContext<{
   login: (data: {token: string; user: Record<string, any>}) => Promise<void>;
   logout: () => Promise<void>;
   updateUserProfile: (profile: Record<string, any>) => void;
+  updateUserMeasurementConfig: (profile: Record<string, any>) => void;
 } | null>(null);
 
 export const AuthProvider = ({children}: React.PropsWithChildren) => {
@@ -54,6 +55,25 @@ export const AuthProvider = ({children}: React.PropsWithChildren) => {
           profile: {
             ...profile,
             userId: user!.id,
+          },
+        };
+
+        setUser(newUser);
+
+        await storeAuth({token: authToken, user: user});
+      }
+    },
+    [user, authToken],
+  );
+
+  const updateUserMeasurementConfig = useCallback(
+    async (config: Record<string, any>) => {
+      if (user && authToken) {
+        const newUser = {
+          ...user,
+          measurementConfig: {
+            ...config,
+            customerId: user!.id,
           },
         };
 
@@ -117,6 +137,7 @@ export const AuthProvider = ({children}: React.PropsWithChildren) => {
         login,
         logout,
         updateUserProfile,
+        updateUserMeasurementConfig,
       }}>
       {children}
     </AuthContext.Provider>

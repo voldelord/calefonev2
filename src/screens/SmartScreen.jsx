@@ -1,5 +1,12 @@
-import {SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useCallback, useState} from 'react';
+import {
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useCallback} from 'react';
 import changeModeIcon from '../assets/change-mode-icon.png';
 import clockIcon from '../assets/clock-icon.png';
 import Header from '../components/layout/Header';
@@ -17,6 +24,17 @@ import useModeScreen from '../hooks/useModeScreen';
 import {COLORS} from '../constants/theme';
 import Slider from '../components/slider/Slider';
 import {useAuth} from '../context/AuthContext';
+import {Formik} from 'formik';
+import {number, object} from 'yup';
+import {useMutation} from 'react-query';
+import {useLoadingOverlayStore} from '../stores/loadingOverlayStore';
+import {createMeasurementConfig} from '../API/profile';
+import {v4 as uuid} from 'uuid';
+
+const validatioSchema = object().shape({
+  maxKWHPerMonth: number().required('Ingrese el limite de kWh'),
+  maxArsPerMonth: number().required('Ingrese el limite de ars'),
+});
 
 const allowedModes = [
   MQTT_DEVICE_MODES.POWER,
@@ -28,14 +46,10 @@ const SmartScreen = ({navigation, route}) => {
   const deviceId = route.params.deviceId;
   const deviceName = route.params.deviceName;
 
-  const {user} = useAuth();
+  const {user, updateUserMeasurementConfig} = useAuth();
 
-  const [kwLimit, setKwLimit] = useState(
-    user.measurementConfig?.maxKWHPerMonth ?? 0,
-  );
-  const [arsLimit, setArsLimit] = useState(
-    user.measurementConfig?.maxArsPerMonth ?? 0,
-  );
+  const startLoading = useLoadingOverlayStore(state => state.startLoading);
+  const stopLoading = useLoadingOverlayStore(state => state.stopLoading);
 
   const {
     subscriptionValue: temperature,
@@ -54,6 +68,27 @@ const SmartScreen = ({navigation, route}) => {
       }
     }, []),
   });
+
+  const {
+    mutate: createMeasurementConfigMutation,
+    isLoading: createMeasurementConfigMutationIsLoading,
+  } = useMutation(createMeasurementConfig, {
+    onMutate: startLoading,
+    onSettled: stopLoading,
+  });
+
+  const handleSubmit = (values, helpers) => {
+    createMeasurementConfigMutation(
+      {
+        id: user.measurementConfig?.id ?? uuid(),
+        ...values,
+      },
+      {
+        onSettled: () => helpers.setSubmitting(false),
+        onSuccess: (_, variables) => updateUserMeasurementConfig(variables),
+      },
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -101,31 +136,64 @@ const SmartScreen = ({navigation, route}) => {
           />
         </View>
 
-        <View style={{paddingBottom: 20}}>
-          <Text style={styles.limitTitle}>Límite de consumo por mes</Text>
+        <Formik
+          initialValues={{
+            maxKWHPerMonth: user.measurementConfig?.maxKWHPerMonth ?? 0,
+            maxArsPerMonth: user.measurementConfig?.maxArsPerMonth ?? 0,
+          }}
+          validatioSchema={validatioSchema}
+          onSubmit={handleSubmit}
+          enableReinitialize>
+          {({values, setFieldValue, dirty, handleSubmit}) => (
+            <View style={{paddingBottom: 20}}>
+              <View style={styles.limitTitleContainer}>
+                <Text style={styles.limitTitle}>Límite de consumo por mes</Text>
+                {dirty && (
+                  <TouchableOpacity
+                    style={styles.limitSave}
+                    onPress={handleSubmit}
+                    disabled={createMeasurementConfigMutationIsLoading}>
+                    <Text style={styles.limitSaveText}>Guardar</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
 
-          <View style={[styles.limitContainer, {marginBottom: 30}]}>
-            <Slider
-              style={{marginRight: 10}}
-              min={0}
-              max={3000}
-              low={kwLimit}
-              onChange={setKwLimit}
-            />
-            <Text style={styles.limitText}>{kwLimit} KW/H</Text>
-          </View>
+              <View style={[styles.limitContainer, {marginBottom: 30}]}>
+                <Slider
+                  style={{marginRight: 10}}
+                  min={0}
+                  max={3000}
+                  low={values.maxKWHPerMonth}
+                  onChange={useCallback(
+                    value => setFieldValue('maxKWHPerMonth', value),
+                    [],
+                  )}
+                  disabled={createMeasurementConfigMutationIsLoading}
+                />
+                <Text style={styles.limitText}>
+                  {values.maxKWHPerMonth} KW/H
+                </Text>
+              </View>
 
-          <View style={styles.limitContainer}>
-            <Slider
-              style={{marginRight: 10}}
-              min={0}
-              max={4000}
-              low={arsLimit}
-              onChange={setArsLimit}
-            />
-            <Text style={styles.limitText}>{arsLimit} ARS</Text>
-          </View>
-        </View>
+              <View style={styles.limitContainer}>
+                <Slider
+                  style={{marginRight: 10}}
+                  min={0}
+                  max={4000}
+                  low={values.maxArsPerMonth}
+                  onChange={useCallback(
+                    value => setFieldValue('maxArsPerMonth', value),
+                    [],
+                  )}
+                  disabled={createMeasurementConfigMutationIsLoading}
+                />
+                <Text style={styles.limitText}>
+                  {values.maxArsPerMonth} ARS
+                </Text>
+              </View>
+            </View>
+          )}
+        </Formik>
       </ScrollView>
     </SafeAreaView>
   );
@@ -141,7 +209,24 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   limitContainer: {flexDirection: 'row', alignItems: 'center'},
-  limitTitle: {color: COLORS.black, marginBottom: 20},
+  limitTitleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+    height: 35,
+  },
+  limitTitle: {color: COLORS.black},
+  limitSave: {
+    backgroundColor: COLORS.primary,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 12,
+  },
+  limitSaveText: {
+    color: COLORS.white,
+    fontWeight: 'bold',
+  },
   limitText: {width: 73, textAlign: 'right'},
 });
 
