@@ -22,14 +22,20 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
   console.log('Message handled in the background!', remoteMessage);
 });
 
+let watchId;
+
 notifee.onBackgroundEvent(async ({type, detail}) => {
-  console.log(type, detail);
+  if (type === EventType.ACTION_PRESS && detail.pressAction.id === 'stop') {
+    if (typeof watchId !== 'undefined') {
+      Geolocation.clearWatch(watchId);
+    }
+
+    await notifee.stopForegroundService();
+  }
 });
 
 notifee.registerForegroundService(notification => {
   return new Promise(() => {
-    let watchId;
-
     watchId = Geolocation.watchPosition(
       async position => {
         const location = {
