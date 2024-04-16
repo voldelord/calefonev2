@@ -1,4 +1,4 @@
-import {Button, SafeAreaView, StyleSheet, View} from 'react-native';
+import {Button, SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import React, {useCallback} from 'react';
 import changeModeIcon from '../assets/change-mode-icon.png';
 import crownIcon from '../assets/crown-icon.png';
@@ -42,7 +42,7 @@ const TemperatureScreen = ({navigation, route}) => {
   return (
     <SafeAreaView style={styles.container}>
       <Header onBackPress={() => navigation.goBack()} />
-      <View style={styles.content}>
+      <ScrollView style={styles.content}>
         <SectionTitle text={deviceName} style={{marginBottom: 10}} />
 
         <RangeSlider
@@ -66,7 +66,7 @@ const TemperatureScreen = ({navigation, route}) => {
           />
         </View>
 
-        <View style={{marginTop: 'auto', marginBottom: 30}}>
+        <View style={{marginBottom: 30, marginTop: 30}}>
           <ModeButton
             small
             icon={changeModeIcon}
@@ -81,7 +81,7 @@ const TemperatureScreen = ({navigation, route}) => {
             withGradient
           />
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
