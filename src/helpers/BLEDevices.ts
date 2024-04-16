@@ -6,6 +6,7 @@ import {
   ESPWifiList,
   ESPStatusResponse,
 } from '@orbital-systems/react-native-esp-idf-provisioning';
+import {ESP_BLUETOOTH_PREFIX, ESP_MOCK_BLE_DEVICES} from '@env';
 import {sleep} from './sleep';
 
 class FakeDevice extends ESPDevice {
@@ -45,23 +46,27 @@ class FakeDevice extends ESPDevice {
 }
 
 export const findDevices = async () => {
-  // await sleep(2000);
+  const mock = Number(ESP_MOCK_BLE_DEVICES);
 
-  // return [
-  //   new FakeDevice({
-  //     name: 'PROV_121231',
-  //     transport: ESPTransport.ble,
-  //     security: ESPSecurity.secure,
-  //   }),
-  //   new FakeDevice({
-  //     name: 'PROV_234345',
-  //     transport: ESPTransport.ble,
-  //     security: ESPSecurity.secure,
-  //   }),
-  // ];
+  if (mock) {
+    await sleep(2000);
+
+    return [
+      new FakeDevice({
+        name: 'PROV_121231',
+        transport: ESPTransport.ble,
+        security: ESPSecurity.secure,
+      }),
+      new FakeDevice({
+        name: 'PROV_234345',
+        transport: ESPTransport.ble,
+        security: ESPSecurity.secure,
+      }),
+    ];
+  }
+
   return await ESPProvisionManager.searchESPDevices(
-    // 'Firenze_',
-    'PROV_',
+    ESP_BLUETOOTH_PREFIX,
     ESPTransport.ble,
     ESPSecurity.secure,
   );
