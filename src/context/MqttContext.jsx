@@ -59,6 +59,7 @@ export const MqttProvider = ({children}) => {
           userName: deviceId,
           useSSL: false,
           timeout: 3,
+          reconnect: true,
           onSuccess: function () {
             console.log('onSuccess');
 
