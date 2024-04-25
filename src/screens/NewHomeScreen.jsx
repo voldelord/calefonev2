@@ -108,6 +108,7 @@ const NewHomeScreen = ({navigation, route}) => {
     await createHome({
       data: {
         id: home.id,
+        inhabitants: home.inhabitants,
         ...values,
       },
     });
