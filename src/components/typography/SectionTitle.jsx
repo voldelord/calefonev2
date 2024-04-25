@@ -4,7 +4,9 @@ import {COLORS} from '../../constants/theme';
 const SectionTitle = ({text, style}) => {
   return (
     <View style={[styles.container, style]}>
-      <Text style={styles.text}>{text}</Text>
+      <Text numberOfLines={1} style={styles.text}>
+        {text}
+      </Text>
     </View>
   );
 };

@@ -8,21 +8,26 @@ const TitleSection = ({
   editDisabled,
   onDeletePress,
   deleteDisabled,
+  onQrPressed,
+  qrDisabled,
 }) => (
   <View style={styles.titleSection}>
-    <SectionTitle text={title} />
+    <SectionTitle style={styles.title} text={title} />
 
     <TitleOptions
       onEditPress={onEditPress}
       editDisabled={editDisabled}
       onDeletePress={onDeletePress}
       deleteDisabled={deleteDisabled}
+      onQrPressed={onQrPressed}
+      qrDisabled={qrDisabled}
     />
   </View>
 );
 
 const styles = StyleSheet.create({
   titleSection: {flexDirection: 'row', alignItems: 'center'},
+  title: {flex: 1},
 });
 
 export default TitleSection;

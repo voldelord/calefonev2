@@ -16,11 +16,18 @@ import {showConfirmationAlert} from '../helpers/alerts';
 import {useLoadingOverlayStore} from '../stores/loadingOverlayStore';
 import TitleSection from '../components/TitleSection';
 import useScenaryFormStore from '../stores/scenaryFormStore';
+import HomeQRModal from '../components/homes/HomeQRModal';
+import useDisclosure from '../hooks/useDisclosure';
 
 const ScenariosScreen = ({navigation, route}) => {
   const homeId = route.params.homeId;
   const homeName = route.params.homeName;
 
+  const {
+    isOpen: qrModalIsOpen,
+    onOpen: qrModalOnOpen,
+    onClose: qrModalOnClose,
+  } = useDisclosure();
   const setIsLoadingOverlay = useLoadingOverlayStore(
     state => state.setIsLoading,
   );
@@ -79,6 +86,7 @@ const ScenariosScreen = ({navigation, route}) => {
               editMode: true,
             });
           }}
+          onQrPressed={qrModalOnOpen}
         />
 
         {environments.map(environment => (
@@ -114,6 +122,13 @@ const ScenariosScreen = ({navigation, route}) => {
           <Text style={styles.parraph}>Agrega un ambiente</Text>
         </TouchableOpacity>
       </ScrollView>
+
+      <HomeQRModal
+        homeId={homeId}
+        homeName={homeName}
+        isOpen={qrModalIsOpen}
+        onBackPress={qrModalOnClose}
+      />
     </SafeAreaView>
   );
 };
