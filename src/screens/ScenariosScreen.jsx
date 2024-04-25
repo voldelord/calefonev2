@@ -18,10 +18,13 @@ import TitleSection from '../components/TitleSection';
 import useScenaryFormStore from '../stores/scenaryFormStore';
 import HomeQRModal from '../components/homes/HomeQRModal';
 import useDisclosure from '../hooks/useDisclosure';
+import {useAuth} from '../context/AuthContext';
 
 const ScenariosScreen = ({navigation, route}) => {
   const homeId = route.params.homeId;
   const homeName = route.params.homeName;
+
+  const {user} = useAuth();
 
   const {
     isOpen: qrModalIsOpen,
@@ -37,8 +40,11 @@ const ScenariosScreen = ({navigation, route}) => {
 
   const [{loading: deleteHomeLoading}, deleteHome] = useAxios(
     {
-      method: 'delete',
-      url: `/v1/homes/${homeId}`,
+      method: 'put',
+      url: `/v1/homes/${homeId}/remove-inhabitant`,
+      data: {
+        inhabitantId: user?.id,
+      },
     },
     {manual: true},
   );

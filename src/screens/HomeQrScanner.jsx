@@ -86,7 +86,7 @@ const HomeQrScanner = ({navigation}) => {
           description: 'No se encontró ningún código',
         });
       } else {
-        addHomeInhabitantMutation({homeId: code.value, inhabitantId: user.id});
+        addHomeInhabitantMutation({homeId: code.value, inhabitantId: user?.id});
       }
 
       setIsCameraActive(false);
