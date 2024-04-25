@@ -114,7 +114,7 @@ const HomeQrScanner = ({navigation}) => {
               </View>
             )}
 
-            <Text style={styles.info}>Escanea un código QR de un hogar</Text>
+            <Text style={styles.info}>Escanea el código QR de un hogar</Text>
           </View>
         )}
       </View>
