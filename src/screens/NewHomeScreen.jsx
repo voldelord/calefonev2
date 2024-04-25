@@ -150,7 +150,7 @@ const NewHomeScreen = ({navigation, route}) => {
                 as={InputField}
               />
 
-              <View style={styles.switchContainer}>
+              {/* <View style={styles.switchContainer}>
                 <Text>Hogar Principal</Text>
                 <CustomSwitch
                   value={values.isMain}
@@ -160,7 +160,7 @@ const NewHomeScreen = ({navigation, route}) => {
                   name="isMain"
                   onChange={handleChange}
                 />
-              </View>
+              </View> */}
 
               <LocationGetter
                 value={

@@ -67,7 +67,7 @@ const HomeMenuScreen = ({navigation}) => {
                 homeName: home.name,
               });
             }}>
-            {home.isMain && <MainIcon />}
+            {/* {home.isMain && <MainIcon />} */}
             <Text style={styles.homeTitle}>{home.name}</Text>
             <Text style={styles.homeAddress}>{home.address}</Text>
           </TouchableOpacity>

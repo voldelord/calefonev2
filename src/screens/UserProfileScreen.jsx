@@ -115,7 +115,7 @@ const UserProfileScreen = ({navigation}) => {
               onPress={() => navigation.navigate(option.destino)}
             />
           ))}
-          <MenuItem
+          {/* <MenuItem
             title={'Monitorear salida del hogar'}
             iconComponent={
               <View style={styles.menuItemIcon}>
@@ -123,7 +123,7 @@ const UserProfileScreen = ({navigation}) => {
               </View>
             }
             onPress={onStartTrackingPress}
-          />
+          /> */}
 
           <MenuItem
             title={'Cerrar sesión'}
