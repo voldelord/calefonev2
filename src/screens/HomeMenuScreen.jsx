@@ -37,7 +37,7 @@ const HomeMenuScreen = ({navigation}) => {
 
   const {homes, getHomes} = useHomes({
     params: {
-      filters: [{field: 'customerId', operator: '=', value: user?.id}],
+      filters: [{field: 'inhabitants', operator: 'contains', value: user?.id}],
     },
   });
 
