@@ -1,4 +1,11 @@
-import {Pressable, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {
+  Linking,
+  Pressable,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import Header from '../components/layout/Header';
 import SectionTitle from '../components/typography/SectionTitle';
 import {
@@ -17,6 +24,7 @@ import {addHomeInhabitant} from '../API/homes';
 import {useLoadingOverlayStore} from '../stores/loadingOverlayStore';
 import extractErrorMessage from '../helpers/extractErrorMessage';
 import {useAuth} from '../context/AuthContext';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const TOAST_TITLE = 'Escaneo de código QR';
 
@@ -29,7 +37,10 @@ const HomeQrScanner = ({navigation}) => {
   const [isCameraActive, setIsCameraActive] = useState(true);
 
   const device = useCameraDevice('back');
-  const {hasPermission, requestPermission} = useCameraPermission();
+  const {
+    hasPermission: hasCameraPermission,
+    requestPermission: requestCameraPermission,
+  } = useCameraPermission();
 
   const {mutate: addHomeInhabitantMutation} = useMutation(
     data => addHomeInhabitant(data),
@@ -56,7 +67,7 @@ const HomeQrScanner = ({navigation}) => {
 
   useFocusEffect(
     useCallback(() => {
-      requestPermission();
+      requestCameraPermission();
     }, []),
   );
 
@@ -93,30 +104,46 @@ const HomeQrScanner = ({navigation}) => {
       <View style={styles.content}>
         <SectionTitle text={'Nuevo Hogar'} style={{marginBottom: 10}} />
 
-        {!hasPermission ? (
-          <Text>Permiso denegado para usar la camara</Text>
-        ) : (
-          <View style={styles.cameraContainer}>
-            {isCameraActive ? (
-              <Camera
-                device={device}
-                codeScanner={codeScanner}
-                isActive={isCameraActive}
-                style={styles.camera}
-              />
-            ) : (
-              <View style={styles.camera}>
-                <Pressable
-                  style={styles.reloadCameraIconContainer}
-                  onPress={handleReloadCamera}>
-                  <AntDesign name="reload1" style={styles.reloadCameraIcon} />
-                </Pressable>
+        <View style={styles.cameraContainer}>
+          {!hasCameraPermission ? (
+            <View style={styles.camera}>
+              <View
+                style={styles.reloadCameraIconContainer}
+                onPress={handleReloadCamera}>
+                <Text style={styles.permissionError}>
+                  El permiso para usar la camara es requerido para escanear el
+                  código QR
+                </Text>
+                <TouchableOpacity
+                  style={styles.openSettingsButton}
+                  onPress={Linking.openSettings}>
+                  <Text style={styles.openSettingsButtonText}>Hablitar</Text>
+                </TouchableOpacity>
               </View>
-            )}
+            </View>
+          ) : (
+            <>
+              {isCameraActive ? (
+                <Camera
+                  device={device}
+                  codeScanner={codeScanner}
+                  isActive={isCameraActive}
+                  style={styles.camera}
+                />
+              ) : (
+                <View style={styles.camera}>
+                  <Pressable
+                    style={styles.reloadCameraIconContainer}
+                    onPress={handleReloadCamera}>
+                    <AntDesign name="reload1" style={styles.reloadCameraIcon} />
+                  </Pressable>
+                </View>
+              )}
 
-            <Text style={styles.info}>Escanea el código QR de un hogar</Text>
-          </View>
-        )}
+              <Text style={styles.info}>Escanea el código QR de un hogar</Text>
+            </>
+          )}
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -152,6 +179,22 @@ const styles = StyleSheet.create({
   },
   info: {
     color: COLORS.black,
+  },
+  openSettingsButton: {
+    backgroundColor: COLORS.primary,
+    paddingVertical: 7,
+    width: 100,
+    borderRadius: 13,
+    marginTop: 10,
+  },
+  openSettingsButtonText: {
+    color: COLORS.white,
+    textAlign: 'center',
+  },
+  permissionError: {
+    color: COLORS.black,
+    textAlign: 'center',
+    paddingHorizontal: 20,
   },
 });
 
