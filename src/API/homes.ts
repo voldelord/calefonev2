@@ -23,3 +23,13 @@ export const getMainHome = async (userId: string) => {
 
   return homes[0] ?? null;
 };
+
+export const addHomeInhabitant = async ({
+  homeId,
+  ...data
+}: {
+  homeId: string;
+  inhabitantId: string;
+}) => {
+  await axios.put(`/v1/homes/${homeId}/add-inhabitant`, data);
+};

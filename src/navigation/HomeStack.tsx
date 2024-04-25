@@ -10,6 +10,7 @@ import KeyConfigScreen from '../screens/KeyConfigScreen';
 import DevicesScreen from '../screens/DevicesScreen';
 import DeviceOptionsScreen from '../screens/DeviceOptionsScreen';
 import SearchBLEDevicesScreenV2 from '../screens/SearchBLEDevicesScreenV2';
+import HomeQrScanner from '../screens/HomeQrScanner';
 
 const Stack = createStackNavigator();
 
@@ -39,6 +40,7 @@ const HomeStack = () => {
         name="SearchBLEDevicesScreen"
         component={SearchBLEDevicesScreenV2}
       />
+      <Stack.Screen name="HomeQrScanner" component={HomeQrScanner} />
     </Stack.Navigator>
   );
 };

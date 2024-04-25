@@ -57,6 +57,7 @@
     "react-native-switch-selector": "^2.3.0",
     "react-native-toggle-element": "^2.0.1",
     "react-native-vector-icons": "^10.0.2",
+    "react-native-vision-camera": "^4.0.1",
     "react-query": "^3.39.3",
     "rn-qr-generator": "^1.4.0",
     "rn-range-slider": "^2.2.2",

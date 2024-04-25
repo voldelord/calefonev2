@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {ErrorMessage, Field, Formik} from 'formik';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import * as Yup from 'yup';
@@ -116,6 +116,10 @@ const NewHomeScreen = ({navigation, route}) => {
     navigation.navigate('HomeMenuScreen');
   };
 
+  const handleScannQrPress = useCallback(() => {
+    navigation.replace('HomeQrScanner');
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <Header onBackPress={() => navigation.goBack()} />
@@ -180,6 +184,16 @@ const NewHomeScreen = ({navigation, route}) => {
                   width={'100%'}
                   height={50}
                 />
+                {!editMode && (
+                  <CustomButton
+                    label="Escanear QR"
+                    onPress={handleScannQrPress}
+                    buttonColor={COLORS.blue}
+                    textColor="white"
+                    width={'100%'}
+                    height={50}
+                  />
+                )}
               </View>
             </>
           )}

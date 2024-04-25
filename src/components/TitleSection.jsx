@@ -10,8 +10,9 @@ const TitleSection = ({
   deleteDisabled,
   onQrPressed,
   qrDisabled,
+  style,
 }) => (
-  <View style={styles.titleSection}>
+  <View style={[styles.titleSection, style]}>
     <SectionTitle style={styles.title} text={title} />
 
     <TitleOptions

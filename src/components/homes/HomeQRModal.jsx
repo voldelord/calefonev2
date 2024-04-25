@@ -6,6 +6,10 @@ import RNQRGenerator from 'rn-qr-generator';
 import {useQuery} from 'react-query';
 import LoadingView from '../ui/LoadingView';
 
+const QR_CONTAINER_WIDTH = 230;
+const QR_CONTAINER_BORDER_WIDTH = 15;
+const QR_WIDTH = QR_CONTAINER_WIDTH - QR_CONTAINER_BORDER_WIDTH * 2;
+
 const HomeQRModal = ({isOpen, homeId, homeName, onBackPress}) => {
   const {
     data: qrData,
@@ -16,14 +20,17 @@ const HomeQRModal = ({isOpen, homeId, homeName, onBackPress}) => {
     () =>
       RNQRGenerator.generate({
         value: homeId,
-        height: 170,
-        width: 170,
+        height: QR_WIDTH,
+        width: QR_WIDTH,
       }),
-    {onSuccess: data => console.log(data)},
+    {enabled: isOpen},
   );
 
   return (
-    <ReactNativeModal isVisible={isOpen} style={styles.modal}>
+    <ReactNativeModal
+      isVisible={isOpen}
+      style={styles.modal}
+      onBackButtonPress={onBackPress}>
       <View style={styles.container}>
         <Header
           onBackPress={onBackPress}
@@ -40,7 +47,9 @@ const HomeQRModal = ({isOpen, homeId, homeName, onBackPress}) => {
             ) : qrDataIsError ? (
               <Text style={styles.error}>Error al generar el código QR.</Text>
             ) : (
-              <Image source={{uri: qrData.uri}} style={styles.qrCode} />
+              qrData?.uri && (
+                <Image source={{uri: qrData.uri}} style={styles.qrCode} />
+              )
             )}
           </View>
 
@@ -63,9 +72,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   qrContainer: {
-    height: 200,
-    width: 200,
-    borderWidth: 15,
+    height: QR_CONTAINER_WIDTH,
+    width: QR_CONTAINER_WIDTH,
+    borderWidth: QR_CONTAINER_BORDER_WIDTH,
     borderColor: '#ddd',
     marginTop: 15,
     marginBottom: 30,
@@ -86,8 +95,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   qrCode: {
-    height: 170,
-    width: 170,
+    height: QR_WIDTH,
+    width: QR_WIDTH,
   },
 });
 
