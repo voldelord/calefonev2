@@ -56,7 +56,7 @@ const useBLEDevices = () => {
       const deviceId = (
         await device.sendData(
           'custom-data',
-          JSON.stringify({mqttServer: `${SETTINGS.hostIp}:1883`}),
+          JSON.stringify({mqttServer: `${SETTINGS.mqttOptions.host}:8883`}),
         )
       ).replaceAll('\0', '');
 

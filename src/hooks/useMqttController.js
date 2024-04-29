@@ -7,7 +7,7 @@ import {debounce} from 'lodash';
 import {SETTINGS} from '../constants/settings';
 
 const options = {
-  host: SETTINGS.hostIp,
+  host: SETTINGS.mqttOptions.host,
   port: 8883,
   path: '/ws',
 };

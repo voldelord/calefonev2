@@ -16,6 +16,7 @@ init({
   defaultExpires: 1000 * 3600 * 24,
   enableCache: true,
   reconnect: true,
+  useSSL: true,
   sync: {},
 });
 
