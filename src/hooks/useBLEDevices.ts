@@ -24,7 +24,7 @@ const useBLEDevices = () => {
   } = useQuery(
     'devices',
     async () => {
-      await requestLocationAndBLuetoothPermissions();
+      // await requestLocationAndBLuetoothPermissions();
 
       return await findDevices();
     },

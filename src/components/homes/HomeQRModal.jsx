@@ -1,4 +1,4 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import ReactNativeModal from 'react-native-modal';
 import {COLORS} from '../../constants/theme';
 import Header from '../layout/Header';
@@ -31,7 +31,7 @@ const HomeQRModal = ({isOpen, homeId, homeName, onBackPress}) => {
       isVisible={isOpen}
       style={styles.modal}
       onBackButtonPress={onBackPress}>
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <Header
           onBackPress={onBackPress}
           hideNotificationIcon
@@ -58,7 +58,7 @@ const HomeQRModal = ({isOpen, homeId, homeName, onBackPress}) => {
             escanearlo con la cámara de Temptech para añadirlo a su cuenta
           </Text>
         </View>
-      </View>
+      </SafeAreaView>
     </ReactNativeModal>
   );
 };

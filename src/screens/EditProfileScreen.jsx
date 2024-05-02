@@ -1,4 +1,4 @@
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
 import React from 'react';
 import InputField from '../components/InputField';
 import CustomButton from '../components/CustomButton';
@@ -58,7 +58,7 @@ const EditProfileScreen = ({navigation}) => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Header onBackPress={() => navigation.goBack()} />
 
       <ScrollView style={styles.content}>
@@ -114,7 +114,7 @@ const EditProfileScreen = ({navigation}) => {
           )}
         </Formik>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -8,6 +8,7 @@ import {
 import {clearAuth, getAuth, storeAuth} from '../helpers/auth';
 import {Alert, PermissionsAndroid} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
+import {requestUserPermission} from '../helpers/requestMessagingPermissions';
 
 const AuthContext = createContext<{
   user: Record<string, any> | null;
@@ -106,9 +107,7 @@ export const AuthProvider = ({children}: React.PropsWithChildren) => {
   }, [isLoading]);
 
   useEffect(() => {
-    PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
-    );
+    requestUserPermission();
 
     if (user?.id) {
       messaging().subscribeToTopic(user.id);

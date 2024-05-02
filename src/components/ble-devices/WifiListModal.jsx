@@ -1,4 +1,5 @@
 import {
+  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -13,7 +14,7 @@ import Header from '../layout/Header';
 const WifiListModal = ({isOpen, wifiNetworks, onWifiPress, onBackPress}) => {
   return (
     <ReactNativeModal isVisible={isOpen} style={styles.modal}>
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <Header
           onBackPress={onBackPress}
           hideNotificationIcon
@@ -40,7 +41,7 @@ const WifiListModal = ({isOpen, wifiNetworks, onWifiPress, onBackPress}) => {
             ))}
           </ScrollView>
         </View>
-      </View>
+      </SafeAreaView>
     </ReactNativeModal>
   );
 };
