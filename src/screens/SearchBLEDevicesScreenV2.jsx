@@ -9,7 +9,6 @@ import {
 import {v4 as uuid} from 'uuid';
 import SectionTitle from '../components/typography/SectionTitle';
 import Header from '../components/layout/Header';
-import {useLoadingOverlayStore} from '../stores/loadingOverlayStore';
 import BLEDevice from '../components/ble-devices/BLEDevice';
 import useBLEDevices from '../hooks/useBLEDevices';
 import WifiListModal from '../components/ble-devices/WifiListModal';
@@ -17,7 +16,6 @@ import useDisclosure from '../hooks/useDisclosure';
 import WifiPasswordModal from '../components/ble-devices/WifiPasswordModal';
 import {createController} from '../API/controllers';
 import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
-import {useEffect} from 'react';
 
 const SearchBLEDevicesScreenV2 = ({navigation, route}) => {
   const environmentId = route.params.environmentId;
@@ -34,8 +32,6 @@ const SearchBLEDevicesScreenV2 = ({navigation, route}) => {
     onClose: passwordModalOnClose,
   } = useDisclosure();
 
-  const setIsLoading = useLoadingOverlayStore(state => state.setIsLoading);
-
   const {
     devices,
     devicesIsLoading,
@@ -44,18 +40,12 @@ const SearchBLEDevicesScreenV2 = ({navigation, route}) => {
     selectedDevice,
     setSelectedDevice,
     wifiNetworks,
-    wifiNetworksIsFetched,
+    wifiNetworksIsLoading,
     selectedWifiNetwork,
     setSelectedWifiNetwork,
     connectDevice,
     provisionEsp,
-  } = useBLEDevices();
-
-  useEffect(() => {
-    if (wifiNetworksIsFetched) {
-      wifiModalOnOpen();
-    }
-  }, [wifiNetworksIsFetched]);
+  } = useBLEDevices({onDeviceSelected: wifiModalOnOpen});
 
   const handleDevicePress = async device => {
     setSelectedDevice(device);
@@ -65,13 +55,11 @@ const SearchBLEDevicesScreenV2 = ({navigation, route}) => {
   const handleWifiPress = wifiNetwork => {
     setSelectedWifiNetwork(wifiNetwork);
     wifiModalOnClose();
-    passwordModalOnOpen();
   };
 
   const handlePasswordModalBackPress = () => {
     setSelectedWifiNetwork(null);
     passwordModalOnClose();
-    wifiModalOnOpen();
   };
 
   const handlePasswordSubmit = (values, helpers) => {
@@ -166,6 +154,12 @@ const SearchBLEDevicesScreenV2 = ({navigation, route}) => {
         wifiNetworks={wifiNetworks ?? []}
         onBackPress={wifiModalOnClose}
         onWifiPress={wifi => handleWifiPress(wifi)}
+        isLoading={wifiNetworksIsLoading}
+        onModalHide={() => {
+          if (selectedWifiNetwork) {
+            passwordModalOnOpen();
+          }
+        }}
       />
 
       <WifiPasswordModal

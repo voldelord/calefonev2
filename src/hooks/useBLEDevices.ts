@@ -9,7 +9,11 @@ import {findDevices} from '../helpers/BLEDevices';
 import {useLoadingOverlayStore} from '../stores/loadingOverlayStore';
 import {SETTINGS} from '../constants/settings';
 
-const useBLEDevices = () => {
+type UseBLEDevicesArgs = {
+  onDeviceSelected?: () => void;
+};
+
+const useBLEDevices = ({onDeviceSelected}: UseBLEDevicesArgs = {}) => {
   const setIsLoading = useLoadingOverlayStore(state => state.setIsLoading);
   const [selectedDevice, setSelectedDevice] = useState<ESPDevice | null>(null);
 
@@ -36,8 +40,7 @@ const useBLEDevices = () => {
       await device.connect('abcd1234', null, 'wifiprov');
     },
     {
-      onMutate: () => setIsLoading(true),
-      onSettled: () => setIsLoading(false),
+      onSuccess: onDeviceSelected,
     },
   );
 
@@ -81,20 +84,17 @@ const useBLEDevices = () => {
   const {
     data: wifiNetworks,
     isError: wifiNetworksIsError,
-    isFetched: wifiNetworksIsFetched,
+    isLoading: wifiNetworksIsLoading,
   } = useQuery(['deviceWifiNetworks', selectedDevice], {
     queryFn: async () => {
       if (!selectedDevice) {
         throw new Error('No device selected');
       }
 
-      setIsLoading(true);
-
       return await selectedDevice.scanWifiList();
     },
     enabled: !!selectedDevice?.connected,
     retry: false,
-    onSettled: () => setIsLoading(false),
   });
 
   return {
@@ -106,7 +106,7 @@ const useBLEDevices = () => {
     deviceRefetch,
     wifiNetworks,
     wifiNetworksIsError,
-    wifiNetworksIsFetched,
+    wifiNetworksIsLoading,
     selectedWifiNetwork,
     setSelectedWifiNetwork,
     connectDevice,

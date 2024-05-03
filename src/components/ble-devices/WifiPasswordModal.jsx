@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import ReactNativeModal from 'react-native-modal';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -19,7 +19,7 @@ const validationSchema = object({
 const WifiPasswordModal = ({isOpen, onBackPress, ssid, onSubmit}) => {
   return (
     <ReactNativeModal isVisible={isOpen} style={styles.modal}>
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <Header
           onBackPress={onBackPress}
           hideNotificationIcon
@@ -81,7 +81,7 @@ const WifiPasswordModal = ({isOpen, onBackPress, ssid, onSubmit}) => {
             )}
           </Formik>
         </View>
-      </View>
+      </SafeAreaView>
     </ReactNativeModal>
   );
 };
