@@ -8,8 +8,11 @@ export const COLORS = {
   white: '#FFFFFF',
   lightGrey: '#D3D6D6',
   grey: '#C1C0C9',
-  blue: '#087BB6',
+  blue: '#6C6CDC',
   yellow: '#F4D03F',
+  error: '#f22424',
+  black: '#121212',
+  success: '#65C466',
 };
 
 export const SIZES = {

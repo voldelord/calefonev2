@@ -1,0 +1,200 @@
+import React from 'react';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  StyleSheet,
+  Image,
+  Pressable,
+} from 'react-native';
+import CustomButton from '../components/CustomButton';
+import {Field, Formik} from 'formik';
+import * as Yup from 'yup';
+import logo from '../assets/logo-full.png';
+import InputField from '../components/InputField';
+import Ionicons from 'react-native-vector-icons/Ionicons'; // importa Ionicons
+import google from '../assets/google.png';
+import {useAuth} from '../context/AuthContext';
+import useAxios from '../hooks/useAxios';
+import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
+import extractErrorMessage from '../helpers/extractErrorMessage';
+
+const initialValues = ({email = '', password = ''}) => ({email, password});
+
+const loginSchema = Yup.object().shape({
+  email: Yup.string()
+    .email('Debe ingresar un email válido')
+    .required('El email es requerido'),
+  password: Yup.string().required('La contraseña es requerida'),
+});
+
+const LoginScreen = ({navigation, route}) => {
+  const email = route.params?.email || '';
+  const password = route.params?.password || '';
+  const doLogin = route.params?.doLogin || false;
+
+  const {login} = useAuth();
+  const [{loading: loadingLoginToApi}, loginToApi] = useAxios(
+    {
+      method: 'post',
+      url: '/v1/auth/login',
+    },
+    {manual: true},
+  );
+
+  const handleSubmit = async (values, helpers) => {
+    if (loadingLoginToApi) {
+      return;
+    }
+
+    try {
+      const {data} = await loginToApi({
+        data: values,
+      });
+
+      await login({
+        token: data.token,
+        user: {...data.user, name: 'Pedro Perez'},
+      });
+    } catch (e) {
+      Toast.show({
+        type: ALERT_TYPE.DANGER,
+        title: 'Error',
+        textBody: extractErrorMessage(e),
+      });
+    }
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.imageContainer}>
+        <Image style={styles.image} source={logo} />
+      </View>
+      <View style={{paddingHorizontal: 20}}>
+        <Formik
+          initialValues={initialValues({email, password})}
+          onSubmit={handleSubmit}
+          validationSchema={loginSchema}>
+          {({handleSubmit}) => (
+            <>
+              <Text style={styles.parraph}>Iniciar Sesion</Text>
+              <Field
+                label={'Email'}
+                name="email"
+                icon={
+                  <Ionicons
+                    name="mail-outline"
+                    size={20}
+                    color="#666"
+                    style={{marginRight: 5}}
+                  />
+                }
+                showFormikError
+                as={InputField}
+              />
+              <Field
+                label={'Password'}
+                name="password"
+                icon={
+                  <Ionicons
+                    name="lock-closed-outline"
+                    size={20}
+                    color="#666"
+                    style={{marginRight: 5}}
+                  />
+                }
+                showFormikError
+                inputType="password"
+                as={InputField}
+              />
+
+              <View style={styles.buttoncontainer}>
+                <CustomButton
+                  label="Iniciar Sesion"
+                  onPress={handleSubmit}
+                  buttonColor="#DA215D"
+                  textColor="white"
+                  width={'100%'}
+                  height={50}
+                />
+              </View>
+            </>
+          )}
+        </Formik>
+      </View>
+
+      <View style={styles.imagecentercontainer}>
+        <Image style={styles.imagecenter} source={google} />
+      </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <Text style={styles.textfooter}>¿No eres Usuario?</Text>
+        <Pressable onPress={() => navigation.navigate('RegisterScreen')}>
+          <Text style={{color: '#DA215D', marginLeft: 5}}>Registrate</Text>
+        </Pressable>
+      </View>
+    </SafeAreaView>
+  );
+};
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+  },
+  imageContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    width: 200,
+    height: 200,
+    resizeMode: 'contain',
+  },
+  parraph: {
+    textAlign: 'left',
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: 'black',
+    marginBottom: 20,
+  },
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+    marginHorizontal: 20,
+    borderRadius: 10,
+    backgroundColor: 'white',
+    marginBottom: 10,
+  },
+  checkbox: {
+    marginHorizontal: 20,
+  },
+  imagecentercontainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+    padding: 40,
+  },
+  imagecenter: {
+    width: 50,
+    height: 50,
+    resizeMode: 'contain',
+  },
+
+  textfooter: {
+    textAlign: 'center',
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
+  buttoncontainer: {
+    alignItems: 'center',
+    marginTop: 10,
+  },
+});
+export default LoginScreen;

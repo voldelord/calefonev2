@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "593185953220",
+    "project_id": "temptech-34181",
+    "storage_bucket": "temptech-34181.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:593185953220:android:9c8cc758080d9722c04091",
+        "android_client_info": {
+          "package_name": "com.calefone"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgcuZq-1tn9fT8RGXbou7Tc44LCqWGIf4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

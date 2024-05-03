@@ -1,0 +1,208 @@
+import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
+import React, {useCallback, useEffect} from 'react';
+import Header from '../components/layout/Header';
+import tempIcon from '../assets/temp-mode-icon.png';
+import powerIcon from '../assets/mode-power-icon.png';
+import ecoIcon from '../assets/mode-eco-icon.png';
+import saveEnergyIcon from '../assets/save-energy-icon.png';
+import envIndicatorsIcon from '../assets/environmental-indicators-icon.png';
+import crownIcon from '../assets/crown-icon.png';
+import ModeButton from '../components/ModeButton';
+import Dropdown from '../components/forms/Dropdown';
+import useHomes from '../hooks/useHomes';
+import useHomeEnvironments from '../hooks/useHomeEnvironments';
+import useControllers from '../hooks/useControllers';
+import {useFocusEffect} from '@react-navigation/native';
+import {useDeviceStore} from '../stores/device-store';
+import {useAuth} from '../context/AuthContext';
+import {ALERT_TYPE, Toast} from 'react-native-alert-notification';
+
+const ModesScreen = ({navigation}) => {
+  const {user} = useAuth();
+
+  const homeId = useDeviceStore(state => state.homeId);
+  const environmentId = useDeviceStore(state => state.environmentId);
+  const deviceId = useDeviceStore(state => state.deviceId);
+  const setData = useDeviceStore(state => state.setData);
+
+  const {
+    homes,
+    loading: homesLoading,
+    getHomes,
+  } = useHomes({
+    params: {
+      filters: [{field: 'customerId', operator: '=', value: user?.id}],
+    },
+  });
+
+  const {
+    environments,
+    loading: environmentsLoading,
+    getEnvironments,
+  } = useHomeEnvironments({homeId: homeId});
+  const {
+    controllers,
+    loading: controllersLoading,
+    getControllers,
+  } = useControllers({
+    params: {
+      filters: [{field: 'environmentId', operator: '=', value: environmentId}],
+    },
+  });
+
+  useFocusEffect(
+    useCallback(() => {
+      getHomes();
+    }, []),
+  );
+
+  useEffect(() => {
+    getEnvironments();
+  }, [homeId]);
+
+  useEffect(() => {
+    getControllers();
+  }, [environmentId]);
+
+  const navigateToScreenWithDevice = screenName => {
+    if (!deviceId) {
+      return Toast.show({
+        type: ALERT_TYPE.INFO,
+        title: 'Atención',
+        textBody: 'Seleccione un dispositivo',
+      });
+    }
+
+    const device = controllers.find(c => c.deviceId === deviceId);
+
+    navigation.navigate(screenName, {
+      deviceId: deviceId,
+      deviceName:
+        device.description || `Dispositivo ${controllers.indexOf(device) + 1}`,
+    });
+  };
+
+  const smartPress = () => {
+    navigation.navigate('SmartScreen');
+  };
+
+  const handleDropdownChange = e => {
+    setData(data => ({
+      ...data,
+      [e.target.name]:
+        e.target.name === 'deviceId'
+          ? e.target.value.deviceId
+          : e.target.value.id,
+    }));
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <Header onBackPress={() => navigation.goBack()} />
+
+      <View style={[styles.pickerContainer, styles.contentPadding]}>
+        <View style={{width: '33.33%'}}>
+          <Dropdown
+            items={homes}
+            defaultValue={homes.find(home => home.id === homeId)}
+            defaultButtonText="Hogar"
+            disabled={homesLoading}
+            buttonTextAfterSelection={home => home.name}
+            rowTextForSelection={home => home.name}
+            name="homeId"
+            onChange={handleDropdownChange}
+          />
+        </View>
+        <View style={{width: '33.33%'}}>
+          <Dropdown
+            items={environments}
+            defaultValue={environments.find(
+              environment => environment.id === environmentId,
+            )}
+            defaultButtonText="Ambiente"
+            disabled={environmentsLoading}
+            buttonTextAfterSelection={environment => environment.name}
+            rowTextForSelection={environment => environment.name}
+            name="environmentId"
+            onChange={handleDropdownChange}
+          />
+        </View>
+        <View style={{width: '33.33%'}}>
+          <Dropdown
+            items={controllers}
+            defaultValue={controllers.find(
+              controller => controller.deviceId === deviceId,
+            )}
+            defaultButtonText="Dispositivo"
+            disabled={controllersLoading}
+            buttonTextAfterSelection={(controller, i) =>
+              controller.description || `Dispositivo ${i + 1}`
+            }
+            rowTextForSelection={(controller, i) =>
+              controller.description || `Dispositivo ${i + 1}`
+            }
+            name="deviceId"
+            onChange={handleDropdownChange}
+          />
+        </View>
+      </View>
+
+      <ScrollView style={[styles.content, styles.contentPadding]}>
+        <ModeButton
+          title={'Modo temperatura'}
+          icon={tempIcon}
+          style={{marginBottom: 20}}
+          onPress={() => navigateToScreenWithDevice('TemperatureScreen')}
+        />
+        <ModeButton
+          title={'Modo potencia'}
+          icon={powerIcon}
+          style={{marginBottom: 20}}
+          onPress={() => navigateToScreenWithDevice('PowerScreen')}
+        />
+        <ModeButton
+          title={'Modo ECO'}
+          icon={ecoIcon}
+          style={{marginBottom: 20}}
+          onPress={() => navigateToScreenWithDevice('EcoScreen')}
+        />
+        <ModeButton
+          title={'Ahorro de energía'}
+          icon={saveEnergyIcon}
+          style={{marginBottom: 20}}
+          onPress={() => navigateToScreenWithDevice('ChartScreen')}
+        />
+        <ModeButton
+          title={'Indicaciones ambientales'}
+          icon={envIndicatorsIcon}
+          style={{marginBottom: 20}}
+        />
+        <ModeButton
+          title={'Plan Avanzado'}
+          icon={crownIcon}
+          withGradient
+          onPress={() => navigateToScreenWithDevice('SmartScreen')}
+        />
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+export default ModesScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  contentPadding: {
+    paddingHorizontal: 15,
+  },
+  content: {
+    flex: 1,
+    paddingTop: 20,
+  },
+  pickerContainer: {
+    flexDirection: 'row',
+  },
+});
