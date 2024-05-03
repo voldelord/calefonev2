@@ -1,5 +1,6 @@
 import 'react-native-get-random-values';
-import {AppRegistry} from 'react-native';
+import 'react-native-gesture-handler';
+import {AppRegistry, LogBox} from 'react-native';
 import App from './App';
 import {name as appName} from './app.json';
 import init from 'react_native_mqtt';
@@ -9,7 +10,7 @@ import notifee, {EventType} from '@notifee/react-native';
 import {calculateDistance} from './src/helpers/geolocation';
 import Geolocation from 'react-native-geolocation-service';
 import {SETTINGS} from './src/constants/settings';
-
+LogBox.ignoreAllLogs();
 init({
   size: 10000,
   storageBackend: AsyncStorage,

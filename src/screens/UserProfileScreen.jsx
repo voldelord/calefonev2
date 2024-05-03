@@ -196,6 +196,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: COLORS.black,
     marginLeft: 'auto',
+    overflow: 'hidden',
   },
   menu: {
     marginTop: 30,

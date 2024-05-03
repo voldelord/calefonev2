@@ -11,6 +11,7 @@ interface InputFieldProps {
   value?: string;
   onChange?: (e: {target: {value: string; name: string}}) => void;
   showFormikError?: boolean;
+  autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
 }
 
 const InputField = ({
@@ -21,6 +22,7 @@ const InputField = ({
   onChange,
   name,
   showFormikError = false,
+  autoCapitalize = 'none',
 }: InputFieldProps): ReactElement => {
   const handleChange = (value: string) => {
     onChange?.({target: {value, name}});
@@ -36,6 +38,7 @@ const InputField = ({
           secureTextEntry={inputType === 'password'}
           value={value}
           onChangeText={handleChange}
+          autoCapitalize={autoCapitalize}
         />
       </View>
       {showFormikError && <ErrorMessage name={name} component={FormError} />}

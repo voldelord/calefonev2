@@ -4,6 +4,7 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import Header from '../components/layout/Header';
@@ -24,7 +25,6 @@ import {addHomeInhabitant} from '../API/homes';
 import {useLoadingOverlayStore} from '../stores/loadingOverlayStore';
 import extractErrorMessage from '../helpers/extractErrorMessage';
 import {useAuth} from '../context/AuthContext';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const TOAST_TITLE = 'Escaneo de código QR';
 
@@ -117,7 +117,7 @@ const HomeQrScanner = ({navigation}) => {
                 <TouchableOpacity
                   style={styles.openSettingsButton}
                   onPress={Linking.openSettings}>
-                  <Text style={styles.openSettingsButtonText}>Hablitar</Text>
+                  <Text style={styles.openSettingsButtonText}>Habilitar</Text>
                 </TouchableOpacity>
               </View>
             </View>
