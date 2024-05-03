@@ -8,6 +8,7 @@ import {useState} from 'react';
 import {findDevices} from '../helpers/BLEDevices';
 import {useLoadingOverlayStore} from '../stores/loadingOverlayStore';
 import {SETTINGS} from '../constants/settings';
+import {Platform} from 'react-native';
 
 type UseBLEDevicesArgs = {
   onDeviceSelected?: () => void;
@@ -28,7 +29,9 @@ const useBLEDevices = ({onDeviceSelected}: UseBLEDevicesArgs = {}) => {
   } = useQuery(
     'devices',
     async () => {
-      // await requestLocationAndBLuetoothPermissions();
+      if (Platform.OS === 'android') {
+        await requestLocationAndBLuetoothPermissions();
+      }
 
       return await findDevices();
     },
