@@ -14,7 +14,6 @@
 		1D5D70C9F743395CCED54EC0 /* Pods_Calefone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7C71AF636B8FF2D527097AF /* Pods_Calefone.framework */; };
 		40C444BA2D9F106594FD2CD2 /* Pods_Calefone_CalefoneTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3977216ACED0E8C761817D2 /* Pods_Calefone_CalefoneTests.framework */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		C61547542BE3DBFC00D2EE41 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C61547532BE3DBFC00D2EE41 /* GoogleService-Info.plist */; };
 		C615476D2BE4145700D2EE41 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C615475A2BE4145700D2EE41 /* Entypo.ttf */; };
 		C615476F2BE4145700D2EE41 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C615475C2BE4145700D2EE41 /* MaterialCommunityIcons.ttf */; };
 		C61547702BE4145700D2EE41 /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C615475D2BE4145700D2EE41 /* AntDesign.ttf */; };
@@ -25,6 +24,7 @@
 		C6B17F3B2BE4251B0070EEA4 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C615475B2BE4145700D2EE41 /* FontAwesome5_Brands.ttf */; };
 		C6B17F3C2BE4251B0070EEA4 /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C61547602BE4145700D2EE41 /* FontAwesome5_Solid.ttf */; };
 		C6B17F3D2BE425EB0070EEA4 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C61547612BE4145700D2EE41 /* FontAwesome5_Regular.ttf */; };
+		C6B348102C013186000A64E9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C6B3480F2C013186000A64E9 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,7 +52,6 @@
 		5B7EB9410499542E8C5724F5 /* Pods-Calefone-CalefoneTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Calefone-CalefoneTests.debug.xcconfig"; path = "Target Support Files/Pods-Calefone-CalefoneTests/Pods-Calefone-CalefoneTests.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Calefone/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-Calefone-CalefoneTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Calefone-CalefoneTests.release.xcconfig"; path = "Target Support Files/Pods-Calefone-CalefoneTests/Pods-Calefone-CalefoneTests.release.xcconfig"; sourceTree = "<group>"; };
-		C61547532BE3DBFC00D2EE41 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C61547562BE4145700D2EE41 /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontisto.ttf; sourceTree = "<group>"; };
 		C61547572BE4145700D2EE41 /* Octicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Octicons.ttf; sourceTree = "<group>"; };
 		C61547582BE4145700D2EE41 /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Feather.ttf; sourceTree = "<group>"; };
@@ -72,6 +71,7 @@
 		C61547662BE4145700D2EE41 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
 		C61547672BE4145700D2EE41 /* FontAwesome6_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome6_Brands.ttf; sourceTree = "<group>"; };
 		C61547682BE4145700D2EE41 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
+		C6B3480F2C013186000A64E9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../desarrollo/temptech/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D3977216ACED0E8C761817D2 /* Pods_Calefone_CalefoneTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Calefone_CalefoneTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7C71AF636B8FF2D527097AF /* Pods_Calefone.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Calefone.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -147,8 +147,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				C6B3480F2C013186000A64E9 /* GoogleService-Info.plist */,
 				C61547552BE4145700D2EE41 /* Fonts */,
-				C61547532BE3DBFC00D2EE41 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* Calefone */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* CalefoneTests */,
@@ -302,6 +302,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C6B348102C013186000A64E9 /* GoogleService-Info.plist in Resources */,
 				C6B17F3D2BE425EB0070EEA4 /* FontAwesome5_Regular.ttf in Resources */,
 				C6B17F3B2BE4251B0070EEA4 /* FontAwesome5_Brands.ttf in Resources */,
 				C6B17F3C2BE4251B0070EEA4 /* FontAwesome5_Solid.ttf in Resources */,
@@ -314,7 +315,6 @@
 				C615477B2BE4145700D2EE41 /* MaterialIcons.ttf in Resources */,
 				C615476D2BE4145700D2EE41 /* Entypo.ttf in Resources */,
 				C61547702BE4145700D2EE41 /* AntDesign.ttf in Resources */,
-				C61547542BE3DBFC00D2EE41 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -554,6 +554,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = TXLMG5W4TZ;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Calefone/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Temptech;
@@ -563,13 +564,13 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.temptecharg;
+				PRODUCT_BUNDLE_IDENTIFIER = com.temptecharg.temptech;
 				PRODUCT_NAME = Calefone;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -584,6 +585,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = TXLMG5W4TZ;
 				INFOPLIST_FILE = Calefone/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Temptech;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -592,13 +594,13 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.temptecharg;
+				PRODUCT_BUNDLE_IDENTIFIER = com.temptecharg.temptech;
 				PRODUCT_NAME = Calefone;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
