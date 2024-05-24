@@ -123,9 +123,9 @@ const LoginScreen = ({navigation, route}) => {
         </Formik>
       </View>
 
-      <View style={styles.imagecentercontainer}>
+      {/* <View style={styles.imagecentercontainer}>
         <Image style={styles.imagecenter} source={google} />
-      </View>
+      </View> */}
       <View
         style={{
           flexDirection: 'row',
